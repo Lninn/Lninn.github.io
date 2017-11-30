@@ -7,7 +7,7 @@ categories: 数据库
 
 T-SQL 是 SQL 的扩展, 可以灵活的使用使用 SQL 来操作数据库, 可以看作是针对数据库的编程。
 
-> 全局变量和局部变量
+#### 全局变量和局部变量
 
     DECLARE @VariableName varType;
 
@@ -20,7 +20,7 @@ T-SQL 是 SQL 的扩展, 可以灵活的使用使用 SQL 来操作数据库, 可
     @@VariableName;
 	全局变量由系统定义，供用户使用
 
-> IF-ELSE语句
+#### IF-ELSE语句
 
     IF (CONDITION)
     	BEGIN
@@ -31,7 +31,7 @@ T-SQL 是 SQL 的扩展, 可以灵活的使用使用 SQL 来操作数据库, 可
     		STATEMENT;
     	END
 
-> CASE语句
+#### CASE语句
 
     CASE Expression
     	WHEN Expression THEN result_Expression1
@@ -39,7 +39,7 @@ T-SQL 是 SQL 的扩展, 可以灵活的使用使用 SQL 来操作数据库, 可
     	[ELSE result_ExpressionN]
     END
 
-> WHILE语句
+#### WHILE语句
 
     WHILE BoolExpression
     	BEGIN
@@ -47,7 +47,7 @@ T-SQL 是 SQL 的扩展, 可以灵活的使用使用 SQL 来操作数据库, 可
     		[CONTIUNE|BREAK]
     	END
 
-> 临时表
+#### 临时表
 
 	本地临时表
 		CREATE TABLE #table_name1(column_name)
