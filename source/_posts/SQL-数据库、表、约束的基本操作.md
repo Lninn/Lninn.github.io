@@ -23,6 +23,7 @@ categories: 数据库
             FILEGROWTH = 10%
         )
 
+<!-- more -->
 - 删除
 
         IF EXISTS(SELECT 1 FROM SYS.DATABASES WHERE NAME = DbName)
@@ -162,6 +163,35 @@ categories: 数据库
 
             ALTER TABLE table-name
             	DROP CONSTRAINT constraint_name
+### 常用函数
+
+|  函数      |  说明 |
+| :--:       | :-- |
+| ABS()      | 求一个数的绝对值|
+| SQRT()     | 平方根 |
+| RAND()     | 返回0-1之间的随机值 |
+| FLOOR()    | 向下取整 |
+| CEILING()  | 向下取整 |
+| ROUND()    | 取一个数的四舍五入值 |
+| SIGN()     | 返回当前数值的符号 |
+| POWER(x, y)| 返回x的y次方 |
+| ASCII()    | 获取字符串中最左端字符的ASCII码值 |
+| CHAR()     | 将ASCII码值转换为字符 |
+| LOWER()    | 转换为小写字母 |
+| UPPER()    | 转换为大写字母 |
+| LTRIM()    | 去掉字符串左空格 |
+| RTRIM()    | 去掉字符串右空格 |
+| SPACE()    | 返回指定个数的空格 |
+| REPLICATE()| 将指定的字符串指定重复的次数 |
+| LEFT()     | 返回已知字符串从左边开始指定个数的字符 |
+| RIGHT()    | 返回已知字符串从右边开始指定个数的字符 |
+| DATALENGTH()| 返回字符串的长度(包括末尾的空格) |
+| SUBSTRING()| 返回从字符串左边’开始位置’起数量为’长度’的字符串。其中表达式可以是字符串或二进制串或含字段名或字符型变量的表达式。在这里要注意一下SUBSTRING（）函数不能用于TEXT 和IMAGE 数据类型 |
+| LEN()     | 返回表达式的长度。注意它返回的是字符数，而不是字节数。不计算串尾空格 |
+| STUFF()     | 删除字符串中指定长度的字符串 |
+| REVERSE()     | 将指定的字符串的字符排列顺序颠倒 |
+| CHARINDEX()     | 返回串1在串2的开始位置，可从所给出的‘开始位置’进行查找 |
+
 
 ### 聚合函数
 

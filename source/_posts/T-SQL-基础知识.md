@@ -20,6 +20,7 @@ T-SQL 是 SQL 的扩展, 可以灵活的使用使用 SQL 来操作数据库, 可
     @@VariableName;
 	全局变量由系统定义，供用户使用
 
+<!-- more -->
 #### IF-ELSE语句
 
     IF (CONDITION)
