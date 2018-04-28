@@ -5,7 +5,7 @@
   </div>
   <div class="article-inner">
     <%- partial('post/gallery') %>
-    <% if (post.link || post.title){ %>
+    <% if ((post.link || post.title) && post.type !== 'categories'){ %>
       <header class="article-header">
         <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
@@ -18,17 +18,25 @@
             <a href="<%- url_for(post.path) %>#more"><%= theme.excerpt_link %></a>
           </p>
         <% } %>
+      <% } else if (post.type === 'categories') { %>
+          <div class="category-all-page">
+             <div class="category-all">
+             <%- list_categories() %>
+             </div>
+           </div>
       <% } else { %>
-        <%- post.content %>
+         <%- post.content %>
       <% } %>
     </div>
-    <footer class="article-footer">
-      <a data-url="<%- post.permalink %>" data-id="<%= post._id %>" class="article-share-link"><%= __('share') %></a>
-      <% if (post.comments && config.disqus_shortname){ %>
-        <a href="<%- post.permalink %>#disqus_thread" class="article-comment-link"><%= __('comment') %></a>
-      <% } %>
-      <%- partial('post/tag') %>
-    </footer>
+    <% if (post.type !== 'categories') { %>
+        <footer class="article-footer">
+          <a data-url="<%- post.permalink %>" data-id="<%= post._id %>" class="article-share-link"><%= __('share') %></a>
+          <% if (post.comments && config.disqus_shortname){ %>
+            <a href="<%- post.permalink %>#disqus_thread" class="article-comment-link"><%= __('comment') %></a>
+          <% } %>
+          <%- partial('post/tag') %>
+        </footer>
+    <% } %>
   </div>
   <% if (!index){ %>
     <%- partial('post/nav') %>
