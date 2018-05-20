@@ -1,10 +1,4 @@
 ---
-title: about
-date: 2017-11-27 23:38:00
+title: About
+layout: about
 ---
-
-## 简介
-
-## 联系方式
-
-## 关于博客
