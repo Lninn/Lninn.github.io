@@ -1,0 +1,61 @@
+author: Lninn # 作者
+description: Lninn's blog
+keyword: JavaScript, 前端, 程序员
+favicon:
+
+excerpt_link: Read more
+
+menu:
+ Home: /
+ Tags: /tags/
+ Archives: /archives/
+ Projects: /project/
+ About: /about/
+
+# highlight
+highlight:
+  tomorrow
+
+# catalog
+catalog: true
+
+# donate
+donate: true
+
+# qrcode
+qrcode: true
+
+# comment
+# you can set gitment, uyan or disqus
+
+comment: gitment
+
+# gitment config
+gitment_owner: Lninn
+gitment_repo: lninn.github.io
+gitment_oauth_id: 9ef924980d81660b1656
+gitment_oauth_secret: 961220b1167eedb76724cfea22a974995430f102
+
+# uyan config
+# if you want to use uyan as your blog comment, plz remove/comment out gitment config
+baidu_id:
+
+# disqus config
+disqus_shortname:
+
+about:
+  banner: http://file.muyutech.com/about.jpg
+  avatar: https://avatars3.githubusercontent.com/u/23557028?v=3&s=460
+  description: "人不应该沉溺于过去，但也不能太过于豁达与释然，忠于自己的内心。"
+  weibo_username: Lninn0
+  twitter_username: Lninn0
+  github_username: Lninn
+  zhihu_username: lin-74-18
+  douban_username: Lninn
+  linkedin_username: Lninn
+
+# MathJax Support
+mathjax:
+  enable: true
+  per_page: false
+  cdn: //cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML
