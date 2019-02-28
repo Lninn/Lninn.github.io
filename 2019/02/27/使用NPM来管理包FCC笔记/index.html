@@ -10,7 +10,7 @@
   
   <title>
     
-      设计模式-适配器模式 | Lninn&#39;s Bolg
+      使用 NPM 来管理包 - FCC笔记 | Lninn&#39;s Bolg
     
   </title>
   <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -142,8 +142,8 @@
 </header>
 
     <div id="article-banner">
-  <h2>设计模式-适配器模式</h2>
-  <p class="post-date">2018-06-01</p>
+  <h2>使用 NPM 来管理包 - FCC笔记</h2>
+  <p class="post-date">2019-02-27</p>
   <div class="arrow-down">
     <a href="javascript:;"></a>
   </div>
@@ -151,22 +151,61 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><p>我对适配器模式的理解，适配器模式是指因为接口不兼容而不能一起工作的类可以一起工作，而不修改他们的源代码。<br>接口可能是不兼容的，但是在函数内部是可以解决这个问题的，适配器模式就是通过将一个类的接口转换为客户端期望的接口来协同工作。</p>
-<h4 id="WHY"><a href="#WHY" class="headerlink" title="WHY"></a>WHY</h4><p>在软件开发的过程中，最典型的情况就是，当遇到现有的一个接口需要用到另一个接口的情况时，就可以考虑使用适配器模式来解决这个问题。如果我们修改本身这个接口的话，可能会影响到很多地方，导致项目出现严重的问题，而现在又正好需要这么一个接口。所以问题就变成了如何在不影响现有接口的情况解决这个问题。</p>
-<h4 id="WHAT"><a href="#WHAT" class="headerlink" title="WHAT"></a>WHAT</h4><p>在这个模式中，通常来说有三个角色 [目标对象 Target]、[适配器 Adapter]、[被适配者 Adaptee]。接下来我就说一下我对这三个角色以及他们在适配器的作用的理解。Target 这就是需要使用的别的接口的类或者接口。因为通常在开发的过程中，这个角色可能已经是设计好已经不能修改或者最好不要修改的状态。但是接口里面的方法又需要去实现，所以这个时候就需要构建一个 Adapter 角色，他就是为使 Target 和 Adaptee一起工作而创建的类，适配器给目标角色提供了一个访问 Adaptee 的权限，但是目标角色并不知道 Adaptee 内部的情况。Adaptee 既就是为目标角色提供了有效的操作的接口。</p>
-<p><br><br>在适配器模式的实现中，有以下几种情况，类的适配器模式、对象的适配器模式、双向适配的模式。根据不同的需求选择不同的模式。</p>
-<p>代码表示类似于下面这样</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">c#</span><br><span class="line">// 目标接口</span><br><span class="line">interface ITarget</span><br><span class="line">&#123;</span><br><span class="line">	void request();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 被适配的对象</span><br><span class="line">public class Adaptee</span><br><span class="line">&#123;</span><br><span class="line">	public void specificRequest();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 适配器对象</span><br><span class="line">public class Adapter: Adaptee, ITarget</span><br><span class="line">&#123;</span><br><span class="line">	// 接口转换</span><br><span class="line">	public void request()</span><br><span class="line">	&#123;</span><br><span class="line">		this.specificRequest();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="HOW"><a href="#HOW" class="headerlink" title="HOW"></a>HOW</h4><p>在什么样的情况下比较适合使用适配器模式<br>1 如何重用一个客户端类没有而又需求的类<br>2 两个不兼容的类如何在一起工作<br>3 如何为一个类提供代替的接口</p>
-<p><br><br>参考链接：<br><a href="https://www.ibm.com/developerworks/cn/java/j-lo-adapter-pattern/index.html" target="_blank" rel="noopener">Adapter pattern-wikipedia</a><br><a href="https://www.ibm.com/developerworks/cn/java/j-lo-adapter-pattern/index.html" target="_blank" rel="noopener">适配器模式原理及实例介绍-developerWorks</a><br><br></p>
+    <section class="markdown-content"><h4 id="关于-npm"><a href="#关于-npm" class="headerlink" title="关于 npm"></a>关于 npm</h4><p>Node Package Manager（简写 npm）是使用 Node.js 一个命令行工具，用来分享和管理使用 JavaScript 开发的代码包。</p>
+<p>当使用 npm 来创建一个项目时，会自动生成一个 package.json 文件，你的项目中所有依赖的包都会在这个文件列表中。</p>
+<p>由于 npm 上的包经常更新，所以这个文件允许为每个依赖指定对应的版本号，这样可以确保包的更新不会影响项目本身。</p>
+<p>npm 将所有的包都保存到一个名为 nodemodules 的文件夹。可以通过以下两种方式来安装这个包:</p>
+<ul>
+<li><p>全局的安装在 node modules 的根目录，所有的项目都可以访问</p>
+</li>
+<li><p>局部的安装在每个项目当前的 node_modules 文件夹中，只允许当前项目来访问这些包</p>
+</li>
+</ul>
+<h4 id="使用-package-json"><a href="#使用-package-json" class="headerlink" title="使用 package.json"></a>使用 package.json</h4><p>任何使用 Node.js 或者是 npm 构建的项目都需要使用 package.json 来管理项目中的包。</p>
+<p>在 package.json 中，所有的信息都通过 JSON 的形式来表示，整个文件用一个 JSON 对象来表示。</p>
+<p>在这个对象里面通过各种不同的格式来表示项目本身的信息和项目依赖的包的信息。</p>
+<ul>
+<li><p>author 表示当前项目的作者</p>
+</li>
+<li><p>description 关于项目的描述</p>
+</li>
+<li><p>keywords 与项目有关的关键字，使用一个数组来表示</p>
+</li>
+<li><p>license 项目当前使用协议，比如开原协议 MIT BSD</p>
+</li>
+<li><p>version 项目的版本号</p>
+</li>
+</ul>
+<ul>
+<li><p>扩展项目的包</p>
+</li>
+<li><p>dependencies 项目中所有依赖的包都将存储到这个字段中，以键值对的形式。需要指定每个包的名字以及对应的版本号</p>
+</li>
+</ul>
+<h4 id="理解-npm-中-dependencies-中的版本号-version"><a href="#理解-npm-中-dependencies-中的版本号-version" class="headerlink" title="理解 npm 中 dependencies 中的版本号 version"></a>理解 npm 中 dependencies 中的版本号 version</h4><p>每一个框架、库或者是其他工具发布、更新、修复的时候都会有一个对应的版本号，我们可以从这个版本号的改变发现每个版本对应的区别。</p>
+<p>一般的为 MAJOR.MINOR.PATCH:</p>
+<ul>
+<li><p>MAJOR 添加新功能，比如进行不兼容的 API 更改</p>
+</li>
+<li><p>MINOR 对早期版本进行了无效的修改，以向后的方式添加更改</p>
+</li>
+<li><p>PATCH 错误修复 以向后兼容的方式进行错误修复</p>
+</li>
+</ul>
+<h4 id="使-dependencies-的包依赖最新的补丁"><a href="#使-dependencies-的包依赖最新的补丁" class="headerlink" title="使 dependencies 的包依赖最新的补丁"></a>使 dependencies 的包依赖最新的补丁</h4><p>当使用 MAJOR.MINOR.PATCH 的方式指定一个包的时候，固定了每一个包的版本，当有的包有很重要的补丁更新的时候，通过这种方式无法更新最新的补丁。</p>
+<p>通过在 ~MAJOR.MINOR.PATCH 的方式就可以解决这个问题，这样相当于 MAJOR.MINOR.X 使 dependencies 的包依赖最新的升级和补丁。</p>
+<p>当在 dependencies 中使用 ~MAJOR.MINOR.PATCH 解决了可以使用任何 PATCH 版本的问题，但是当遇到有重要的 MINOR 更新时却无法使用，</p>
+<p>这时候可以通过下面的方式来解决 ^MAJOR.MINOR.PATCH 相当于 ^MAJOR-X-X</p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>安装到全局 npm i -g <pacakgename>，安装到当前项目，npm i –save-dev <pacakgename></pacakgename></pacakgename></p>
+<h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><p>移除包，直接从 package.json 里面删除对应的 key value 就可以了。</p>
 </section>
     <!-- Tags START -->
     
       <div class="tags">
         <span>Tags:</span>
         
-  <a href="/tags#设计模式">
-    <span class="tag-code">设计模式</span>
+  <a href="/tags#npm">
+    <span class="tag-code">npm</span>
   </a>
 
       </div>
@@ -177,17 +216,17 @@
   <div class="nav-container">
     <!-- reverse left and right to put prev and next in a more logic postition -->
     
-      <a class="nav-left" href="/2018/05/31/设计模式-迭代器模式/">
+      <a class="nav-left" href="/2018/06/01/设计模式-适配器模式/">
         <span class="nav-arrow">← </span>
         
-          设计模式-迭代器模式
+          设计模式-适配器模式
         
       </a>
     
     
-      <a class="nav-right" href="/2019/02/27/使用NPM来管理包FCC笔记/">
+      <a class="nav-right" href="/2019/02/27/express和node基础FCC笔记/">
         
-          使用 NPM 来管理包 - FCC笔记
+          express 和 node 基础 - FCC笔记
         
         <span class="nav-arrow"> →</span>
       </a>
@@ -236,7 +275,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#适配器模式"><span class="toc-nav-text">适配器模式</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#WHY"><span class="toc-nav-text">WHY</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#WHAT"><span class="toc-nav-text">WHAT</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#HOW"><span class="toc-nav-text">HOW</span></a></li></ol></li></ol>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#关于-npm"><span class="toc-nav-text">关于 npm</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#使用-package-json"><span class="toc-nav-text">使用 package.json</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#理解-npm-中-dependencies-中的版本号-version"><span class="toc-nav-text">理解 npm 中 dependencies 中的版本号 version</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#使-dependencies-的包依赖最新的补丁"><span class="toc-nav-text">使 dependencies 的包依赖最新的补丁</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#安装"><span class="toc-nav-text">安装</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#删除"><span class="toc-nav-text">删除</span></a></li></ol>
     
   </div>
 </aside>
@@ -246,7 +285,7 @@
 
 <script>
   (function () {
-    var url = 'Lninn.github.io/2018/06/01/设计模式-适配器模式/';
+    var url = 'Lninn.github.io/2019/02/27/使用NPM来管理包FCC笔记/';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
@@ -308,7 +347,7 @@
     var gitmentConfig = "Lninn";
     if (gitmentConfig !== 'undefined') {
       var gitment = new Gitment({
-        id: "设计模式-适配器模式",
+        id: "使用 NPM 来管理包 - FCC笔记",
         owner: "Lninn",
         repo: "lninn.github.io",
         oauth: {
