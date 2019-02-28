@@ -1,0 +1,58 @@
+.column {
+  max-width: 1080px;
+  height: 272px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.column li {
+  border:　1px solid #fff;
+  float: left;
+  height: 100%;
+  width: 24%;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.column-1 {
+  background: url(../img/hey_siri_medium.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.column-2 {
+  background-image: url(../img/macbookair_medium.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.column-3 {
+  background-image: url(../img/summer_formal_small.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.column-4 {
+  background-image: url(../img/iphone_upgrade_large.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.column li div {
+    font-family: 微软雅黑;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 30px;
+}
+
+.column-2-text, .column-3-text, .column-4-text {
+  color: #111;
+}
+
+.column-1-text h4, .column-2-text h4, .column-3-text h4, .column-4-text h4 {
+  margin-top: 10px;
+}
+
+.column-2-text h3 {
+  margin-top: 5px;
+}
