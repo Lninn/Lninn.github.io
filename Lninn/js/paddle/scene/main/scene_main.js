@@ -114,7 +114,8 @@ class SceneMain extends Scene {
 
     this.blocks = []
 
-    const data = getDataFromLS('LEVELS') || []
+    const data = getDataFromLS('LEVELS') || JSON.parse(LEVELS)
+    
     const points = data[num] || []
    
     this.numOfBlock = points.length

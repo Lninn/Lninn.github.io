@@ -34,6 +34,7 @@ class SceneEditor extends Scene {
 
     this.addKEvent('s', function() {
       self.blockList.setData()
+      saveFile('LEVELS')
     })
 
     this.addKEvent('r', function() {

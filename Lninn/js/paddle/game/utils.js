@@ -118,3 +118,59 @@ const debounce = function(func, delay = 100) {
     }
   }
 }
+
+const scriptToJson = function (key){
+  return JSON.stringify(getDataFromLS(key))
+}
+
+const saveFile = function (key){
+  // const title = prompt("Save file as: ")
+  const title = key
+  if (!title){ return }
+
+  const file = new Blob([scriptToJson(key)], {type: 'application/json'})
+  const reader = new FileReader()
+  const a = document.createElement('a')
+  reader.onloadend = function(){
+      a.href = reader.result
+      a.download = title + '.json'
+      a.click()
+  }
+  reader.readAsDataURL(file)
+}
+
+const readFile = function (file, callback){
+  let result = []
+  
+  const fileName = file.name
+  if (fileName.indexOf('.json', fileName.length - 5) === -1) {
+      return alert('Not a JSON file')
+  }
+
+  const reader = new FileReader()
+  reader.readAsText( file )
+  reader.onload = function (evt){ 
+    result = JSON.parse(evt.target.result)
+    callback(result)
+  }
+  
+  return result
+}
+
+const loadFile = function (callback){
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.title = '加载数据文件'
+  input.accept = 'application/json'
+  if (!input){ return }
+
+  input.addEventListener('change', function(evt){ 
+    readFile(input.files[0], callback)
+  })
+
+  // 在 chrome 和 Firefox 下反应不一样
+  const evt = document.createEvent("MouseEvents")
+  evt.initEvent("click", true, false)
+  input.dispatchEvent(evt)
+  // input.click()
+}
