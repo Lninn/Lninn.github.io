@@ -65,7 +65,7 @@ class BlockList{
   setPointList(num) {
     this.level = num
     
-    const data = getDataFromLS('LEVELS')
+    const data = getDataFromLS('LEVELS') || JSON.parse(LEVELS)
     const pointList = data[num] || []
 
     if (pointList.length == 0) {
