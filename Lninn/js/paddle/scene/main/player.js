@@ -79,6 +79,16 @@ class Palyer {
       boardArea.y + this.fontSize + (boardArea.h - this.fontSize) / 2,
     )
 
+    c.font = `20px 微软雅黑`
+    c.fillStyle = "#fff"
+    let text = '开始 (F) 暂停 (P) 左 (A) 右(D)'
+    let len = c.measureText(text).width
+    c.fillText(
+      text,
+      (config.w - len) / 2,
+      config.h - 30,
+    )
+
     if (this.pass) {
       this.timer % 60 == 0 && this.count--
    

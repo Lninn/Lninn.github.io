@@ -13,8 +13,8 @@ const config = {
   ],
   paddle_height: 800,
   paddle_speed: 12,
-  ball_speedX: -7,
-  ball_speedY: -7,
+  ball_speedX: -6,
+  ball_speedY: -6,
   initial_lives: 5,
   color_mode: true,
   images: {
