@@ -1,19 +1,15 @@
-### 作品连接
+## 作品连接
 
 > tips: 按住 ctrl 键在新的窗口打开链接
 
-#### 售后维护系统 (Mobile)
+#### 售后维护系统 (移动端)
 
 <ul>
   <li>
-    <h4>
-      <a href="https://github.com/Lninn/vue-wechat-app" target="_blank" />code</a>
-    </h4>
-  </li>
-  <li>
-    <h4>
+    <h5>
+      <a href="https://github.com/Lninn/vue-wechat-app" target="_blank" />code</a> |
       <a href="https://lninn.github.io/Lninn/js/vue-wechat-app" target="_blank" />demo</a>
-    </h4>
+    </h5>
   </li>
 </ul>
 
@@ -21,14 +17,10 @@
 
 <ul>
   <li>
-    <h4>
-      <a href="https://github.com/Lninn/vue-background-platform" target="_blank" />code</a>
-    </h4>
-  </li>
-  <li>
-    <h4>
+    <h5>
+      <a href="https://github.com/Lninn/vue-background-platform" target="_blank" />code</a> |
       <a href="https://lninn.github.io/Lninn/js/background-platform" target="_blank" />demo</a>
-    </h4>
+    </h5>
   </li>
 </ul>
 
@@ -36,14 +28,10 @@
 
 <ul>
   <li>
-    <h4>
-      <a href="https://github.com/Lninn/js-practice" target="_blank" />code</a>
-    </h4>
-  </li>
-  <li>
-    <h4>
+    <h5>
+      <a href="https://github.com/Lninn/js-practice" target="_blank" />code</a> |
       <a href="https://lninn.github.io/Lninn/js/paddle" target="_blank" />demo</a>
-    </h4>
+    </h5>
   </li>
 </ul>
 
@@ -51,9 +39,9 @@
 
 <ul>
   <li>
-    <h4>
-      <a href="https://github.com/Lninn/awesome-python3-webapp" target="_blank" />code</a>
-    </h4>
+    <h5>
+      <a href="https://github.com/Lninn/awesome-python3-webapp" target="_blank" />代码</a>
+    </h5>
   </li>
 </ul>
 
@@ -61,28 +49,24 @@
 
 <ul>
   <li>
-    <h4>
+    <h5>
       <a href="https://github.com/Lninn/simple-calc" target="_blank" />计算器</a>
-    </h4>
+    </h5>
   </li>
   <li>
-    <h4>
+    <h5>
       <a href="https://github.com/Lninn/wechat-handwriting" target="_blank" />手写板</a>
-    </h4>
+    </h5>
   </li>
 </ul>
 
-#### CSS Demo
+#### CSS Demo (单页面)
 
 <ul>
   <li>
-    <h4>
-      <a href="https://lninn.github.io/Lninn/static/apple" target="_blank" />苹果主页(单页面)]</a>
-    </h4>
-  </li>
-  <li>
-    <h4>
-      <a href="https://lninn.github.io/Lninn/static/meibuy" target="_blank" />梅兰商城(单页面)</a>
-    </h4>
+    <h5>
+      <a href="https://lninn.github.io/Lninn/static/apple" target="_blank" />苹果主页</a> |
+      <a href="https://lninn.github.io/Lninn/static/meibuy" target="_blank" />梅兰商城</a>
+    </h5>
   </li>
 </ul>
