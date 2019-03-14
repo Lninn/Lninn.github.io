@@ -1,0 +1,338 @@
+/*
+*  主页样式
+*  2017年8月6日12:12:09
+*  By：Linin
+*/
+
+/*广告*/
+.adv-wrapper {
+	width: 100%;
+	background-color: #444;
+	height: 40px;
+}
+
+.adv-wrapper .adv-wrapper-text {
+	max-width: 976px;
+	text-align: right;
+	color: #a8a8aa;
+	font-size: 12px;
+	line-height: 40px;
+	margin: 0 auto;
+}
+
+/*导航栏*/
+.nav-wrapper {
+	width: 100%;
+	height: 44px;
+	background: rgba(0,0,0,0.8);
+	position: relative;
+	z-index: 10;
+}
+
+.nav-wrapper .nav-wrapper-content {
+	max-width: 1000px;
+	height: 100%;
+	margin: 0 auto;
+}
+    .nav-wrapper .nav-wrapper-content li {
+		display: inline-block;
+		line-height: 44px;
+		margin: 0 36px;
+		font-size: 14px;
+		position: relative;
+	}
+
+	.nav-wrapper-content .nav-icon {
+		vertical-align: middle;
+	}
+
+	.nav-wrapper .nav-wrapper-content .nav-icon a {
+		display: block;
+		background-repeat: no-repeat;
+		background-position: center center;
+		width: 20px;
+		height: 20px;
+		position: absolute;
+		top: -10px;
+	}
+
+	.nav-wrapper .nav-wrapper-content .nav-icon .apple {
+		background-image: url(../img/image_apple.svg);
+		background-size:20px 44px;
+	}
+
+	.nav-wrapper .nav-wrapper-content .nav-icon .apple:hover, .nav-wrapper .nav-wrapper-content .nav-icon .search:hover, .nav-wrapper .nav-wrapper-content .nav-icon .bag:hover {
+		opacity: .65;
+	}
+
+	.nav-wrapper .nav-wrapper-content .nav-icon .search {
+		background-image: url(../img/image_search.svg);
+		background-size:20px 48px;
+	}
+
+	.nav-wrapper .nav-wrapper-content .nav-icon .bag {
+		background-image: url(../img/image_bag.svg);
+		background-size:20px 44px;
+	}
+
+	.nav-wrapper .nav-wrapper-content .icon-margin {
+		margin-right: 0;
+		margin-left: 70px;
+	}
+
+	.nav-wrapper-content a:hover {
+		color: #c0c0c0;
+	}
+
+	.search-bar {
+		width: 900px;
+		height: 200px;
+		top: 0;
+		left: 300px;
+		position: absolute;
+		display: none;
+	}
+
+	.search-bar input {
+		width: 700px;
+		height: 44px;
+		font-size: 20px;
+		background-color: #272727;
+		border-style: none;
+		margin-left: 20px;
+		color: #fff;
+	}
+
+	.search-bar .icleft {
+		display: block;
+		width: 15px;
+		height: 30px;
+		position: absolute;
+		background:url(../img/image_search.svg) no-repeat;
+	}
+
+	.search-bar .icright {
+		display: block;
+		width: 30px;
+		height: 30px;
+		position: absolute;
+		left: 850px;
+		top: 5px;
+		background:url(../img/icright.png) no-repeat;
+	}
+
+	.search-bar .icright:hover {
+		cursor: pointer;
+	}
+
+		.search-bar .bar {
+			width: 800px;
+			height: 200px;
+			background-color: #fff;
+		}
+
+			.bar span {
+				position: relative;
+				top: 20px;
+				left: 50px;
+			}
+
+			.bar ul {
+				width: 100%;
+				margin-top: 40px;
+			}
+
+			.bar li {
+				font-size: 16px;
+				padding-left: 60px;
+				margin-bottom: 2px;
+				height: 30px;
+				line-height: 30px;
+			}
+
+			.bar li:hover {
+				background-color: #ccc;
+				cursor: pointer;
+			}
+
+/*主体*/
+.main-wrapper {
+	height: 650px;
+	min-width: 1349px;
+	position: relative;
+}
+
+	.slider{
+		width: 3000px;
+		height: 572px;
+		position: relative;
+		left: 0;
+		overflow: hidden;
+	}
+
+	.slider-top {
+		width: 100%;
+		height: 44px;
+		position: absolute;
+		top: -44px;
+		z-index: 5;
+	}
+
+	/*------------------------轮播图第一张------------------------------*/
+	.slider-left {
+		min-width: 1349px;
+		height: 528px;
+		background-color: #121212;
+		position: absolute;
+		z-index: 10;
+		left: 0;
+	}
+
+		.slider-left a {
+			background-image: url(../img/iphone_7_medium.jpg);
+			background-repeat: no-repeat;
+			background-position: 40px 0%;
+			background-size: 100% 160%;
+			display: block;
+			height: 528px;
+		}
+
+		.slider-left-text {
+			color: #fff;
+			position: absolute;
+			left: 600px;
+			top: 100px;
+		}
+
+		.slider-left-text h4 {
+			font-size: 30px;
+			text-indent: 15px;
+		}
+
+		.slider-left-text h3 {
+			font-size: 40px;
+		}
+	/*------------------------轮播图第二张------------------------*/
+	.slider-center {
+		min-width: 1349px;
+		height: 528px;
+		background-color: #fafafa;
+		position: absolute;
+		z-index: 20;
+		left: 0;
+	}
+
+		.slider-center a {
+			background-image: url(../img/hero_medium.jpg);
+			background-repeat: no-repeat;
+			background-position: center 260px;
+			display: block;
+			height: 528px;
+		}
+
+		.slider-center-text {
+			color: #000;
+			position: absolute;
+			left: 520px;
+			top: 50px;
+		}
+
+		.slider-center-text h3 {
+			font-size: 75px;
+		}
+
+		.slider-center-text h4 {
+			font-size: 30px;
+			font-weight: normal;
+			text-align: center;
+		}
+
+	/*-----------------------轮播图第三张--------------------------*/
+	.slider-right {
+		min-width: 1349px;
+		height: 528px;
+		background-color: #f2f2f2;
+		position: absolute;
+		z-index: 30;
+		left: 0;
+	}
+
+		.slider-right a {
+			background-image: url(../img/watch_medium.jpg);
+			background-repeat: no-repeat;
+			background-position: center center;
+			background-size: contain;
+			display: block;
+			height: 528px;
+		}
+
+		.slider-right-text {
+			color: #333;
+			position: absolute;
+			left: 470px;
+			top: 20px;
+		}
+
+		.slider-right-text i {
+			background-image: url(../img/watch_series_2_large.png);
+			display: block;
+			background-repeat: no-repeat;
+			height: 44px;
+			background-position: center center;
+
+		}
+
+		.slider-right-text h3 {
+			font-size: 38px;
+			font-weight: normal;
+		}
+
+	.slider-tablist {
+		width: 220px;
+		position: absolute;
+		bottom: 80px;
+		left: 580px;
+		z-index: 100;
+	}
+
+		.slider-tablist li {
+			margin: 5px 0;
+			width: 45px;
+			margin: 0 10px;
+			border: 1px solid #dcdcdc;
+			display: inline-block;
+		}
+
+		.slider-left-tablist {
+			position: absolute;
+			top: -240px;
+			opacity: 0.2;
+			left: -540px;
+			font-size: 40px;
+			color: rgba(0,0,0,0.44);
+			text-align: center;
+			width: 60px;
+			height: 60px;
+			padding: 0 8px;
+			background-color: rgba(180,180,180,0.25);
+			border-radius: 50% 50%;
+		}
+
+		.slider-right-tablist {
+			position: absolute;
+			top: -220px;
+			left: 620px;
+			opacity: 0.2;
+			font-size: 40px;
+			text-align: center;
+			color: rgba(0,0,0,0.44);
+			width: 60px;
+			height: 60px;
+			padding: 0 8px;
+			background-color: rgba(180,180,180,0.25);
+			border-radius: 50% 50%;
+		}
+
+		.slider-tablist li:hover {
+			cursor: pointer;
+		}
