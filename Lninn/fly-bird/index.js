@@ -15,9 +15,17 @@ const __main = function() {
 
   const pipes = new PipeList(app)
 
+  // 移动端点击
+  window.addEventListener("touchend", e => {
+    // log(e)
+
+    bird.jump()
+  })
+
+  // 键盘事件
   window.addEventListener("keydown", e => {
     const key = e.key
-    if (key == " ") {
+    if (key == "d") {
       !config.paused && bird.jump()
     }
   })
