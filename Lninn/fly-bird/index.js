@@ -16,11 +16,11 @@ const __main = function() {
   const pipes = new PipeList(app)
 
   // 移动端点击
-  window.addEventListener("touchend", e => {
-    // log(e)
-
+  function handleStart() {
     bird.jump()
-  })
+  }
+  const canvas = app.canvas
+  canvas.addEventListener("touchstart", handleStart, false);
 
   // 键盘事件
   window.addEventListener("keydown", e => {
