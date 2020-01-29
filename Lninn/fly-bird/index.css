@@ -1,0 +1,21 @@
+html,
+body,
+div {
+  padding: 0;
+  margin: 0;
+}
+
+.game {
+  /* max-width: 500px;
+  text-align: left;
+  padding: 10px; */
+}
+
+canvas {
+  display: inline-block;
+  width: 100vw;
+  height: 100vh;
+  /* height: 640px; */
+  /* margin: 0 auto;
+  outline: 1px solid #ddd; */
+}
