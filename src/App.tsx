@@ -1,6 +1,7 @@
 import Card from './components/Card'
+import Header from './components/Header'
 
-import './App.css'
+import './App.less'
 
 
 const COLORS = [
@@ -15,6 +16,8 @@ const COLORS = [
 function App() {
   return (
     <div className="App">
+
+     <Header />
 
       <Card title='DESIGN MEETING' bgColor={COLORS[0]} />
       <Card title='DAILY PROJECT' bgColor={COLORS[1]} />
