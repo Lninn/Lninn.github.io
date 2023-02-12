@@ -1,4 +1,54 @@
 .card {
-  padding: 12px;
+  background-color: #fff;
+  font-family: Helvetica, sans-serif;
+  font-size: 55px;
+  line-height: 1;
+
+  display: flex;
+  gap: 24px;
+  border-radius: 40px;
+  padding: 16px 16px 16px 16px;
+
+  & + & {
+    margin-top: 6px;
+  }
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.line {
+  width: 0.5px;
+  height: 13.5px;
   background-color: #333;
+}
+
+.time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.hour {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.minute {
+  font-size: 12px;
+}
+
+.footer {
+  font-size: 16px;
+
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  opacity: 0.8;
 }
