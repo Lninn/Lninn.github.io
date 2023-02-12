@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import * as dayjs from 'dayjs'
-
+import dayjs from 'dayjs'
 import clsx from 'clsx'
 
 // import 'dayjs/locale/zh-cn'
@@ -9,10 +8,7 @@ import clsx from 'clsx'
 import './DatePanel.less'
 
 
-console.log('debug ', dayjs)
 const current = dayjs()
-console.log('debug ', current)
-
 const dayOfWeek = current.format('dddd')
 const dateOfMonth = current.format('D')
 
