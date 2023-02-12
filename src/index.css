@@ -25,7 +25,8 @@ a:hover {
 
 body {
   margin: 0;
-  background-color: #b32580;
+  background-color: #1f1f1f;
+  font-family: Helvetica, sans-serif;
 }
 
 h1 {

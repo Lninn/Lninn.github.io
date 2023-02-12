@@ -1,0 +1,51 @@
+.datetime {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  font-size: 16px;
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.5;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin: 24px 0 24px 16px;
+
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    &__item {
+      font-size: 40px;
+      color: #8f8f8f;
+      line-height: 1;
+
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      &::after {
+        content: '';
+        display: block;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background-color: #b32580;
+        opacity: 0;
+      }
+    }
+
+    .active {
+      color: #fff;
+      &::after {
+        opacity: 1;
+      }
+    }
+  }
+}
