@@ -9,8 +9,12 @@ import clsx from 'clsx'
 import './DatePanel.less'
 
 
-const dayOfWeek = dayjs().format('dddd')
-const dateOfMonth = dayjs().format('D')
+console.log('debug ', dayjs)
+const current = dayjs()
+console.log('debug ', current)
+
+const dayOfWeek = current.format('dddd')
+const dateOfMonth = current.format('D')
 
 const dateList = [
   dateOfMonth,
