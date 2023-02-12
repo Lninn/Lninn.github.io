@@ -29,6 +29,10 @@ body {
   font-family: Helvetica, sans-serif;
 }
 
+html, body {
+  height: 100%;
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
