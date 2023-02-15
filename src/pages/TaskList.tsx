@@ -4,6 +4,7 @@ import Task from './Task'
 import { ITask } from './type'
 
 import './TaskList.less'
+import clsx from 'clsx'
 
 
 const LIST: ITask[] = [
@@ -39,11 +40,45 @@ const LIST: ITask[] = [
   },
 ]
 
+interface IOption {
+  label: string
+  value: string
+}
+
+const STATUS_OPTIONS: Array<IOption> = [
+  {
+    label: 'ACTIVE',
+    value: 'active',
+  },
+  {
+    label: 'DONE',
+    value: 'done',
+  },
+]
+
 const StatusBar = () => {
+  const [status, setStatus] = useState('active')
+
   return (
     <div className='statusBar'>
-      <div className='statusBar_item'>ACTIVE</div>
-      <div className='statusBar_item'>DONE</div>
+      {STATUS_OPTIONS.map(option => {
+        const isActive = option.value === status
+
+        const cls = clsx(
+          'statusBar__item',
+          { isActive }
+        )
+
+        return (
+          <div 
+            key={option.value}
+            className={cls}
+            onClick={() => setStatus(option.value)}
+          >
+            {option.label}
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -74,7 +109,8 @@ const TaskList = ({
     <div className='taskList'>
       {list.map((item, idx) => {
         const style: CSSProperties = {
-          backgroundColor: item.bgColor
+          backgroundColor: item.bgColor,
+          zIndex: idx,
         }
 
         const handleClick = () => {
@@ -89,7 +125,7 @@ const TaskList = ({
             style={style}
             item={item}
             onClick={handleClick}
-            y={-65 * idx}
+            y={idx == 0 ? 0 : -155}
           />
         )
       })}

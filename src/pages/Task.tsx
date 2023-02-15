@@ -1,4 +1,4 @@
-import { CSSProperties, useState } from 'react'
+import { CSSProperties, useEffect, useRef, useState } from 'react'
 import { ITask } from './type'
 import clsx from 'clsx'
 
@@ -20,12 +20,31 @@ const Task = (props: IProps) => {
     onClick,
   } = props
 
+  const taskRef = useRef<HTMLDivElement | null>(null)
   const [isClick, setIsClick] = useState(false)
+
+  useEffect(() => {
+    const element = taskRef.current
+    if (!element) return
+
+    const handleElementFocusIn = () => {
+      setIsClick(true)
+    }
+    const handleElementFocusOut = () => {
+      setIsClick(false)
+    }
+
+    element.addEventListener('focusin', handleElementFocusIn)
+    element.addEventListener('focusout', handleElementFocusOut)
+
+    return () => {
+      element.removeEventListener('focusin', handleElementFocusIn)
+      element.removeEventListener('focusout', handleElementFocusOut)
+    }
+  }, [])
 
   const handleClick = () => {
     onClick()
-
-    setIsClick(true)
   }
 
   const cls = clsx(
@@ -33,11 +52,9 @@ const Task = (props: IProps) => {
     { isClick }
   )
 
-  const ty = isClick ? y + (-50) : y
-
   const finalStyle: CSSProperties = {
     ...style,
-    transform: `translateY(${ty}px)`,
+    marginTop: y + 'px',
   }
 
   return (
@@ -45,6 +62,8 @@ const Task = (props: IProps) => {
       className={cls}
       style={finalStyle}
       onClick={handleClick}
+      tabIndex={0}
+      ref={taskRef}
     >
       <div className="task__header">
         <div>{item.status}</div>
