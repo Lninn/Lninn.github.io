@@ -195,13 +195,39 @@ const Page = () => {
       <Create onClick={handleAdd} />
       <Modal visible={visible} onClose={onClose} >
 
-        <button onClick={onClose}>
-          关闭
-        </button>
-        
-        asdasda asdasd
-        asdasda asdasd
-        asdasda asdasd
+        <div className='form'>
+
+          <div className='form-title'>
+            New Task Todo
+          </div>
+
+          <div className='field'>
+            <div className='field__title'>
+              Task Title
+            </div>
+            <input
+              className='field__input'
+              placeholder='Add a task title'
+            />
+          </div>
+
+          <div className='field'>
+            <div className='field__title'>
+              Task Description
+            </div>
+            <div
+              contentEditable
+              className='field__input textarea'
+              placeholder='Add a task title'
+            />
+          </div>
+
+          <div className='btn'>
+            <button className='cancel' onClick={onClose}>Cancel</button>
+            <button className='confirm' onClick={onClose}>Confirm</button>
+          </div>
+
+        </div>
       </Modal>
     </div>
   )
