@@ -12,14 +12,26 @@ const current = dayjs()
 const dayOfWeek = current.format('dddd')
 const dateOfMonth = current.format('D')
 
-const dateList = [
-  dateOfMonth,
-  '16',
-  '17',
-  '18',
-  '19',
-]
+const getRecent5Day = () => {
+  const days: string[] = []
 
+  let current = dayjs()
+
+  let i = 0
+  while(i < 5) {
+
+    days.push(
+      current.format('D'),
+    )
+
+    current = current.add(1, 'days')
+    i++
+  }
+
+  return days
+}
+
+const dateList = getRecent5Day()
 
 const DatePanel = () => {
   const [activeDate, setActiveDate] = useState(dateOfMonth)
