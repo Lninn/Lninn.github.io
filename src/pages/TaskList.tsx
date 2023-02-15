@@ -2,9 +2,10 @@ import { CSSProperties, useState } from 'react'
 import { COLORS } from '../constant'
 import Task from './Task'
 import { ITask } from './type'
+import clsx from 'clsx'
+import Modal from '../components/Modal'
 
 import './TaskList.less'
-import clsx from 'clsx'
 
 
 const LIST: ITask[] = [
@@ -133,9 +134,9 @@ const TaskList = ({
   )
 }
 
-const Create = () => {
+const Create = ({ onClick, }: { onClick: () => void }) => {
   return (
-    <div className='newTask'>
+    <div className='newTask' onClick={onClick}>
       <div className='newTask__label'>
         CREATE SUBTASK
       </div>
@@ -160,8 +161,17 @@ const Header = () => {
 }
 
 const Page = () => {
-  
+ 
+  const [visible, setVisible] = useState(false)
   const [taskList, setTaskList] = useState(LIST)
+
+  const onClose = () => {
+    setVisible(false)
+  }
+
+  const handleAdd = () => {
+    setVisible(true)
+  }
 
   return (
     <div className='page'>
@@ -171,7 +181,17 @@ const Page = () => {
       </div>
       <StatusBar />
       <TaskList list={taskList} onChange={setTaskList} />
-      <Create />
+      <Create onClick={handleAdd} />
+      <Modal visible={visible} onClose={onClose} >
+
+        <button onClick={onClose}>
+          关闭
+        </button>
+        
+        asdasda asdasd
+        asdasda asdasd
+        asdasda asdasd
+      </Modal>
     </div>
   )
 }
