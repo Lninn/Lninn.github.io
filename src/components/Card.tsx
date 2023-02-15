@@ -1,5 +1,7 @@
 import './Card.less'
 
+import { useNavigate } from 'react-router-dom'
+
 
 interface CardProps {
   title: string
@@ -7,8 +9,18 @@ interface CardProps {
 }
 
 const Card = ({ title, bgColor }: CardProps) => {
+  const navigate = useNavigate()
+  
+  const handleClick = () => {
+    navigate('/list')
+  }
+
   return (
-    <div className='card' style={{ backgroundColor: bgColor }}>
+    <div
+      className='card'
+      style={{ backgroundColor: bgColor }}
+      onClick={handleClick}
+    >
       <div className='left'>
         <div className='time'>
           <div className='hour'>

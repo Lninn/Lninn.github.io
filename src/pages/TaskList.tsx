@@ -4,6 +4,9 @@ import Task from './Task'
 import { ITask } from './type'
 import clsx from 'clsx'
 import Modal from '../components/Modal'
+import { useNavigate } from 'react-router-dom'
+
+import arrowLeft from '../assets/arrowLeft.svg'
 
 import './TaskList.less'
 
@@ -148,10 +151,18 @@ const Create = ({ onClick, }: { onClick: () => void }) => {
 }
 
 const Header = () => {
+  const navigate = useNavigate()
+  const handleClick = () => {
+    navigate('/')
+  }
+
   return (
     <div className='listHeader'>
-      <div className='listHeader__btn'>
-        Exit
+      <div
+        className='listHeader__btn'
+        onClick={handleClick}
+      >
+        <img className='listHeader__icon' src={arrowLeft} />
       </div>
       <div className='listHeader__label'>
         2/15
