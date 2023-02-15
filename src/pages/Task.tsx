@@ -1,14 +1,17 @@
 import { CSSProperties, useEffect, useRef, useState } from 'react'
 import { ITask } from './type'
 import clsx from 'clsx'
+import Radio from '../components/Radio'
+
+import penSvg from '../assets/pen.svg'
 
 
 interface IProps {
   title: string
   style: CSSProperties
   item: ITask
-  onClick: () => void
   y: number
+  onCheck: (checked: boolean) => void
 }
 
 const Task = (props: IProps) => {
@@ -17,7 +20,7 @@ const Task = (props: IProps) => {
     item,
     title,
     style,
-    onClick,
+    onCheck,
   } = props
 
   const taskRef = useRef<HTMLDivElement | null>(null)
@@ -43,10 +46,6 @@ const Task = (props: IProps) => {
     }
   }, [])
 
-  const handleClick = () => {
-    onClick()
-  }
-
   const cls = clsx(
     'task',
     { isClick }
@@ -57,17 +56,21 @@ const Task = (props: IProps) => {
     marginTop: y + 'px',
   }
 
+  const checked = item.status === 'done'
+
   return (
     <div
       className={cls}
       style={finalStyle}
-      onClick={handleClick}
       tabIndex={0}
       ref={taskRef}
     >
       <div className="task__header">
-        <div>{item.status}</div>
-        <div>Editing</div>
+        <Radio
+          checked={checked}
+          onChange={onCheck}
+        />
+        <img className='task__header__editIcon' src={penSvg} alt='' />
       </div>
       <div>
         

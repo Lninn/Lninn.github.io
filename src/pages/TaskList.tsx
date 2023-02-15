@@ -113,7 +113,7 @@ const TaskList = ({
           zIndex: idx,
         }
 
-        const handleClick = () => {
+        const handleCheck = () => {
           const newList = getTaskList(item)
           onChange(newList)
         }
@@ -124,7 +124,7 @@ const TaskList = ({
             title={item.title}
             style={style}
             item={item}
-            onClick={handleClick}
+            onCheck={handleCheck}
             y={idx == 0 ? 0 : -155}
           />
         )
