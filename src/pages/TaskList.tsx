@@ -6,6 +6,7 @@ import clsx from 'clsx'
 import Modal from '../components/Modal'
 import { useNavigate } from 'react-router-dom'
 
+import TaskForm from './TaskForm'
 import arrowLeft from '../assets/arrowLeft.svg'
 
 import './TaskList.less'
@@ -194,40 +195,7 @@ const Page = () => {
       <TaskList list={taskList} onChange={setTaskList} />
       <Create onClick={handleAdd} />
       <Modal visible={visible} onClose={onClose} >
-
-        <div className='form'>
-
-          <div className='form-title'>
-            New Task Todo
-          </div>
-
-          <div className='field'>
-            <div className='field__title'>
-              Task Title
-            </div>
-            <input
-              className='field__input'
-              placeholder='Add a task title'
-            />
-          </div>
-
-          <div className='field'>
-            <div className='field__title'>
-              Task Description
-            </div>
-            <div
-              contentEditable
-              className='field__input textarea'
-              placeholder='Add a task title'
-            />
-          </div>
-
-          <div className='btn'>
-            <button className='cancel' onClick={onClose}>Cancel</button>
-            <button className='confirm' onClick={onClose}>Confirm</button>
-          </div>
-
-        </div>
+        <TaskForm />
       </Modal>
     </div>
   )

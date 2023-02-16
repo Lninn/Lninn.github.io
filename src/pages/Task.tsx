@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import Radio from '../components/Radio'
 
 import penSvg from '../assets/pen.svg'
+import { useApp } from '../AppCtx'
 
 
 interface IProps {
@@ -25,6 +26,10 @@ const Task = (props: IProps) => {
 
   const taskRef = useRef<HTMLDivElement | null>(null)
   const [isClick, setIsClick] = useState(false)
+
+  const [status, setStatus] = useState<boolean>(false)
+
+  const { patch } = useApp()
 
   useEffect(() => {
     const element = taskRef.current
@@ -48,12 +53,24 @@ const Task = (props: IProps) => {
 
   const cls = clsx(
     'task',
-    { isClick }
+    { isClick },
+    { isEdit: status }
   )
 
   const finalStyle: CSSProperties = {
     ...style,
     marginTop: y + 'px',
+  }
+
+  const handleEditClick = () => {
+    
+    setStatus(!status)
+    
+    const element = taskRef.current
+    if (!element) return
+
+    const rect = element.getBoundingClientRect()
+    patch(rect)
   }
 
   const checked = item.status === 'done'
@@ -70,10 +87,15 @@ const Task = (props: IProps) => {
           checked={checked}
           onChange={onCheck}
         />
-        <img className='task__header__editIcon' src={penSvg} alt='' />
+
+        <img
+          className='task__header__editIcon'
+          src={penSvg}
+          alt=''
+          onClick={handleEditClick}
+        />
       </div>
       <div>
-        
         {title}
       </div>
     </div>
