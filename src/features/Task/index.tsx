@@ -1,10 +1,11 @@
-import { CSSProperties, useEffect, useRef, useState } from 'react'
-import { ITask } from './type'
 import clsx from 'clsx'
-import Radio from '../components/Radio'
+import { CSSProperties, useEffect, useRef, useState } from 'react'
+import { useApp } from '../../AppCtx'
+import Radio from '../../components/Radio'
+import { ITask } from '../../pages/type'
+import penSvg from '../../assets/pen.svg'
 
-import penSvg from '../assets/pen.svg'
-import { useApp } from '../AppCtx'
+import './index.less'
 
 
 interface IProps {

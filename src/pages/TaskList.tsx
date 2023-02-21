@@ -1,13 +1,11 @@
 import { CSSProperties, useState } from 'react'
 import { COLORS } from '../constant'
-import Task from './Task'
 import { ITask } from './type'
-import clsx from 'clsx'
 import Modal from '../components/Modal'
 import { useNavigate } from 'react-router-dom'
-
-import TaskForm from './TaskForm'
 import arrowLeft from '../assets/arrowLeft.svg'
+import { CreateButton, Task, TaskForm } from '../features'
+import StatusBar from './StatusBar'
 
 import './TaskList.less'
 
@@ -44,49 +42,6 @@ const LIST: ITask[] = [
     status: 'active',
   },
 ]
-
-interface IOption {
-  label: string
-  value: string
-}
-
-const STATUS_OPTIONS: Array<IOption> = [
-  {
-    label: 'ACTIVE',
-    value: 'active',
-  },
-  {
-    label: 'DONE',
-    value: 'done',
-  },
-]
-
-const StatusBar = () => {
-  const [status, setStatus] = useState('active')
-
-  return (
-    <div className='statusBar'>
-      {STATUS_OPTIONS.map(option => {
-        const isActive = option.value === status
-
-        const cls = clsx(
-          'statusBar__item',
-          { isActive }
-        )
-
-        return (
-          <div 
-            key={option.value}
-            className={cls}
-            onClick={() => setStatus(option.value)}
-          >
-            {option.label}
-          </div>
-        )
-      })}
-    </div>
-  )
-}
 
 interface IProps {
   list: ITask[]
@@ -138,44 +93,15 @@ const TaskList = ({
   )
 }
 
-const Create = ({ onClick, }: { onClick: () => void }) => {
-  return (
-    <div className='newTask' onClick={onClick}>
-      <div className='newTask__label'>
-        CREATE SUBTASK
-      </div>
-      <div className='newTask__btn'>
-        +
-      </div>
-    </div>
-  )
-}
-
-const Header = () => {
-  const navigate = useNavigate()
-  const handleClick = () => {
-    navigate('/')
-  }
-
-  return (
-    <div className='listHeader'>
-      <div
-        className='listHeader__btn'
-        onClick={handleClick}
-      >
-        <img className='listHeader__icon' src={arrowLeft} />
-      </div>
-      <div className='listHeader__label'>
-        2/15
-      </div>
-    </div>
-  )
-}
-
 const Page = () => {
  
   const [visible, setVisible] = useState(false)
   const [taskList, setTaskList] = useState(LIST)
+
+  const navigate = useNavigate()
+  const handleClick = () => {
+    navigate('/')
+  }
 
   const onClose = () => {
     setVisible(false)
@@ -187,13 +113,24 @@ const Page = () => {
 
   return (
     <div className='page'>
-      <Header />
+      <div className='listHeader'>
+        <div
+          className='listHeader__btn'
+          onClick={handleClick}
+        >
+          <img className='listHeader__icon' src={arrowLeft} />
+        </div>
+        <div className='listHeader__label'>
+          2/15
+        </div>
+      </div>
+
       <div className='title'>
         TASKS
       </div>
       <StatusBar />
       <TaskList list={taskList} onChange={setTaskList} />
-      <Create onClick={handleAdd} />
+      <CreateButton onClick={handleAdd} />
       <Modal visible={visible} onClose={onClose} >
         <TaskForm />
       </Modal>

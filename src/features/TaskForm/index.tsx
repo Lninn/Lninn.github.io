@@ -1,4 +1,4 @@
-import './TaskForm.less'
+import './index.less'
 
 
 const TaskForm = () => {

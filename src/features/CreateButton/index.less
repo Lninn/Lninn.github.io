@@ -1,0 +1,32 @@
+.newTask {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+
+  z-index: 4;
+
+  position: fixed;
+  bottom: 12px;
+
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  &__label,
+  &__btn {
+    padding: 24px;
+    color: #fff;
+    background-color: #1f1f1f;
+
+    font-size: 24px;
+  }
+
+  &__label {
+    border-radius: 24px 0 0 24px;
+  }
+
+  &__btn {
+    border-radius: 0 24px 24px 0;
+    font-size: 28px;
+  }
+}
