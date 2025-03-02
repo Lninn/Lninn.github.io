@@ -30,7 +30,7 @@ function App() {
      fetch(`/articles/${name}`)
      .then((response) => response.text())
      .then((t) => {
-      console.log(t)
+      // console.log(t)
        return t
      })
      .then((text) => setMarkdown(text))
