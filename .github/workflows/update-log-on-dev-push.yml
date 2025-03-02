@@ -16,11 +16,11 @@ jobs:
         with:
           fetch-depth: 0  # 获取完整的提交历史
 
-      # 2. 切换到 main 分支
-      - name: Switch to main branch
+      # 2. 创建临时分支
+      - name: Create temporary branch
         run: |
           git fetch origin main
-          git checkout main
+          git checkout -b temp-log-update main
 
       # 3. 创建 articles 文件夹（如果不存在）
       - name: Create articles directory
@@ -47,14 +47,19 @@ jobs:
           echo "- **Message**: $(git log -1 --format=%s)" >> "$LOG_FILE"
           echo "" >> "$LOG_FILE"
 
-      # 6. 提交更改到 main 分支
-      - name: Commit changes to main branch
+      # 6. 提交更改到临时分支
+      - name: Commit changes to temporary branch
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          ls
-          echo "-==-"
-          ls articles
-          git add .
+          git add articles/log.md
           git commit -m "Update log.md with latest commit info"
-          git push origin main
+
+      # 7. 推送临时分支并创建 Pull Request
+      - name: Push temporary branch and create PR
+        run: |
+          git remote set-url origin https://${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
+          git push origin temp-log-update
+          gh pr create --base main --head temp-log-update --title "Update log.md" --body "Automated update of log.md file."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
