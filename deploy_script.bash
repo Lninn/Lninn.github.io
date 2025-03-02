@@ -1,6 +1,16 @@
 #!/bin/bash
 
-# 1. 打包项目
+# 1. 安装项目依赖
+echo "Running npm install..."
+npm install
+
+# 检查 npm install 是否成功
+if [ $? -ne 0 ]; then
+  echo "Error: npm install failed."
+  exit 1
+fi
+
+# 2. 打包项目
 echo "Running npm run build..."
 npm run build
 
@@ -10,7 +20,7 @@ if [ ! -d "dist" ]; then
   exit 1
 fi
 
-# 2. 检查 temp-deploy 分支是否存在，如果存在则删除
+# 3. 检查 temp-deploy 分支是否存在，如果存在则删除
 if git show-ref --quiet refs/heads/temp-deploy; then
   echo "Deleting existing temp-deploy branch..."
   # 切换到 dev 分支以释放对 temp-deploy 的占用
@@ -18,16 +28,16 @@ if git show-ref --quiet refs/heads/temp-deploy; then
   git branch -D temp-deploy
 fi
 
-# 3. 创建一个临时分支用于部署
+# 4. 创建一个临时分支用于部署
 echo "Creating temporary branch for deployment..."
 git checkout --orphan temp-deploy
 git reset --hard
 
-# 4. 清空当前目录（除了 .git、dist 和 node_modules 目录）
+# 5. 清空当前目录（除了 .git、dist 和 node_modules 目录）
 echo "Cleaning current directory (except .git, dist, and node_modules)..."
 find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name 'dist' ! -name 'node_modules' -exec rm -rf {} +
 
-# 5. 创建 .gitignore 文件，屏蔽 node_modules 和 dist 等目录
+# 6. 创建 .gitignore 文件，屏蔽 node_modules 和 dist 等目录
 echo "Creating .gitignore file..."
 cat <<EOL > .gitignore
 # Ignore node_modules and dist directories
@@ -40,24 +50,24 @@ dist/
 .DS_Store
 EOL
 
-# 6. 将 dist 目录中的内容复制到当前目录
+# 7. 将 dist 目录中的内容复制到当前目录
 echo "Copying dist contents to temporary branch..."
 cp -r dist/* .
 
-# 7. 提交更改
+# 8. 提交更改
 echo "Committing changes to temporary branch..."
 git add .
 git commit -m "Deploy: Update main branch with latest build"
 
-# 8. 强制推送到远程 main 分支
+# 9. 强制推送到远程 main 分支
 echo "Force pushing changes to origin/main..."
 git push origin temp-deploy:main --force
 
-# 9. 切换回 dev 分支
+# 10. 切换回 dev 分支
 echo "Switching back to dev branch..."
 git checkout dev
 
-# 10. 删除临时分支
+# 11. 删除临时分支
 echo "Deleting temporary branch..."
 git branch -D temp-deploy
 
