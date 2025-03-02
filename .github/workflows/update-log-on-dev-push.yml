@@ -16,11 +16,11 @@ jobs:
         with:
           fetch-depth: 0  # 获取完整的提交历史
 
-      # 2. 创建临时分支
-      - name: Create temporary branch
+      # 2. 拉取远程 main 分支并创建临时分支
+      - name: Fetch main branch and create temporary branch
         run: |
-          git fetch origin main
-          git checkout -b temp-log-update main
+          git fetch origin main:main  # 拉取远程 main 分支到本地
+          git checkout -b temp-log-update main  # 基于 main 分支创建临时分支
 
       # 3. 创建 articles 文件夹（如果不存在）
       - name: Create articles directory
