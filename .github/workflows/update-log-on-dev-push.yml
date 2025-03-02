@@ -16,11 +16,17 @@ jobs:
         with:
           fetch-depth: 0  # 获取完整的提交历史
 
-      # 2. 创建 public/foo 文件夹（如果不存在）
-      - name: Create public/foo directory
-        run: mkdir -p public/foo
+      # 2. 切换到 main 分支
+      - name: Switch to main branch
+        run: |
+          git fetch origin main
+          git checkout main
 
-      # 3. 获取最新提交信息
+      # 3. 创建 public/articles 文件夹（如果不存在）
+      - name: Create public/articles directory
+        run: mkdir -p public/articles
+
+      # 4. 获取最新提交信息
       - name: Get latest commit info
         id: commit
         run: |
@@ -28,10 +34,10 @@ jobs:
           echo "::set-output name=author::$(git log -1 --format=%an)"
           echo "::set-output name=message::$(git log -1 --format=%s)"
 
-      # 4. 创建或更新 log.md 文件
+      # 5. 创建或更新 log.md 文件
       - name: Update log.md
         run: |
-          LOG_FILE="public/foo/log.md"
+          LOG_FILE="public/articles/log.md"
           if [ ! -f "$LOG_FILE" ]; then
             echo "# Commit Log" > "$LOG_FILE"
             echo "" >> "$LOG_FILE"
@@ -41,11 +47,11 @@ jobs:
           echo "- **Message**: $(git log -1 --format=%s)" >> "$LOG_FILE"
           echo "" >> "$LOG_FILE"
 
-      # 5. 提交更改
-      - name: Commit changes
+      # 6. 提交更改到 main 分支
+      - name: Commit changes to main branch
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add public/foo/log.md
+          git add public/articles/log.md
           git commit -m "Update log.md with latest commit info"
-          git push
+          git push origin main
