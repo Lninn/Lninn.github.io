@@ -91,13 +91,15 @@ jobs:
       - name: Create articles directory
         run: mkdir -p articles
 
-      # 14. 获取最新提交信息
-      - name: Get latest commit info
+      # 14. 获取 dev 分支上最新的提交信息
+      - name: Get latest commit info from dev branch
         id: commit
         run: |
+          git checkout dev  # 切换到 dev 分支
           echo "::set-output name=date::$(git log -1 --format=%cd --date=short)"
           echo "::set-output name=author::$(git log -1 --format=%an)"
           echo "::set-output name=message::$(git log -1 --format=%s)"
+          git checkout "${{ steps.temp-branch.outputs.temp_branch }}"  # 切换回临时分支
 
       # 15. 创建或更新 log.md 文件
       - name: Update log.md
@@ -107,9 +109,9 @@ jobs:
             echo "# Commit Log" > "$LOG_FILE"
             echo "" >> "$LOG_FILE"
           fi
-          echo "## $(git log -1 --format=%cd --date=short)" >> "$LOG_FILE"
-          echo "- **Author**: $(git log -1 --format=%an)" >> "$LOG_FILE"
-          echo "- **Message**: $(git log -1 --format=%s)" >> "$LOG_FILE"
+          echo "## ${{ steps.commit.outputs.date }}" >> "$LOG_FILE"
+          echo "- **Author**: ${{ steps.commit.outputs.author }}" >> "$LOG_FILE"
+          echo "- **Message**: ${{ steps.commit.outputs.message }}" >> "$LOG_FILE"
           echo "" >> "$LOG_FILE"
 
       # 16. 配置 Git 用户信息
