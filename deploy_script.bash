@@ -54,20 +54,25 @@ EOL
 echo "Copying dist contents to temporary branch..."
 cp -r dist/* .
 
-# 8. 提交更改
+# 8. 配置 Git 用户信息
+echo "Configuring Git user information..."
+git config --global user.name "GitHub Actions"
+git config --global user.email "actions@github.com"
+
+# 9. 提交更改
 echo "Committing changes to temporary branch..."
 git add .
 git commit -m "Deploy: Update main branch with latest build"
 
-# 9. 强制推送到远程 main 分支
+# 10. 强制推送到远程 main 分支
 echo "Force pushing changes to origin/main..."
 git push origin temp-deploy:main --force
 
-# 10. 切换回 dev 分支
+# 11. 切换回 dev 分支
 echo "Switching back to dev branch..."
 git checkout dev
 
-# 11. 删除临时分支
+# 12. 删除临时分支
 echo "Deleting temporary branch..."
 git branch -D temp-deploy
 
