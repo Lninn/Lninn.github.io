@@ -55,6 +55,6 @@ jobs:
           ls
           echo "-==-"
           ls articles
-          git add articles/log.md
+          git add .
           git commit -m "Update log.md with latest commit info"
           git push origin main
