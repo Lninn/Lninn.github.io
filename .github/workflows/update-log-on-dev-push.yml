@@ -58,8 +58,8 @@ jobs:
       # 7. 推送临时分支并创建 Pull Request
       - name: Push temporary branch and create PR
         run: |
-          git remote set-url origin https://${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
+          git remote set-url origin https://${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
           git push origin temp-log-update
           gh pr create --base main --head temp-log-update --title "Update log.md" --body "Automated update of log.md file."
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
