@@ -24,6 +24,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # 4. 运行部署脚本
+      # 4. 赋予 deploy_script.bash 执行权限
+      - name: Make deploy_script.bash executable
+        run: chmod +x ./deploy_script.bash
+
+      # 5. 运行部署脚本
       - name: Run deploy script
         run: npm run deploy
