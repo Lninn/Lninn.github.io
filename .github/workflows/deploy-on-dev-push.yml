@@ -45,7 +45,12 @@ jobs:
           TEMP_BRANCH="temp-deploy-$(date +%s)"
           echo "::set-output name=temp_branch::$TEMP_BRANCH"
 
-      # 7. 检查临时分支是否存在，如果存在则删除
+      # 7. 拉取 main 分支的提交历史
+      - name: Fetch main branch
+        run: |
+          git fetch origin main:main
+
+      # 8. 检查临时分支是否存在，如果存在则删除
       - name: Delete existing temporary branch
         run: |
           if git show-ref --quiet refs/heads/"${{ steps.temp-branch.outputs.temp_branch }}"; then
@@ -53,18 +58,17 @@ jobs:
             git branch -D "${{ steps.temp-branch.outputs.temp_branch }}"
           fi
 
-      # 8. 创建一个临时分支用于部署
+      # 9. 基于 main 分支创建临时分支
       - name: Create temporary branch
         run: |
-          git checkout --orphan "${{ steps.temp-branch.outputs.temp_branch }}"
-          git reset --hard
+          git checkout -b "${{ steps.temp-branch.outputs.temp_branch }}" main
 
-      # 9. 清空当前目录（除了 .git、dist 和 node_modules 目录）
+      # 10. 清空当前目录（除了 .git、dist 和 node_modules 目录）
       - name: Clean current directory
         run: |
           find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name 'dist' ! -name 'node_modules' -exec rm -rf {} +
 
-      # 10. 创建 .gitignore 文件，屏蔽 node_modules 和 dist 等目录
+      # 11. 创建 .gitignore 文件，屏蔽 node_modules 和 dist 等目录
       - name: Create .gitignore file
         run: |
           cat <<EOL > .gitignore
@@ -78,18 +82,18 @@ jobs:
           .DS_Store
           EOL
 
-      # 11. 将 dist 目录中的内容复制到当前目录
+      # 12. 将 dist 目录中的内容复制到当前目录
       - name: Copy dist contents
         run: |
           cp -r dist/* .
 
-      # 12. 配置 Git 用户信息
+      # 13. 配置 Git 用户信息
       - name: Configure Git user information
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
 
-      # 13. 提交更改
+      # 14. 提交更改
       - name: Commit changes
         run: |
           git add .
@@ -98,7 +102,7 @@ jobs:
             exit 1
           fi
 
-      # 14. 推送临时分支并创建 Pull Request
+      # 15. 推送临时分支并创建 Pull Request
       - name: Push temporary branch and create PR
         run: |
           git remote set-url origin https://${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
@@ -107,17 +111,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      # 15. 切换回 dev 分支
+      # 16. 切换回 dev 分支
       - name: Switch back to dev branch
         run: |
           git checkout dev
 
-      # 16. 删除临时分支
+      # 17. 删除临时分支
       - name: Delete temporary branch
         run: |
           git branch -D "${{ steps.temp-branch.outputs.temp_branch }}"
 
-      # 17. 完成部署
+      # 18. 完成部署
       - name: Complete deployment
         run: |
           echo "Deployment to origin/main completed successfully!"
