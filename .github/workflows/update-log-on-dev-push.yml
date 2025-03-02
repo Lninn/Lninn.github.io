@@ -52,6 +52,7 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+          ls
           git add articles/log.md
           git commit -m "Update log.md with latest commit info"
           git push origin main
