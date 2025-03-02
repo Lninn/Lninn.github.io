@@ -21,6 +21,7 @@ function App() {
      const fileNames = Object.keys(fileList).map((filePath) =>
        filePath.split("/").pop()
      );
+     console.log('fileNames ', { fileNames })
      setFiles(fileNames);
 
   }, []);
