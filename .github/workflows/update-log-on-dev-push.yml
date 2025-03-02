@@ -22,9 +22,9 @@ jobs:
           git fetch origin main
           git checkout main
 
-      # 3. 创建 public/articles 文件夹（如果不存在）
-      - name: Create public/articles directory
-        run: mkdir -p public/articles
+      # 3. 创建 articles 文件夹（如果不存在）
+      - name: Create articles directory
+        run: mkdir -p articles
 
       # 4. 获取最新提交信息
       - name: Get latest commit info
@@ -37,7 +37,7 @@ jobs:
       # 5. 创建或更新 log.md 文件
       - name: Update log.md
         run: |
-          LOG_FILE="public/articles/log.md"
+          LOG_FILE="articles/log.md"
           if [ ! -f "$LOG_FILE" ]; then
             echo "# Commit Log" > "$LOG_FILE"
             echo "" >> "$LOG_FILE"
@@ -52,6 +52,6 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add public/articles/log.md
+          git add articles/log.md
           git commit -m "Update log.md with latest commit info"
           git push origin main
