@@ -23,9 +23,9 @@ echo "Creating temporary branch for deployment..."
 git checkout --orphan temp-deploy
 git reset --hard
 
-# 4. 清空当前目录（除了 .git 目录）
-echo "Cleaning current directory..."
-find . -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+# 4. 清空当前目录（除了 .git、dist 和 node_modules 目录）
+echo "Cleaning current directory (except .git, dist, and node_modules)..."
+find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name 'dist' ! -name 'node_modules' -exec rm -rf {} +
 
 # 5. 创建 .gitignore 文件，屏蔽 node_modules 和 dist 等目录
 echo "Creating .gitignore file..."
