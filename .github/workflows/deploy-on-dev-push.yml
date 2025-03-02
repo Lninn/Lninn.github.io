@@ -10,27 +10,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 检出代码
+      # 1. 检出代码（默认检出 dev 分支）
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0  # 获取完整的提交历史
 
-      # 2. 设置 Node.js 环境
+      # 2. 获取 dev 分支上最新的提交信息
+      - name: Get latest commit info from dev branch
+        id: commit
+        run: |
+          echo "::set-output name=date::$(git log -1 --format=%cd --date=short)"
+          echo "::set-output name=author::$(git log -1 --format=%an)"
+          echo "::set-output name=message::$(git log -1 --format=%s)"
+
+      # 3. 设置 Node.js 环境
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18  # 根据项目需求指定 Node.js 版本
 
-      # 3. 安装依赖
+      # 4. 安装依赖
       - name: Install dependencies
         run: npm install
 
-      # 4. 打包项目
+      # 5. 打包项目
       - name: Build project
         run: npm run build
 
-      # 5. 检查是否成功生成 dist 目录
+      # 6. 检查是否成功生成 dist 目录
       - name: Check dist directory
         run: |
           if [ ! -d "dist" ]; then
@@ -38,19 +46,19 @@ jobs:
             exit 1
           fi
 
-      # 6. 生成唯一的临时分支名称
+      # 7. 生成唯一的临时分支名称
       - name: Generate temporary branch name
         id: temp-branch
         run: |
           TEMP_BRANCH="temp-deploy-$(date +%s)"
           echo "temp_branch=$TEMP_BRANCH" >> $GITHUB_OUTPUT
 
-      # 7. 拉取 main 分支的提交历史
+      # 8. 拉取 main 分支的提交历史
       - name: Fetch main branch
         run: |
           git fetch origin main:main
 
-      # 8. 检查临时分支是否存在，如果存在则删除
+      # 9. 检查临时分支是否存在，如果存在则删除
       - name: Delete existing temporary branch
         run: |
           if git show-ref --quiet refs/heads/"${{ steps.temp-branch.outputs.temp_branch }}"; then
@@ -58,17 +66,17 @@ jobs:
             git branch -D "${{ steps.temp-branch.outputs.temp_branch }}"
           fi
 
-      # 9. 基于 main 分支创建临时分支
+      # 10. 基于 main 分支创建临时分支
       - name: Create temporary branch
         run: |
           git checkout -b "${{ steps.temp-branch.outputs.temp_branch }}" main
 
-      # 10. 清空当前目录（除了 .git、dist 和 node_modules 目录）
+      # 11. 清空当前目录（除了 .git、dist 和 node_modules 目录）
       - name: Clean current directory
         run: |
           find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name 'dist' ! -name 'node_modules' -exec rm -rf {} +
 
-      # 11. 创建 .gitignore 文件，屏蔽 node_modules 和 dist 等目录
+      # 12. 创建 .gitignore 文件，屏蔽 node_modules 和 dist 等目录
       - name: Create .gitignore file
         run: |
           cat <<EOL > .gitignore
@@ -82,24 +90,14 @@ jobs:
           .DS_Store
           EOL
 
-      # 12. 将 dist 目录中的内容复制到当前目录
+      # 13. 将 dist 目录中的内容复制到当前目录
       - name: Copy dist contents
         run: |
           cp -r dist/* .
 
-      # 13. 创建 articles 文件夹（如果不存在）
+      # 14. 创建 articles 文件夹（如果不存在）
       - name: Create articles directory
         run: mkdir -p articles
-
-      # 14. 获取 dev 分支上最新的提交信息
-      - name: Get latest commit info from dev branch
-        id: commit
-        run: |
-          git checkout dev  # 切换到 dev 分支
-          echo "::set-output name=date::$(git log -1 --format=%cd --date=short)"
-          echo "::set-output name=author::$(git log -1 --format=%an)"
-          echo "::set-output name=message::$(git log -1 --format=%s)"
-          git checkout "${{ steps.temp-branch.outputs.temp_branch }}"  # 切换回临时分支
 
       # 15. 创建或更新 log.md 文件
       - name: Update log.md
