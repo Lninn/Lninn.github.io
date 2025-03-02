@@ -65,7 +65,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      # 8. 自动合并 Pull Request
+      # 8. 等待 PR 创建完成
+      - name: Wait for PR creation
+        run: sleep 10  # 等待 10 秒，确保 PR 已创建
+
+      # 9. 自动合并 Pull Request
       - name: Merge Pull Request
         run: |
           gh pr merge "$BRANCH_NAME" --merge --delete-branch

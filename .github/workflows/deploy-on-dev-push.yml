@@ -43,7 +43,7 @@ jobs:
         id: temp-branch
         run: |
           TEMP_BRANCH="temp-deploy-$(date +%s)"
-          echo "::set-output name=temp_branch::$TEMP_BRANCH"
+          echo "temp_branch=$TEMP_BRANCH" >> $GITHUB_OUTPUT
 
       # 7. 拉取 main 分支的提交历史
       - name: Fetch main branch
@@ -111,22 +111,21 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      # 16. 自动合并 Pull Request
+      # 16. 等待 PR 创建完成
+      - name: Wait for PR creation
+        run: sleep 10  # 等待 10 秒，确保 PR 已创建
+
+      # 17. 自动合并 Pull Request
       - name: Merge Pull Request
         run: |
           gh pr merge "${{ steps.temp-branch.outputs.temp_branch }}" --merge --delete-branch
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      # 17. 切换回 dev 分支
+      # 18. 切换回 dev 分支
       - name: Switch back to dev branch
         run: |
           git checkout dev
-
-      # 18. 删除临时分支
-      - name: Delete temporary branch
-        run: |
-          git branch -D "${{ steps.temp-branch.outputs.temp_branch }}"
 
       # 19. 完成部署
       - name: Complete deployment
