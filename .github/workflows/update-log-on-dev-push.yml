@@ -64,3 +64,10 @@ jobs:
           gh pr create --base main --head "$BRANCH_NAME" --title "Update log.md" --body "Automated update of log.md file."
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      # 8. 自动合并 Pull Request
+      - name: Merge Pull Request
+        run: |
+          gh pr merge "$BRANCH_NAME" --merge --delete-branch
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}

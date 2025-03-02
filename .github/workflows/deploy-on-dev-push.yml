@@ -111,17 +111,24 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      # 16. 切换回 dev 分支
+      # 16. 自动合并 Pull Request
+      - name: Merge Pull Request
+        run: |
+          gh pr merge "${{ steps.temp-branch.outputs.temp_branch }}" --merge --delete-branch
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      # 17. 切换回 dev 分支
       - name: Switch back to dev branch
         run: |
           git checkout dev
 
-      # 17. 删除临时分支
+      # 18. 删除临时分支
       - name: Delete temporary branch
         run: |
           git branch -D "${{ steps.temp-branch.outputs.temp_branch }}"
 
-      # 18. 完成部署
+      # 19. 完成部署
       - name: Complete deployment
         run: |
           echo "Deployment to origin/main completed successfully!"
