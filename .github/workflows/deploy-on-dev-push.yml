@@ -1,4 +1,4 @@
-name: Deploy on Dev Push
+name: Deploy and Update Log on Dev Push
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - dev  # 仅在 dev 分支有新提交时触发
 
 jobs:
-  deploy:
+  deploy-and-update-log:
     runs-on: ubuntu-latest
 
     steps:
@@ -87,47 +87,72 @@ jobs:
         run: |
           cp -r dist/* .
 
-      # 13. 配置 Git 用户信息
+      # 13. 创建 articles 文件夹（如果不存在）
+      - name: Create articles directory
+        run: mkdir -p articles
+
+      # 14. 获取最新提交信息
+      - name: Get latest commit info
+        id: commit
+        run: |
+          echo "::set-output name=date::$(git log -1 --format=%cd --date=short)"
+          echo "::set-output name=author::$(git log -1 --format=%an)"
+          echo "::set-output name=message::$(git log -1 --format=%s)"
+
+      # 15. 创建或更新 log.md 文件
+      - name: Update log.md
+        run: |
+          LOG_FILE="articles/log.md"
+          if [ ! -f "$LOG_FILE" ]; then
+            echo "# Commit Log" > "$LOG_FILE"
+            echo "" >> "$LOG_FILE"
+          fi
+          echo "## $(git log -1 --format=%cd --date=short)" >> "$LOG_FILE"
+          echo "- **Author**: $(git log -1 --format=%an)" >> "$LOG_FILE"
+          echo "- **Message**: $(git log -1 --format=%s)" >> "$LOG_FILE"
+          echo "" >> "$LOG_FILE"
+
+      # 16. 配置 Git 用户信息
       - name: Configure Git user information
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
 
-      # 14. 提交更改
+      # 17. 提交更改
       - name: Commit changes
         run: |
           git add .
-          if ! git commit -m "Deploy: Update main branch with latest build"; then
+          if ! git commit -m "Deploy: Update main branch with latest build and log.md"; then
             echo "Error: Failed to commit changes."
             exit 1
           fi
 
-      # 15. 推送临时分支并创建 Pull Request
+      # 18. 推送临时分支并创建 Pull Request
       - name: Push temporary branch and create PR
         run: |
           git remote set-url origin https://${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
           git push origin "${{ steps.temp-branch.outputs.temp_branch }}"
-          gh pr create --base main --head "${{ steps.temp-branch.outputs.temp_branch }}" --title "Deploy: Update main branch with latest build" --body "Automated deployment of the latest build."
+          gh pr create --base main --head "${{ steps.temp-branch.outputs.temp_branch }}" --title "Deploy: Update main branch with latest build and log.md" --body "Automated deployment of the latest build and update of log.md."
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      # 16. 等待 PR 创建完成
+      # 19. 等待 PR 创建完成
       - name: Wait for PR creation
         run: sleep 10  # 等待 10 秒，确保 PR 已创建
 
-      # 17. 自动合并 Pull Request
+      # 20. 自动合并 Pull Request
       - name: Merge Pull Request
         run: |
           gh pr merge "${{ steps.temp-branch.outputs.temp_branch }}" --merge --delete-branch
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      # 18. 切换回 dev 分支
+      # 21. 切换回 dev 分支
       - name: Switch back to dev branch
         run: |
           git checkout dev
 
-      # 19. 完成部署
-      - name: Complete deployment
+      # 22. 完成部署和日志更新
+      - name: Complete deployment and log update
         run: |
-          echo "Deployment to origin/main completed successfully!"
+          echo "Deployment to origin/main and log.md update completed successfully!"
