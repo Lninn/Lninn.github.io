@@ -20,7 +20,7 @@ jobs:
       - name: Fetch main branch and create temporary branch
         run: |
           git fetch origin main:main  # 拉取远程 main 分支到本地
-          git checkout -b temp-log-update main  # 基于 main 分支创建临时分支
+          git checkout -b temp-log-update-${{ github.run_id }} main  # 基于 main 分支创建临时分支
 
       # 3. 创建 articles 文件夹（如果不存在）
       - name: Create articles directory
@@ -58,8 +58,9 @@ jobs:
       # 7. 推送临时分支并创建 Pull Request
       - name: Push temporary branch and create PR
         run: |
+          BRANCH_NAME="temp-log-update-${{ github.run_id }}"  # 使用运行 ID 作为唯一标识符
           git remote set-url origin https://${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
-          git push origin temp-log-update
-          gh pr create --base main --head temp-log-update --title "Update log.md" --body "Automated update of log.md file."
+          git push origin "$BRANCH_NAME" --force
+          gh pr create --base main --head "$BRANCH_NAME" --title "Update log.md" --body "Automated update of log.md file."
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
