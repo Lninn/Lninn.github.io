@@ -1,4 +1,4 @@
 ## 2025-03-03
-- **Author**: Lninn
-- **Message**: json数据整理
+- **Author**: HongLin Tian
+- **Message**: Merge pull request #35 from Lninn/feat/home-page
 
