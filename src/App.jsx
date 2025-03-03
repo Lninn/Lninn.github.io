@@ -58,7 +58,6 @@ const urls = [
 
 
 function App() {
-  const [count, setCount] = useState(0)
 
   const [files, setFiles] = useState([]);
   const [markdown, setMarkdown] = useState("");
@@ -87,32 +86,24 @@ function App() {
 
   return (
     <>
-      <h1>Hello world123</h1>
-
       <p>
         <button onClick={() => getFiles()}>点击获取文件列表</button>
       </p>
 
-      <p className='urls'>
+      <dl>
+        <dt>Beast of Bodmin</dt>
         {urls.map(obj => {
           return (
-            <a href={obj.url} target='_blank'>{obj.name}</a>
+            <dd>
+              <a href={obj.url} target='_blank'>{obj.name}</a>
+            </dd>
           )
         })}
-      </p>
+      </dl>
 
       <p>
         {files.map(name => (<a key={name} onClick={() => loadFile(name)}>{name}</a>))}
       </p>
-
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
 
       <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
         {markdown}
