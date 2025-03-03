@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
@@ -14,8 +14,7 @@ function App() {
   const [files, setFiles] = useState([]);
   const [markdown, setMarkdown] = useState("");
 
-  useEffect(() => {
-
+  function getFiles() {
      // 使用 import.meta.glob 获取文件列表
      const fileList = import.meta.glob("/public/articles/*");
      const fileNames = Object.keys(fileList).map((filePath) =>
@@ -23,8 +22,7 @@ function App() {
      );
      console.log('fileNames ', { fileNames })
      setFiles(fileNames);
-
-  }, []);
+  }
 
   function loadFile(name) {
      // 加载 public 目录中的 init.md 文件
@@ -41,6 +39,8 @@ function App() {
   return (
     <>
       <h1>Hello world123</h1>
+
+      <button onClick={() => getFiles()}>点击获取文件列表</button>
 
       <p>
         {files.map(name => (<a key={name} onClick={() => loadFile(name)}>{name}</a>))}
