@@ -71,10 +71,10 @@ jobs:
         run: |
           git checkout -b "${{ steps.temp-branch.outputs.temp_branch }}" main
 
-      # 11. 清空当前目录（除了 .git、dist 和 node_modules 目录）
+      # 11. 清空当前目录（除了 .git、dist、node_modules 和 articles 目录）
       - name: Clean current directory
         run: |
-          find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name 'dist' ! -name 'node_modules' -exec rm -rf {} +
+          find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name 'dist' ! -name 'node_modules' ! -name 'articles' -exec rm -rf {} +
 
       # 12. 创建 .gitignore 文件，屏蔽 node_modules 和 dist 等目录
       - name: Create .gitignore file
