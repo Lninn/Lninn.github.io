@@ -18,6 +18,11 @@ pre {
   overflow-x: auto;
 }
 
+.urls {
+  display: inline-flex;
+  gap: 8px;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
