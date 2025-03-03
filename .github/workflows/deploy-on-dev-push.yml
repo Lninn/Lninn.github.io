@@ -99,7 +99,7 @@ jobs:
       - name: Create articles directory
         run: mkdir -p articles
 
-      # 15. 创建或更新 log.md 文件
+      # 15. 更新 log.md 文件（追加新记录）
       - name: Update log.md
         run: |
           LOG_FILE="articles/log.md"
