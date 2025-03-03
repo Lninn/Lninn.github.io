@@ -1,0 +1,17 @@
+.app-nav {
+  display: flex;
+  justify-content: center;
+}
+
+.app-nav ul {
+  display: flex;
+  gap: 24px;
+}
+
+.app-nav li {
+  list-style: none;
+}
+
+.app-nav li a {
+  font-size: 24px;
+}
