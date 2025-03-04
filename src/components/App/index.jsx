@@ -10,7 +10,7 @@ const ROUTES = {
   },
   LOG: {
     path: 'log',
-    component: lazy(() => import('../../Article'))
+    component: lazy(() => import('../Article'))
   }
 }
 
