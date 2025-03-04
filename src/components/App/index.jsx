@@ -1,20 +1,23 @@
 import './index.css'
 
-import { Suspense, useState, lazy } from 'react'
+import { Suspense, useState } from 'react'
 import AppHeader from '../AppHeader'
+import Bookmark from '../Bookmark'
+import Article from '../Article'
+import Dashboard from '../Dashboard'
 
 const ROUTES = {
   BOOKMARK: {
     path: 'bookmark',
-    component: lazy(() => import('../Bookmark'))
+    component: Bookmark
   },
   LOG: {
     path: 'log',
-    component: lazy(() => import('../Article'))
+    component: Article
   },
   DASHBOARD: {
     path: 'dashboard',
-    component: lazy(() => import('../Dashboard'))
+    component: Dashboard
   }
 }
 
