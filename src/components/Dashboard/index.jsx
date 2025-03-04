@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import useBookmarkStore from '../../store/bookmark'
-
+import AddBookmarkModal from './AddBookmarkModal'
 import './index.css'
 
 
@@ -11,7 +11,7 @@ export default function Dashboard() {
   useEffect(() => {
     fetchBookmarks()
   }, [])
-
+  const [showAddModal, setShowAddModal] = useState(false)
   const [bookmarks, setBookmarks] = useState([])
   // const [originalData, setOriginalData] = useState([])
   const [showDiff, setShowDiff] = useState(false)
@@ -25,10 +25,6 @@ export default function Dashboard() {
     setBookmarks(prev => prev.filter(item => item.url !== url))
   }
 
-  const handleSync = async () => {
-    setShowDiff(true)
-  }
-
   const handleConfirmSync = async () => {
     // 这里需要后端API支持，暂时只是模拟
     console.log('Syncing changes:', bookmarks)
@@ -39,20 +35,23 @@ export default function Dashboard() {
     <div className="dashboard">
       <div className="dashboard-header">
         <h1>书签管理</h1>
-        <button 
-          className="sync-button"
-          onClick={handleSync}
-        >
-          同步更改
-        </button>
+        <div className="header-actions">
+          <button 
+            className="add-button"
+            onClick={() => setShowAddModal(true)}
+          >
+            添加书签
+          </button>
+          <button 
+            className="sync-button"
+            onClick={() => setShowDiff(true)}
+          >
+            同步更改
+          </button>
+        </div>
       </div>
 
       <div className="dashboard-content">
-        <div className="form-section">
-          <h2>添加新书签</h2>
-          <BookmarkForm onSubmit={handleAdd} />
-        </div>
-
         <div className="list-section">
           <h2>书签列表</h2>
           <div className="bookmark-list">
@@ -77,6 +76,13 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {showAddModal && (
+        <AddBookmarkModal
+          onClose={() => setShowAddModal(false)}
+          onSubmit={handleAdd}
+        />
+      )}
 
       {showDiff && (
         <div className="modal">
