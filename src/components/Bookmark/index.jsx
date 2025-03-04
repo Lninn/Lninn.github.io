@@ -1,21 +1,18 @@
-import { use } from 'react'
-import UrlList from './UrlList'
-import { getUrlArray } from './url-support'
 import './index.css'
 
-const urlListPromise = getUrlList()
+import { use, useMemo } from 'react'
+import UrlList from './UrlList'
+import { supabase } from '../../supabaseClient'
 
-function BookmarkCategory({ name, data }) {
-  return (
-    <div className="bookmark-category">
-      <h2 className="category-title">{name}</h2>
-      <UrlList list={data} />
-    </div>
-  )
-}
+
+const fetchBookmarkPromise = fetchBookmarkData()
 
 export default function Bookmark() {
-  const data = use(urlListPromise)
+  const originalData = use(fetchBookmarkPromise)
+
+  const data = useMemo(() => {
+    return getUrlArray(originalData)
+  }, [originalData])
 
   return (
     <div className="bookmark-container">
@@ -36,24 +33,58 @@ export default function Bookmark() {
   )
 }
 
-function getUrlList() {
-  return fetch('data.json')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to fetch bookmark data')
+function BookmarkCategory({ name, data }) {
+  return (
+    <div className="bookmark-category">
+      <h2 className="category-title">{name}</h2>
+      <UrlList list={data} />
+    </div>
+  )
+}
+
+async function fetchBookmarkData() {
+  let { data, error } = await supabase
+    .from('bookmark')
+    .select('*')
+
+  if (error) {
+    console.error('Failed to fetch bookmark data:', error)
+    return []
+  }
+
+  return data
+}
+
+export function getUrlArray(list) {
+  var originalData = list
+  var restList = []
+
+  var dataMap = {}
+
+  for (const item of originalData) {
+    if ('category' in item) {
+      var name = item['category']
+      if (name in dataMap) {
+        dataMap[name].push(item)
+      } else {
+        dataMap[name] = [item]
       }
-      return response.text()
-    })
-    .then(list => {
-      try {
-        return getUrlArray(list)
-      } catch (error) {
-        console.error('Failed to parse bookmark data:', error)
-        return []
+    } else {
+      restList.push(item)
+    }
+  }
+
+  var dataList = Object.entries(dataMap)
+  
+  return sortByFirstLetter(dataList, false)
+}
+
+function sortByFirstLetter(arr, ascending = true) {
+  return arr.sort((a, b) => {
+      if (ascending) {
+          return a[0][0].localeCompare(b[0][0]);
+      } else {
+          return b[0][0].localeCompare(a[0][0]);
       }
-    })
-    .catch(error => {
-      console.error('Failed to load bookmark data:', error)
-      return []
-    })
+  });
 }
