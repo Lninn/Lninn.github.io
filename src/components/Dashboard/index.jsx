@@ -4,19 +4,21 @@ import { useEffect, useState } from 'react'
 import useBookmarkStore from '../../store/bookmark'
 import AddBookmarkModal from './AddBookmarkModal'
 import SyncChangesModal from './SyncChangesModal'
-
+import { supabase } from '../../supabaseClient'
+import Notification from '../Notification'
 
 export default function Dashboard() {
 
-  const { list, fetchBookmarks } = useBookmarkStore()
+  const { list: renderList, fetchBookmarks } = useBookmarkStore()
 
   useEffect(() => {
     fetchBookmarks()
   }, [])
 
-  const [showAddModal, setShowAddModal] = useState(false)
   const [bookmarks, setBookmarks] = useState([])
   const [showDiff, setShowDiff] = useState(false)
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [notification, setNotification] = useState(null);
 
   const handleAdd = (newBookmark) => {
     setBookmarks(prev => [...prev, newBookmark])
@@ -27,9 +29,34 @@ export default function Dashboard() {
   }
 
   const handleConfirmSync = async () => {
-    // 这里需要后端API支持，暂时只是模拟
-    console.log('Syncing changes:', bookmarks)
+    insertBookmark(bookmarks)
     setShowDiff(false)
+  }
+
+  const insertBookmark = async (bookmarks) => {
+    const newData = bookmarks.map(item => {
+      return {
+        ...item,
+        id: renderList.length + 1
+      }
+    })
+
+    const { data, error } = await supabase
+      .from('bookmark')
+      .insert(newData)
+      .select()
+
+    if (error) {
+      setNotification({
+        type: 'error',
+        message: '书签同步失败，请稍后重试'
+      });
+    } else {
+      setNotification({
+        type: 'success',
+        message: `成功同步 ${data.length} 个书签`
+      });
+    }
   }
 
   return (
@@ -58,10 +85,10 @@ export default function Dashboard() {
         <div className="list-section">
           <div className="section-header">
             <h2>书签列表</h2>
-            <span className="bookmark-count">{list.length} 个书签</span>
+            <span className="bookmark-count">{renderList.length} 个书签</span>
           </div>
           <div className="bookmark-list">
-            {list.map(bookmark => (
+            {renderList.map(bookmark => (
               <div key={bookmark.url} className="bookmark-item">
                 <div className="bookmark-icon-wrapper">
                   <img src={bookmark.icon} alt="" className="bookmark-icon" />
@@ -95,10 +122,18 @@ export default function Dashboard() {
 
       {showDiff && (
         <SyncChangesModal
-          original={list}
+          original={[]}
           modified={bookmarks}
           onClose={() => setShowDiff(false)}
           onConfirm={handleConfirmSync}
+        />
+      )}
+
+      {notification && (
+        <Notification
+          type={notification.type}
+          message={notification.message}
+          onClose={() => setNotification(null)}
         />
       )}
     </div>
