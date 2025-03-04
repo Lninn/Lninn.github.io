@@ -6,7 +6,7 @@ import AppHeader from '../AppHeader'
 const ROUTES = {
   BOOKMARK: {
     path: 'bookmark',
-    component: lazy(() => import('../../Bookmark'))
+    component: lazy(() => import('../Bookmark'))
   },
   LOG: {
     path: 'log',
