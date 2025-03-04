@@ -11,6 +11,11 @@ const NAVIGATION_ITEMS = [
     name: '日志',
     icon: '📝'
   },
+  {
+    path: 'dashboard',
+    name: '仪表板',
+    icon: '📈'
+  }
 ]
 
 export default function AppHeader({ activePath, onChange }) {

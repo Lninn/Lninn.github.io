@@ -11,6 +11,10 @@ const ROUTES = {
   LOG: {
     path: 'log',
     component: lazy(() => import('../Article'))
+  },
+  DASHBOARD: {
+    path: 'dashboard',
+    component: lazy(() => import('../Dashboard'))
   }
 }
 
