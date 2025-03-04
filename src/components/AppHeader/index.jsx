@@ -18,7 +18,7 @@ export default function AppHeader({ activePath, onChange }) {
     <header className="app-header">
       <div className="header-content">
         <div className="logo">
-          <span className="logo-text">My Blog</span>
+          <span className="logo-text">Lninn's Space</span>
         </div>
 
         <AppNav activePath={activePath} onChange={onChange} />

@@ -1,0 +1,79 @@
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+}
+
+.app-main {
+  flex: 1;
+  padding: 24px;
+}
+
+.content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  gap: 12px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #eaeaea;
+  border-top-color: #007cf0;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.not-found {
+  text-align: center;
+  padding: 48px 0;
+  color: #666;
+}
+
+.not-found h2 {
+  font-size: 48px;
+  margin: 0 0 16px;
+  color: #333;
+}
+
+.app-footer {
+  border-top: 1px solid #eaeaea;
+  padding: 24px;
+  background-color: #fff;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  color: #666;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .app-main {
+    padding: 16px;
+  }
+
+  .content-container {
+    padding: 16px;
+  }
+}
