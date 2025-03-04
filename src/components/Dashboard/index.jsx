@@ -40,12 +40,14 @@ export default function Dashboard() {
             className="add-button"
             onClick={() => setShowAddModal(true)}
           >
+            <span className="button-icon">+</span>
             添加书签
           </button>
           <button 
             className="sync-button"
             onClick={() => setShowDiff(true)}
           >
+            <span className="button-icon">↑</span>
             同步更改
           </button>
         </div>
@@ -53,14 +55,19 @@ export default function Dashboard() {
 
       <div className="dashboard-content">
         <div className="list-section">
-          <h2>书签列表</h2>
+          <div className="section-header">
+            <h2>书签列表</h2>
+            <span className="bookmark-count">{bookmarkList.length} 个书签</span>
+          </div>
           <div className="bookmark-list">
             {bookmarkList.map(bookmark => (
               <div key={bookmark.url} className="bookmark-item">
-                <img src={bookmark.icon} alt="" className="bookmark-icon" />
+                <div className="bookmark-icon-wrapper">
+                  <img src={bookmark.icon} alt="" className="bookmark-icon" />
+                </div>
                 <div className="bookmark-info">
                   <h3>{bookmark.name}</h3>
-                  <p>{bookmark.category}</p>
+                  <p className="category-tag">{bookmark.category}</p>
                   <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
                     {bookmark.url}
                   </a>
@@ -68,8 +75,9 @@ export default function Dashboard() {
                 <button 
                   className="delete-button"
                   onClick={() => handleDelete(bookmark.url)}
+                  title="删除书签"
                 >
-                  删除
+                  <span className="delete-icon">×</span>
                 </button>
               </div>
             ))}

@@ -1,190 +1,278 @@
+/* 主题变量 */
+:root {
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --success-color: #059669;
+  --success-hover: #047857;
+  --danger-color: #dc2626;
+  --danger-hover: #b91c1c;
+  --bg-color: #f8fafc;
+  --card-bg: #ffffff;
+  --text-color: #1e293b;
+  --text-secondary: #64748b;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+
+/* 基础布局 */
 .dashboard {
-  padding: 24px;
-  max-width: 1200px;
+  padding: 2rem;
+  max-width: 1280px;
   margin: 0 auto;
   min-height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
-  gap: 24px;
+  gap: 2rem;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
-.dashboard-content {
+/* 头部样式 */
+.dashboard-header {
   display: flex;
-  gap: 24px;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.dashboard-header h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* 按钮样式 */
+.add-button, .sync-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.add-button {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.add-button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.sync-button {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.sync-button:hover {
+  background-color: var(--success-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.button-icon {
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+/* 内容区域 */
+.dashboard-content {
   flex: 1;
-  /* 移除 min-height: 0 */
 }
 
 .list-section {
-  flex: 1;
-  background: var(--card-bg, #fff);
-  color: var(--text-color, #333);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: var(--card-bg);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.bookmark-count {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+/* 书签列表 */
+.bookmark-list {
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  height: fit-content;
+  gap: 1rem;
 }
 
 .bookmark-item {
-  background: var(--item-bg, #f8f9fa);
-  border: 1px solid var(--border-color, #eee);
-  border-radius: 6px;
-  padding: 12px;
   display: flex;
   align-items: center;
-  transition: all 0.2s ease;
-  color: var(--text-color, #333);
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--bg-color);
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.bookmark-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.bookmark-icon-wrapper {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  background: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.bookmark-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+}
+
+.bookmark-info {
+  flex: 1;
+  min-width: 0;
 }
 
 .bookmark-info h3 {
-  margin: 0 0 2px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--heading-color, #333);
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
 }
 
-.bookmark-info p {
-  margin: 0 0 2px;
-  font-size: 12px;
-  color: var(--secondary-text, #666);
+.category-tag {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--primary-color);
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  margin: 0 0 0.5rem;
 }
 
 .bookmark-info a {
-  font-size: 12px;
-  color: #007cf0;
+  color: var(--text-secondary);
   text-decoration: none;
+  font-size: 0.875rem;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 200px;
+  max-width: 400px;
+  transition: color 0.2s;
+}
+
+.bookmark-info a:hover {
+  color: var(--primary-color);
 }
 
 .delete-button {
-  padding: 4px 8px;
-  font-size: 12px;
-  background: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
   opacity: 0;
-  transition: opacity 0.2s;
+  padding: 0.5rem;
+  border: none;
+  background: var(--danger-color);
+  color: white;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .bookmark-item:hover .delete-button {
   opacity: 1;
 }
 
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.delete-button:hover {
+  background: var(--danger-hover);
+  transform: scale(1.1);
 }
 
-.modal-content {
-  background: white;
-  padding: 24px;
-  border-radius: 8px;
-  max-width: 800px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
+.delete-icon {
+  font-size: 1.25rem;
+  line-height: 1;
 }
 
-.diff-view {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin: 24px 0;
-}
-
-.diff-column {
-  background: #f8f9fa;
-  padding: 16px;
-  border-radius: 4px;
-}
-
-.diff-column pre {
-  margin: 0;
-  white-space: pre-wrap;
-  word-break: break-all;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 16px;
-  margin-top: 24px;
-}
-
-.modal-actions button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.modal-actions button:first-child {
-  background: #28a745;
-  color: white;
-}
-
-.modal-actions button:last-child {
-  background: #6c757d;
-  color: white;
-}
-
-.sync-button {
-  padding: 8px 16px;
-  background: #28a745;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.sync-button:hover {
-  background: #218838;
-}
-
-.add-button {
-  padding: 8px 16px;
-  background: #007cf0;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-right: 10px;
-}
-
-.add-button:hover {
-  background: #0056b3;
-}
-
-.header-actions {
-  display: flex;
-}
-
+/* 响应式设计 */
 @media (max-width: 768px) {
-  .dashboard-content {
-    flex-direction: column;
+  .dashboard {
+    padding: 1rem;
   }
 
-  .form-section {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .header-actions {
     width: 100%;
+  }
+
+  .add-button, .sync-button {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .bookmark-info a {
+    max-width: 200px;
+  }
+
+  .section-header {
+    padding: 1rem;
+  }
+
+  .bookmark-list {
+    padding: 1rem;
+  }
+
+  .bookmark-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .delete-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    opacity: 1;
   }
 }
