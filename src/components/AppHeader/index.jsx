@@ -1,5 +1,8 @@
 import './index.css'
 
+import useRouteStore from '../../store/route'
+
+
 const NAVIGATION_ITEMS = [
   {
     path: 'bookmark',
@@ -18,7 +21,7 @@ const NAVIGATION_ITEMS = [
   }
 ]
 
-export default function AppHeader({ activePath, onChange }) {
+export default function AppHeader() {
   return (
     <header className="app-header">
       <div className="header-content">
@@ -26,7 +29,7 @@ export default function AppHeader({ activePath, onChange }) {
           <span className="logo-text">Lninn's Space</span>
         </div>
 
-        <AppNav activePath={activePath} onChange={onChange} />
+        <AppNav />
 
         <div className="header-actions">
           <button className="theme-toggle" aria-label="切换主题">
@@ -38,7 +41,9 @@ export default function AppHeader({ activePath, onChange }) {
   )
 }
 
-function AppNav({ activePath, onChange }) {
+function AppNav() {
+  const { activePath, setActivePath } = useRouteStore()
+
   return (
     <nav className="app-nav">
       <ul>
@@ -49,7 +54,7 @@ function AppNav({ activePath, onChange }) {
               className={`nav-item ${activePath === item.path ? 'active' : ''}`}
               onClick={e => {
                 e.preventDefault()
-                onChange(item.path)
+                setActivePath(item.path)
               }}
             >
               <span className="nav-icon">{item.icon}</span>
