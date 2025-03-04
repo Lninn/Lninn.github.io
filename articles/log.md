@@ -1,4 +1,4 @@
 ## 2025-03-04
 - **Author**: Lninn
-- **Message**: 更新vite配置手动拆分chunks
+- **Message**: 更新Supabase配置信息
 
