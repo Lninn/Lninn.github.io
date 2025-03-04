@@ -1,34 +1,51 @@
-import { Suspense, useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
 import './App.css'
+
+import { Suspense, useState } from 'react'
 
 import Article from './Article'
 import Bookmark from './Bookmark'
-import AppNav from './Nav'
+import AppHeader from './AppHeader'
 
 
-const compoentMap = {
-  'bookmark': Bookmark,
-  'log': Article,
+const ROUTES = {
+  BOOKMARK: 'bookmark',
+  LOG: 'log'
+}
+
+const componentMap = {
+  [ROUTES.BOOKMARK]: Bookmark,
+  [ROUTES.LOG]: Article
+}
+
+function LoadingSpinner() {
+  return (
+    <div className="loading-container">
+      <div>Loading...</div>
+    </div>
+  )
 }
 
 function App() {
+  const [path, setPath] = useState(ROUTES.BOOKMARK)
 
-  const [path, setPath] = useState('bookmark')
-
-  const Component = compoentMap[path]
+  const Component = componentMap[path] || (() => (
+    <div className="not-found">页面不存在</div>
+  ))
 
   return (
-    <>
-      <AppNav activePath={path} onChange={setPath} />
+    <div className="app-container">
+      <AppHeader activePath={path} onChange={setPath} />
 
-      <Suspense fallback={<div>Loading component...</div>}>
-        <Component />
-      </Suspense>
+      <main className="app-main">
+        <Suspense fallback={<LoadingSpinner />}>
+          <Component />
+        </Suspense>
+      </main>
 
-      <p>power by Deepseek</p>
-    </>
+      <footer className="app-footer">
+        <p>Powered by Deepseek</p>
+      </footer>
+    </div>
   )
 }
 

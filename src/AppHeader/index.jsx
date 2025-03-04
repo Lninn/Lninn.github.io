@@ -1,5 +1,3 @@
-import './Nav.css'
-
 var data = [
   {
     path: 'bookmark',
@@ -11,7 +9,15 @@ var data = [
   },
 ]
 
-export default function AppNav({ activePath, onChange }) {
+export default function AppHeader({ activePath, onChange }) {
+  return (
+    <header className="app-header">
+      <AppNav activePath={activePath} onChange={onChange} />
+    </header>
+  )
+}
+
+function AppNav({ activePath, onChange }) {
   return (
     <nav className='app-nav'>
       <ul>
