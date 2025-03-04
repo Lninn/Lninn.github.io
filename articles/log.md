@@ -1,4 +1,4 @@
 ## 2025-03-04
 - **Author**: Lninn
-- **Message**: 移除多余的文件
+- **Message**: 更新组件及添加Dashboard
 
