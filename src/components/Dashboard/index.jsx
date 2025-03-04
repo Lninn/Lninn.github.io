@@ -3,6 +3,7 @@ import './index.css'
 import { useEffect, useState } from 'react'
 import useBookmarkStore from '../../store/bookmark'
 import AddBookmarkModal from './AddBookmarkModal'
+import SyncChangesModal from './SyncChangesModal'
 
 
 export default function Dashboard() {
@@ -16,7 +17,6 @@ export default function Dashboard() {
   const [showAddModal, setShowAddModal] = useState(false)
   const [bookmarks, setBookmarks] = useState([])
   const [showDiff, setShowDiff] = useState(false)
-
 
   const handleAdd = (newBookmark) => {
     setBookmarks(prev => [...prev, newBookmark])
@@ -94,32 +94,13 @@ export default function Dashboard() {
       )}
 
       {showDiff && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>确认更改</h2>
-            <DiffView original={list} modified={bookmarks} />
-            <div className="modal-actions">
-              <button onClick={handleConfirmSync}>确认</button>
-              <button onClick={() => setShowDiff(false)}>取消</button>
-            </div>
-          </div>
-        </div>
+        <SyncChangesModal
+          original={list}
+          modified={bookmarks}
+          onClose={() => setShowDiff(false)}
+          onConfirm={handleConfirmSync}
+        />
       )}
-    </div>
-  )
-}
-
-function DiffView({ original, modified }) {
-  return (
-    <div className="diff-view">
-      <div className="diff-column">
-        <h3>原数据</h3>
-        <pre>{JSON.stringify(original, null, 2)}</pre>
-      </div>
-      <div className="diff-column">
-        <h3>新数据</h3>
-        <pre>{JSON.stringify(modified, null, 2)}</pre>
-      </div>
     </div>
   )
 }
