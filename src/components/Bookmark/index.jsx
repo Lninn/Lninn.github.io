@@ -55,7 +55,7 @@ async function fetchBookmarkData() {
   return data
 }
 
-export function getUrlArray(list) {
+function getUrlArray(list) {
   var originalData = list
   var restList = []
 
