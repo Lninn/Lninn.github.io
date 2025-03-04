@@ -1,10 +1,10 @@
 import './index.css'
-
-import { Suspense, useState } from 'react'
+import { Suspense } from 'react'
 import AppHeader from '../AppHeader'
 import Bookmark from '../Bookmark'
 import Article from '../Article'
 import Dashboard from '../Dashboard'
+import useRouteStore from '../../store/route'
 
 const ROUTES = {
   BOOKMARK: {
@@ -40,14 +40,14 @@ function NotFound() {
 }
 
 function App() {
-  const [path, setPath] = useState(ROUTES.BOOKMARK.path)
+  const { activePath, setActivePath } = useRouteStore()
 
-  const route = Object.values(ROUTES).find(r => r.path === path)
+  const route = Object.values(ROUTES).find(r => r.path === activePath)
   const Component = route?.component || NotFound
 
   return (
     <div className="app-container">
-      <AppHeader activePath={path} onChange={setPath} />
+      <AppHeader activePath={activePath} onChange={setActivePath} />
 
       <main className="app-main">
         <div className="content-container">
