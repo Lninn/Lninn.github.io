@@ -1,10 +1,8 @@
 import { create } from 'zustand'
-import { getUrlArray } from './shared'
 import { supabase } from '../supabaseClient'
 
 const useBookmarkStore = create((set) => ({
-  bookmarkList: [],
-  groupedBookmarks: [],
+  list: [],
   
   fetchBookmarks: async () => {
     const { data, error } = await supabase.from('bookmark').select('*')
@@ -14,25 +12,11 @@ const useBookmarkStore = create((set) => ({
       return
     }
 
-    const groupedData = getUrlArray(data)
     set({ 
-      bookmarkList: data,
-      groupedBookmarks: groupedData
+      list: data,
     })
   },
 
-  addBookmark: (bookmark) => set(state => ({
-    bookmarkList: [...state.bookmarkList, bookmark],
-    groupedBookmarks: getUrlArray([...state.bookmarkList, bookmark])
-  })),
-
-  removeBookmark: (url) => set(state => {
-    const newList = state.bookmarkList.filter(item => item.url !== url)
-    return {
-      bookmarkList: newList,
-      groupedBookmarks: getUrlArray(newList)
-    }
-  })
 }))
 
 export default useBookmarkStore

@@ -1,19 +1,20 @@
+import './index.css'
+
 import { useEffect, useState } from 'react'
 import useBookmarkStore from '../../store/bookmark'
 import AddBookmarkModal from './AddBookmarkModal'
-import './index.css'
 
 
 export default function Dashboard() {
 
-  const { bookmarkList, fetchBookmarks } = useBookmarkStore()
+  const { list, fetchBookmarks } = useBookmarkStore()
 
   useEffect(() => {
     fetchBookmarks()
   }, [])
+
   const [showAddModal, setShowAddModal] = useState(false)
   const [bookmarks, setBookmarks] = useState([])
-  // const [originalData, setOriginalData] = useState([])
   const [showDiff, setShowDiff] = useState(false)
 
 
@@ -57,10 +58,10 @@ export default function Dashboard() {
         <div className="list-section">
           <div className="section-header">
             <h2>书签列表</h2>
-            <span className="bookmark-count">{bookmarkList.length} 个书签</span>
+            <span className="bookmark-count">{list.length} 个书签</span>
           </div>
           <div className="bookmark-list">
-            {bookmarkList.map(bookmark => (
+            {list.map(bookmark => (
               <div key={bookmark.url} className="bookmark-item">
                 <div className="bookmark-icon-wrapper">
                   <img src={bookmark.icon} alt="" className="bookmark-icon" />
@@ -96,7 +97,7 @@ export default function Dashboard() {
         <div className="modal">
           <div className="modal-content">
             <h2>确认更改</h2>
-            <DiffView original={bookmarkList} modified={bookmarks} />
+            <DiffView original={list} modified={bookmarks} />
             <div className="modal-actions">
               <button onClick={handleConfirmSync}>确认</button>
               <button onClick={() => setShowDiff(false)}>取消</button>
@@ -105,64 +106,6 @@ export default function Dashboard() {
         </div>
       )}
     </div>
-  )
-}
-
-
-function BookmarkForm({ onSubmit }) {
-  const [formData, setFormData] = useState({
-    url: '',
-    name: '',
-    category: '',
-    icon: ''
-  })
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    onSubmit(formData)
-    setFormData({ url: '', name: '', category: '', icon: '' })
-  }
-
-  return (
-    <form className="bookmark-form" onSubmit={handleSubmit}>
-      <div className="form-group">
-        <input
-          type="text"
-          placeholder="URL"
-          value={formData.url}
-          onChange={e => setFormData(prev => ({ ...prev, url: e.target.value }))}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <input
-          type="text"
-          placeholder="名称"
-          value={formData.name}
-          onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <input
-          type="text"
-          placeholder="分类"
-          value={formData.category}
-          onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <input
-          type="text"
-          placeholder="图标URL"
-          value={formData.icon}
-          onChange={e => setFormData(prev => ({ ...prev, icon: e.target.value }))}
-          required
-        />
-      </div>
-      <button type="submit">添加书签</button>
-    </form>
   )
 }
 
