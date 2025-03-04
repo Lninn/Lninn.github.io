@@ -1,14 +1,15 @@
 import './index.css'
-import { useEffect } from 'react'
+
+import { use } from 'react'
 import UrlList from './UrlList'
-import useBookmarkStore from '../../store/bookmark'
+import { getUrlArray } from '../../store/shared'
+import { supabase } from '../../supabaseClient'
+
+
+const initialFnPromise = fetchBookmarks()
 
 export default function Bookmark() {
-  const { groupedBookmarks, fetchBookmarks } = useBookmarkStore()
-
-  useEffect(() => {
-    fetchBookmarks()
-  }, [])
+  const list = use(initialFnPromise)
 
   return (
     <div className="bookmark-container">
@@ -17,7 +18,7 @@ export default function Bookmark() {
       </div>
 
       <section className="bookmark-grid">
-        {groupedBookmarks.map(([name, categoryData]) => (
+        {list.map(([name, categoryData]) => (
           <BookmarkCategory 
             key={name} 
             name={name} 
@@ -36,4 +37,16 @@ function BookmarkCategory({ name, data }) {
       <UrlList list={data} />
     </div>
   )
+}
+
+async function fetchBookmarks() {
+  const { data, error } = await supabase.from('bookmark').select('*')
+    
+  if (error) {
+    console.error('Failed to fetch bookmark data:', error)
+    return
+  }
+
+  const groupedData = getUrlArray(data)
+  return groupedData
 }
