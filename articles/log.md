@@ -1,4 +1,4 @@
 ## 2025-03-04
 - **Author**: Lninn
-- **Message**: 更新项目图标及SVG文件
+- **Message**: 添加书签组件及Supabase支持
 
