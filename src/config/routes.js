@@ -1,44 +1,32 @@
-import Bookmark from '../components/Bookmark'
-import Article from '../components/Article'
-import Dashboard from '../components/Dashboard'
+import { lazy } from 'react'
+
+// 使用 lazy 进行代码分割
+const Bookmark = lazy(() => import('../components/Bookmark'))
+const Article = lazy(() => import('../components/Article'))
+const Dashboard = lazy(() => import('../components/Dashboard'))
 
 // 统一的路由配置
 const ROUTES_CONFIG = [
   {
-    path: 'bookmark',
+    path: '/bookmark',
     name: '书签',
     icon: '📚',
     component: Bookmark
   },
   {
-    path: 'log',
+    path: '/log',
     name: '日志',
     icon: '📝',
     component: Article
   },
   {
-    path: 'dashboard',
+    path: '/dashboard',
     name: '仪表板',
     icon: '📈',
     component: Dashboard
   }
 ]
 
-// 为App组件提供的路由对象
-export const ROUTES = ROUTES_CONFIG.reduce((acc, route) => {
-  const key = route.path.toUpperCase()
-  acc[key] = {
-    path: route.path,
-    component: route.component
-  }
-  return acc
-}, {})
-
-// 为AppHeader组件提供的导航项
-export const NAVIGATION_ITEMS = ROUTES_CONFIG.map(route => ({
-  path: route.path,
-  name: route.name,
-  icon: route.icon
-}))
+export const NAVIGATION_ITEMS = ROUTES_CONFIG
 
 export default ROUTES_CONFIG

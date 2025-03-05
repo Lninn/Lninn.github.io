@@ -1,5 +1,5 @@
 import './index.css'
-import useRouteStore from '../../store/route'
+import { NavLink } from 'react-router-dom'
 import useThemeStore from '../../store/theme'
 import { NAVIGATION_ITEMS } from '../../config/routes'
 
@@ -9,8 +9,6 @@ export default function AppHeader() {
   const toggleTheme = () => {
     setDarkMode(!darkMode)
   }
-
-  // 删除 toggleNavPosition 函数
 
   return (
     <header className="app-header">
@@ -22,7 +20,6 @@ export default function AppHeader() {
         <AppNav />
 
         <div className="header-actions">
-          {/* 删除导航位置切换按钮 */}
           <button 
             className="theme-toggle" 
             aria-label="切换主题"
@@ -37,24 +34,18 @@ export default function AppHeader() {
 }
 
 function AppNav() {
-  const { activePath, setActivePath } = useRouteStore()
-
   return (
     <nav className="app-nav">
       <ul>
         {NAVIGATION_ITEMS.map(item => (
           <li key={item.path}>
-            <a
-              href="#"
-              className={`nav-item ${activePath === item.path ? 'active' : ''}`}
-              onClick={e => {
-                e.preventDefault()
-                setActivePath(item.path)
-              }}
+            <NavLink
+              to={item.path}
+              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
             >
               <span className="nav-icon">{item.icon}</span>
               <span className="nav-text">{item.name}</span>
-            </a>
+            </NavLink>
           </li>
         ))}
       </ul>
