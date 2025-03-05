@@ -196,6 +196,52 @@
   white-space: nowrap;
 }
 
+.bookmark-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.edit-button {
+  opacity: 0;
+  padding: 0.35rem;
+  border: none;
+  background: var(--primary);
+  color: var(--text-on-primary);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bookmark-item:hover .edit-button {
+  opacity: 1;
+}
+
+.edit-button:hover {
+  background: var(--primary-hover);
+  transform: scale(1.05);
+}
+
+/* 调整删除按钮样式以配合编辑按钮 */
+.delete-button {
+  margin-left: 0;
+}
+
+@media (max-width: 768px) {
+  .bookmark-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .edit-button,
+  .delete-button {
+    opacity: 1;
+  }
+}
+
 .delete-button {
   opacity: 0;
   padding: 0.35rem;

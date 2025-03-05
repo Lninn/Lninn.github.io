@@ -3,6 +3,7 @@ import './index.css'
 import { useEffect, useState } from 'react'
 import useBookmarkStore from '../../store/bookmark'
 import AddBookmarkModal from './AddBookmarkModal'
+import EditBookmarkModal from './EditBookmarkModal'
 import { supabase } from '../../supabaseClient'
 import Notification from '../Notification'
 
@@ -107,6 +108,50 @@ export default function Dashboard() {
     }
   }
 
+  // 添加编辑相关状态
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [editingBookmark, setEditingBookmark] = useState(null)
+
+  // 处理编辑按钮点击
+  const handleEdit = (bookmark) => {
+    setEditingBookmark(bookmark)
+    setShowEditModal(true)
+  }
+
+  // 处理更新书签
+  const handleUpdate = async (updatedBookmark) => {
+    try {
+      const { error } = await supabase
+        .from('bookmark')
+        .update({
+          name: updatedBookmark.name,
+          category: updatedBookmark.category
+        })
+        .eq('url', updatedBookmark.url)
+
+      if (error) {
+        setNotification({
+          type: 'error',
+          message: '更新书签失败，请稍后重试'
+        });
+      } else {
+        setNotification({
+          type: 'success',
+          message: '成功更新书签'
+        });
+        fetchBookmarks();
+      }
+    } catch (err) {
+      console.log(err)
+      setNotification({
+        type: 'error',
+        message: '更新书签失败，请稍后重试'
+      });
+    }
+    setShowEditModal(false)
+    setEditingBookmark(null)
+  }
+
   return (
     <div className="dashboard">
       <div className="dashboard-header">
@@ -170,13 +215,22 @@ export default function Dashboard() {
                       </button>
                     </div>
                   </div>
-                  <button 
-                    className="delete-button"
-                    onClick={() => handleDelete(bookmark.url)}
-                    title="删除书签"
-                  >
-                    <span className="delete-icon">×</span>
-                  </button>
+                  <div className="bookmark-actions">
+                    <button 
+                      className="edit-button"
+                      onClick={() => handleEdit(bookmark)}
+                      title="编辑书签"
+                    >
+                      ✏️
+                    </button>
+                    <button 
+                      className="delete-button"
+                      onClick={() => handleDelete(bookmark.url)}
+                      title="删除书签"
+                    >
+                      <span className="delete-icon">×</span>
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -188,6 +242,17 @@ export default function Dashboard() {
         <AddBookmarkModal
           onClose={() => setShowAddModal(false)}
           onSubmit={handleAdd}
+        />
+      )}
+
+      {showEditModal && editingBookmark && (
+        <EditBookmarkModal
+          bookmark={editingBookmark}
+          onClose={() => {
+            setShowEditModal(false)
+            setEditingBookmark(null)
+          }}
+          onSubmit={handleUpdate}
         />
       )}
 
