@@ -94,9 +94,36 @@ export const logError = (error, componentInfo = '') => {
 }
 
 export const handleApiError = (error, fallbackMessage = '操作失败，请稍后重试') => {
-  logError(error, 'API请求')
-  if (error?.status === 401) return '请先登录后再尝试此操作'
-  if (error?.status === 403) return '您没有权限执行此操作'
-  if (error?.status === 404) return '请求的资源不存在'
-  return error?.message || fallbackMessage
+  const errorType = getErrorType(error)
+  logError(error, `API请求 - ${errorType}`)
+
+  switch (errorType) {
+    case ErrorTypes.AUTH:
+      return '请先登录后再尝试此操作'
+    case ErrorTypes.NETWORK:
+      return '网络连接失败，请检查网络设置'
+    case ErrorTypes.DATABASE:
+      return '数据库操作失败，请稍后重试'
+    case ErrorTypes.VALIDATION:
+      return error?.message || '输入数据无效'
+    default:
+      return fallbackMessage
+  }
+}
+
+// 添加错误类型枚举
+export const ErrorTypes = {
+  NETWORK: 'NETWORK',
+  DATABASE: 'DATABASE',
+  VALIDATION: 'VALIDATION',
+  AUTH: 'AUTH',
+  UNKNOWN: 'UNKNOWN'
+}
+
+function getErrorType(error) {
+  if (error?.status === 401) return ErrorTypes.AUTH
+  if (error?.message?.includes('network')) return ErrorTypes.NETWORK
+  if (error?.code?.startsWith('23')) return ErrorTypes.DATABASE
+  if (error?.code === 'VALIDATION') return ErrorTypes.VALIDATION
+  return ErrorTypes.UNKNOWN
 }
