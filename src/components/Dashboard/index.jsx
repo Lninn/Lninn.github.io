@@ -120,10 +120,11 @@ export default function Dashboard() {
         .from('bookmark')
         .update({
           name: updatedBookmark.name,
-          category: updatedBookmark.category
+          category: updatedBookmark.category,
+          icon: updatedBookmark.icon  // 添加 icon 字段
         })
         .eq('url', updatedBookmark.url)
-
+    
       if (error) throw error
       
       // 记录更新历史

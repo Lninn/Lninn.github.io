@@ -6,7 +6,8 @@ export default function EditBookmarkModal({ bookmark, onClose, onSubmit }) {
   const { list: bookmarkList } = useBookmarkStore()
   const [formData, setFormData] = useState({
     name: bookmark.name,
-    category: bookmark.category
+    category: bookmark.category,
+    icon: bookmark.icon  // 添加 icon 字段
   })
   const [categories, setCategories] = useState([])
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false)
@@ -44,6 +45,28 @@ export default function EditBookmarkModal({ bookmark, onClose, onSubmit }) {
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
               />
+            </div>
+
+            {/* 添加 icon 输入字段 */}
+            <div className="form-group">
+              <label>图标 URL</label>
+              <div className="icon-input-container">
+                <input
+                  type="text"
+                  value={formData.icon}
+                  onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                  placeholder="输入图标 URL"
+                />
+                {formData.icon && (
+                  <div className="icon-preview">
+                    <img 
+                      src={formData.icon} 
+                      alt="图标预览"
+                      onError={(e) => e.target.src = '/fallback-icon.svg'}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="form-group">
