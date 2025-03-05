@@ -19,6 +19,8 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
   const [analysisComplete, setAnalysisComplete] = useState(false)
   const [categories, setCategories] = useState([])
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false)
+  // 添加URL重复检查状态
+  const [urlExists, setUrlExists] = useState(false)
   
   useEffect(() => {
     if (bookmarkList && bookmarkList.length > 0) {
@@ -45,6 +47,7 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
     setAnalysisStep('开始分析')
     setAnalysisError(null)
     setAnalysisComplete(false)
+    setUrlExists(false) // 重置URL存在状态
     
     try {
       setAnalysisStep('验证URL格式')
@@ -53,6 +56,19 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
         processedUrl = 'https://' + url
       }
       
+      // 检查URL是否已存在
+      const normalizedUrl = processedUrl.toLowerCase().replace(/\/$/, '')
+      const exists = bookmarkList.some(bookmark => 
+        bookmark.url.toLowerCase().replace(/\/$/, '') === normalizedUrl
+      )
+      
+      if (exists) {
+        setUrlExists(true)
+        setAnalysisError('该URL已存在于您的书签中')
+        setAnalyzing(false)
+        return
+      }
+
       setAnalysisStep('获取网站元数据')
       const response = await fetchWebsiteMetadata(processedUrl)
       
@@ -205,6 +221,19 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    
+    // 再次检查URL是否已存在（以防用户修改了表单数据）
+    const normalizedUrl = formData.url.toLowerCase().replace(/\/$/, '')
+    const exists = bookmarkList.some(bookmark => 
+      bookmark.url.toLowerCase().replace(/\/$/, '') === normalizedUrl
+    )
+    
+    if (exists) {
+      setUrlExists(true)
+      setAnalysisError('该URL已存在于您的书签中')
+      return
+    }
+    
     onSubmit(formData)
     onClose()
   }
@@ -258,7 +287,14 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
             </div>
           )}
 
-          {analysisError && (
+          {urlExists && (
+            <div className="analysis-error">
+              <p>该URL已存在于您的书签中</p>
+              <p className="error-tip">提示：您可以在书签列表中查找此网站。</p>
+            </div>
+          )}
+          
+          {analysisError && !urlExists && (
             <div className="analysis-error">
               <p>{analysisError}</p>
               <p className="error-tip">提示：请检查网址是否正确，或稍后再试。</p>
