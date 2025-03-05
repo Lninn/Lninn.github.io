@@ -6,6 +6,7 @@ import AddBookmarkModal from './AddBookmarkModal'
 import EditBookmarkModal from './EditBookmarkModal'
 import { supabase } from '../../supabaseClient'
 import Notification from '../Notification'
+import HistoryList from './HistoryList'
 
 export default function Dashboard() {
   // 添加加载状态
@@ -42,34 +43,30 @@ export default function Dashboard() {
       });
   }
 
-  // 直接添加书签到数据库
+  // 修改现有的操作方法，添加历史记录
   const handleAdd = async (newBookmark) => {
     try {
-      // 生成唯一ID：时间戳 + 随机数
-      const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
+      const uniqueId = Date.now() + Math.floor(Math.random() * 1000)
+      const bookmarkData = {
+        ...newBookmark,
+        id: uniqueId,
+        create_at: new Date().toISOString()
+      }
       
       const { error } = await supabase
         .from('bookmark')
-        .insert([{
-          ...newBookmark,
-          id: uniqueId,
-          create_at: new Date().toISOString()
-        }])
+        .insert([bookmarkData])
         .select()
 
-      if (error) {
-        setNotification({
-          type: 'error',
-          message: '添加书签失败，请稍后重试'
-        });
-      } else {
-        setNotification({
-          type: 'success',
-          message: '成功添加书签'
-        });
-        // 刷新书签列表
-        fetchBookmarks();
-      }
+      if (error) throw error
+      
+      await recordHistory('add', bookmarkData)
+      
+      setNotification({
+        type: 'success',
+        message: '成功添加书签'
+      })
+      fetchBookmarks()
     } catch (err) {
       console.log(err)
       setNotification({
@@ -79,32 +76,29 @@ export default function Dashboard() {
     }
   }
 
-  const handleDelete = async (url) => {
+  const handleDelete = async (bookmark) => {
     try {
       const { error } = await supabase
         .from('bookmark')
         .delete()
-        .eq('url', url)
+        .eq('url', bookmark.url)
 
-      if (error) {
-        setNotification({
-          type: 'error',
-          message: '删除书签失败，请稍后重试'
-        });
-      } else {
-        setNotification({
-          type: 'success',
-          message: '成功删除书签'
-        });
-        // 刷新书签列表
-        fetchBookmarks();
-      }
+      if (error) throw error
+      
+      // 记录删除历史
+      await recordHistory('delete', bookmark)
+      
+      setNotification({
+        type: 'success',
+        message: '成功删除书签'
+      })
+      fetchBookmarks()
     } catch (err) {
-      console.log(err)
+      console.error(err)
       setNotification({
         type: 'error',
-        message: '删除书签失败，请稍后重试'
-      });
+        message: '删除书签失败'
+      })
     }
   }
 
@@ -129,113 +123,146 @@ export default function Dashboard() {
         })
         .eq('url', updatedBookmark.url)
 
-      if (error) {
-        setNotification({
-          type: 'error',
-          message: '更新书签失败，请稍后重试'
-        });
-      } else {
-        setNotification({
-          type: 'success',
-          message: '成功更新书签'
-        });
-        fetchBookmarks();
-      }
+      if (error) throw error
+      
+      // 记录更新历史
+      await recordHistory('update', updatedBookmark)
+      
+      setNotification({
+        type: 'success',
+        message: '成功更新书签'
+      })
+      fetchBookmarks()
     } catch (err) {
-      console.log(err)
+      console.error(err)
       setNotification({
         type: 'error',
-        message: '更新书签失败，请稍后重试'
-      });
+        message: '更新书签失败'
+      })
     }
     setShowEditModal(false)
     setEditingBookmark(null)
   }
 
+  const [showHistory, setShowHistory] = useState(false)
+
+  // 添加记录历史的方法
+  const recordHistory = async (action, bookmarkData) => {
+    try {
+      await supabase
+        .from('bookmark_history')
+        .insert([{
+          action,
+          bookmark_id: bookmarkData.id,
+          bookmark_data: bookmarkData
+        }])
+    } catch (err) {
+      console.error('记录历史失败:', err)
+    }
+  }
+
   return (
     <div className="dashboard">
-      <div className="dashboard-header">
-        <h1>书签管理</h1>
-        <div className="header-actions">
-          <button 
-            className="add-button"
-            onClick={() => setShowAddModal(true)}
-          >
-            <span className="button-icon">+</span>
-            添加书签
-          </button>
-        </div>
+      <div className="dashboard-tabs">
+        <button 
+          className={`tab-button ${!showHistory ? 'active' : ''}`}
+          onClick={() => setShowHistory(false)}
+        >
+          书签列表
+        </button>
+        <button 
+          className={`tab-button ${showHistory ? 'active' : ''}`}
+          onClick={() => setShowHistory(true)}
+        >
+          操作历史
+        </button>
       </div>
 
       <div className="dashboard-content">
-        <div className="list-section">
-          <div className="section-header">
-            <h2>书签列表</h2>
-            <span className="bookmark-count">
-              {isLoading ? '加载中...' : `${renderList.length} 个书签`}
-            </span>
-          </div>
-          
-          {isLoading ? (
-            <div className="loading-state">
-              <div className="loading-spinner"></div>
-              <p>正在加载书签...</p>
+        {!showHistory ? (
+          <div className="list-section">
+            <div className="section-header">
+              <h2>书签列表</h2>
+              <div className="header-actions">
+                <button 
+                  className="add-button" 
+                  onClick={() => setShowAddModal(true)}
+                >
+                  <span className="button-icon">+</span>
+                  添加书签
+                </button>
+                <span className="bookmark-count">
+                  {isLoading ? '加载中...' : `${renderList.length} 个书签`}
+                </span>
+              </div>
             </div>
-          ) : (
-            <div className="bookmark-list">
-              {renderList.map(bookmark => (
-                <div key={bookmark.url} className="bookmark-item">
-                  <div className="bookmark-icon-wrapper">
-                    <img 
-                      src={bookmark.icon} 
-                      alt="" 
-                      className="bookmark-icon" 
-                      loading="lazy"
-                      onError={(e) => {
-                        e.target.src = '/fallback-icon.svg';
-                      }}
-                    />
-                  </div>
-                  <div className="bookmark-info">
-                    <h3>{bookmark.name}</h3>
-                    <p className="category-tag">{bookmark.category}</p>
-                    <div className="url-container">
-                      <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
-                        {bookmark.url}
-                      </a>
-                      <button 
-                        className="copy-button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleCopyUrl(bookmark.url);
+            
+            {isLoading ? (
+              <div className="loading-state">
+                <div className="loading-spinner"></div>
+                <p>正在加载书签...</p>
+              </div>
+            ) : (
+              <div className="bookmark-list">
+                {renderList.map(bookmark => (
+                  <div key={bookmark.url} className="bookmark-item">
+                    <div className="bookmark-icon-wrapper">
+                      <img 
+                        src={bookmark.icon} 
+                        alt="" 
+                        className="bookmark-icon" 
+                        loading="lazy"
+                        onError={(e) => {
+                          e.target.src = '/fallback-icon.svg';
                         }}
-                        title="复制URL"
+                      />
+                    </div>
+                    <div className="bookmark-info">
+                      <h3>{bookmark.name}</h3>
+                      <p className="category-tag">{bookmark.category}</p>
+                      <div className="url-container">
+                        <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
+                          {bookmark.url}
+                        </a>
+                        <button 
+                          className="copy-button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleCopyUrl(bookmark.url);
+                          }}
+                          title="复制URL"
+                        >
+                          📋
+                        </button>
+                      </div>
+                    </div>
+                    <div className="bookmark-actions">
+                      <button 
+                        className="edit-button"
+                        onClick={() => handleEdit(bookmark)}
+                        title="编辑书签"
                       >
-                        📋
+                        ✏️
+                      </button>
+                      <button 
+                        className="delete-button"
+                        onClick={() => handleDelete(bookmark.url)}
+                        title="删除书签"
+                      >
+                        <span className="delete-icon">×</span>
                       </button>
                     </div>
                   </div>
-                  <div className="bookmark-actions">
-                    <button 
-                      className="edit-button"
-                      onClick={() => handleEdit(bookmark)}
-                      title="编辑书签"
-                    >
-                      ✏️
-                    </button>
-                    <button 
-                      className="delete-button"
-                      onClick={() => handleDelete(bookmark.url)}
-                      title="删除书签"
-                    >
-                      <span className="delete-icon">×</span>
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          <HistoryList 
+            onRestore={fetchBookmarks}
+            onNotify={setNotification}
+          />
+        )}
       </div>
 
       {showAddModal && (
