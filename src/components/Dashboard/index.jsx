@@ -21,11 +21,14 @@ export default function Dashboard() {
   // 直接添加书签到数据库
   const handleAdd = async (newBookmark) => {
     try {
+      // 生成唯一ID：时间戳 + 随机数
+      const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
+      
       const { error } = await supabase
         .from('bookmark')
         .insert([{
           ...newBookmark,
-          id: renderList.length + 1
+          id: uniqueId
         }])
         .select()
 
