@@ -7,11 +7,17 @@ import { supabase } from '../../supabaseClient'
 import Notification from '../Notification'
 
 export default function Dashboard() {
-
+  // 添加加载状态
+  const [isLoading, setIsLoading] = useState(true)
   const { list: renderList, fetchBookmarks } = useBookmarkStore()
 
   useEffect(() => {
-    fetchBookmarks()
+    const loadBookmarks = async () => {
+      setIsLoading(true)
+      await fetchBookmarks()
+      setIsLoading(false)
+    }
+    loadBookmarks()
   }, [])
 
   // 移除 bookmarks 和 showDiff 状态
@@ -120,51 +126,61 @@ export default function Dashboard() {
         <div className="list-section">
           <div className="section-header">
             <h2>书签列表</h2>
-            <span className="bookmark-count">{renderList.length} 个书签</span>
+            <span className="bookmark-count">
+              {isLoading ? '加载中...' : `${renderList.length} 个书签`}
+            </span>
           </div>
-          <div className="bookmark-list">
-            {renderList.map(bookmark => (
-              <div key={bookmark.url} className="bookmark-item">
-                <div className="bookmark-icon-wrapper">
-                  <img 
-                    src={bookmark.icon} 
-                    alt="" 
-                    className="bookmark-icon" 
-                    loading="lazy"
-                    onError={(e) => {
-                      e.target.src = '/fallback-icon.svg';
-                    }}
-                  />
-                </div>
-                <div className="bookmark-info">
-                  <h3>{bookmark.name}</h3>
-                  <p className="category-tag">{bookmark.category}</p>
-                  <div className="url-container">
-                    <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
-                      {bookmark.url}
-                    </a>
-                    <button 
-                      className="copy-button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleCopyUrl(bookmark.url);
+          
+          {isLoading ? (
+            <div className="loading-state">
+              <div className="loading-spinner"></div>
+              <p>正在加载书签...</p>
+            </div>
+          ) : (
+            <div className="bookmark-list">
+              {renderList.map(bookmark => (
+                <div key={bookmark.url} className="bookmark-item">
+                  <div className="bookmark-icon-wrapper">
+                    <img 
+                      src={bookmark.icon} 
+                      alt="" 
+                      className="bookmark-icon" 
+                      loading="lazy"
+                      onError={(e) => {
+                        e.target.src = '/fallback-icon.svg';
                       }}
-                      title="复制URL"
-                    >
-                      📋
-                    </button>
+                    />
                   </div>
+                  <div className="bookmark-info">
+                    <h3>{bookmark.name}</h3>
+                    <p className="category-tag">{bookmark.category}</p>
+                    <div className="url-container">
+                      <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
+                        {bookmark.url}
+                      </a>
+                      <button 
+                        className="copy-button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleCopyUrl(bookmark.url);
+                        }}
+                        title="复制URL"
+                      >
+                        📋
+                      </button>
+                    </div>
+                  </div>
+                  <button 
+                    className="delete-button"
+                    onClick={() => handleDelete(bookmark.url)}
+                    title="删除书签"
+                  >
+                    <span className="delete-icon">×</span>
+                  </button>
                 </div>
-                <button 
-                  className="delete-button"
-                  onClick={() => handleDelete(bookmark.url)}
-                  title="删除书签"
-                >
-                  <span className="delete-icon">×</span>
-                </button>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
