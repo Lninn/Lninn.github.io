@@ -13,8 +13,23 @@
   max-width: 1200px;
   margin: 0 auto;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
   padding: 24px;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  .app-main {
+    padding: 12px;
+  }
+
+  .content-container {
+    padding: 12px;
+    border-radius: 8px;
+    margin: 0;
+    box-shadow: none;
+  }
 }
 
 .loading-container {

@@ -123,16 +123,30 @@
 @media (max-width: 768px) {
   .article-container {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .article-list {
     border-right: none;
     border-bottom: 1px solid var(--border-color);
     padding-right: 0;
-    padding-bottom: 24px;
+    padding-bottom: 16px;
+    max-height: 300px;
+    overflow-y: auto;
   }
 
   .article-content {
     padding: 0;
+  }
+
+  .article-content img {
+    width: 100%;
+    height: auto;
+  }
+
+  .article-content pre {
+    margin: 1rem -12px;
+    border-radius: 0;
+    padding: 1rem;
   }
 }
