@@ -1,4 +1,4 @@
 ## 2025-03-05
 - **Author**: Lninn
-- **Message**: update
+- **Message**: 优化错误处理函数
 
