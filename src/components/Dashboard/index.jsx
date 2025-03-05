@@ -28,7 +28,8 @@ export default function Dashboard() {
         .from('bookmark')
         .insert([{
           ...newBookmark,
-          id: uniqueId
+          id: uniqueId,
+          create_at: new Date().toISOString()
         }])
         .select()
 
