@@ -108,7 +108,15 @@ export default function Dashboard() {
             {renderList.map(bookmark => (
               <div key={bookmark.url} className="bookmark-item">
                 <div className="bookmark-icon-wrapper">
-                  <img src={bookmark.icon} alt="" className="bookmark-icon" />
+                  <img 
+                    src={bookmark.icon} 
+                    alt="" 
+                    className="bookmark-icon" 
+                    loading="lazy"
+                    onError={(e) => {
+                      e.target.src = '/fallback-icon.png';
+                    }}
+                  />
                 </div>
                 <div className="bookmark-info">
                   <h3>{bookmark.name}</h3>

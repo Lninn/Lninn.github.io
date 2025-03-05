@@ -121,6 +121,7 @@
   gap: 0.5rem;
 }
 
+/* 添加卡片悬停动画 */
 .bookmark-item {
   display: flex;
   align-items: center;
@@ -128,14 +129,12 @@
   padding: 0.75rem;
   background: var(--bg-primary);
   border-radius: 0.5rem;
-  transition: all 0.2s ease;
-  position: relative;
-  border: 1px solid var(--border-color);
+  transition: all 0.25s ease-in-out;
 }
 
 .bookmark-item:hover {
-  transform: none;
-  background: var(--bg-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
   border-color: var(--primary);
 }
 
@@ -162,6 +161,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  padding: 1rem;
 }
 
 .bookmark-info h3 {
@@ -204,7 +204,7 @@
   color: var(--text-on-primary);
   border-radius: 0.25rem;
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -217,7 +217,7 @@
 
 .delete-button:hover {
   background: var(--danger-hover);
-  transform: none;
+  transform: scale(1.05);
 }
 
 .delete-icon {

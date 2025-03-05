@@ -71,42 +71,66 @@
   color: var(--text-primary);
 }
 
-.article-content p {
+/* 优化文章内容排版 */
+.article-content {
   line-height: 1.8;
-  margin: 1em 0;
-  color: var(--text-primary);
+  font-size: 1.05rem;
+}
+
+.article-content h1 {
+  font-size: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.article-content h2 {
+  font-size: 1.5rem;
+  margin-top: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.article-content h3 {
+  font-size: 1.25rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.article-content p {
+  margin: 1.25rem 0;
+}
+
+/* 优化代码块样式 */
+.article-content pre {
+  background-color: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border: 1px solid var(--border-color);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .article-content code {
-  background-color: var(--bg-secondary);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.9em;
   padding: 0.2em 0.4em;
   border-radius: 3px;
-  font-family: monospace;
-  color: var(--text-primary);
-}
-
-.article-content pre {
   background-color: var(--bg-secondary);
-  padding: 16px;
-  border-radius: 8px;
-  overflow-x: auto;
-  margin: 1.5em 0;
-  border: 1px solid var(--border-color);
 }
 
-.article-content a {
-  color: var(--primary);
-  text-decoration: none;
-}
-
-.article-content a:hover {
-  text-decoration: underline;
-}
-
+/* 优化图片显示 */
 .article-content img {
   max-width: 100%;
+  height: auto;
   border-radius: 8px;
-  margin: 1em 0;
+  margin: 1.5rem 0;
+  display: block;
+  box-shadow: var(--shadow-sm);
 }
 
 .article-content blockquote {
@@ -148,5 +172,35 @@
     margin: 1rem -12px;
     border-radius: 0;
     padding: 1rem;
+  }
+}
+
+/* 打印样式 */
+@media print {
+  .app-header, .app-footer, .article-list {
+    display: none !important;
+  }
+  
+  .article-container {
+    display: block;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .article-content {
+    padding: 0;
+    max-width: 100%;
+    font-size: 12pt;
+  }
+  
+  .article-content a {
+    color: #000;
+    text-decoration: underline;
+  }
+  
+  .article-content pre, .article-content code {
+    background-color: #f5f5f5 !important;
+    border: 1px solid #ddd !important;
+    color: #333 !important;
   }
 }
