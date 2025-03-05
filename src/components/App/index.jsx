@@ -1,6 +1,6 @@
 import './index.css'
 import { Suspense } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import AppHeader from '../AppHeader'
 import Footer from '../Footer'
 import ErrorBoundary from '../ErrorBoundary'
@@ -26,7 +26,7 @@ function NotFound() {
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className="app-container">
         <AppHeader />
         <main className="app-main">
@@ -55,7 +55,7 @@ function App() {
         </main>
         <Footer />
       </div>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 
