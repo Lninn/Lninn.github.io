@@ -1,18 +1,28 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 
-// https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react()],
-  // https://stackoverflow.com/questions/73459654/import-markdown-files-dynamically-with-vite
   assetsInclude: ['**/*.md'],
   define: {
-    // Some libraries use the global object, even though it doesn't exist in the browser.
-    // Alternatively, we could add `<script>window.global = window;</script>` to index.html.
-    // https://github.com/vitejs/vite/discussions/5912
     global: {},
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          utils: ['date-fns', 'zustand']
+        }
+      }
+    },
+    cssCodeSplit: true,
+    sourcemap: command === 'serve',
+    minify: 'terser'
+  },
   server: {
-    historyApiFallback: true
+    port: 3000,
+    open: true,
+    cors: true
   }
-})
+}))
