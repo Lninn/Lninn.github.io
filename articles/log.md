@@ -1,4 +1,4 @@
 ## 2025-03-05
 - **Author**: Lninn
-- **Message**: 复制功能
+- **Message**: 加载动画
 
