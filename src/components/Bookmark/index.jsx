@@ -1,12 +1,13 @@
 import './index.css'
 
-import { use, useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import UrlList from './UrlList'
 import { getUrlArray } from '../../store/shared'
 import { supabase } from '../../supabaseClient'
 import ErrorBoundary from '../ErrorBoundary'
+import { createResource } from '../../utils/createResource'
 
-const initialFnPromise = fetchBookmarks()
+const bookmarkResource = createResource(fetchBookmarks())
 
 async function fetchBookmarks() {
   // 获取书签数据
@@ -15,8 +16,7 @@ async function fetchBookmarks() {
     .select('*')
     
   if (bookmarkError) {
-    console.error('Failed to fetch bookmark data:', bookmarkError)
-    return { list: [], viewsMap: new Map() }
+    throw bookmarkError
   }
 
   // 获取分类访问量数据
@@ -25,7 +25,7 @@ async function fetchBookmarks() {
     .select('*')
 
   if (viewsError) {
-    console.error('Failed to fetch views data:', viewsError)
+    throw viewsError
   }
 
   // 创建访问量映射
@@ -47,7 +47,7 @@ async function fetchBookmarks() {
 }
 
 export default function Bookmark() {
-  const { list, viewsMap } = use(initialFnPromise)
+  const { list, viewsMap } = bookmarkResource.read()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('全部')
 
