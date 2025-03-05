@@ -92,7 +92,8 @@ function getFirstLine(markdownText) {
   let firstLine = lines[0].trim();
 
   // 去除 Markdown 标题符号（如 ###）
-  firstLine = firstLine.replace(/^#+\s*/, '');
+  // 如 # 标题 => 标题
+  firstLine = firstLine.replace(/^#+ /, '');
 
   return firstLine;
 }
