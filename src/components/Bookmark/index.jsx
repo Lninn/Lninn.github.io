@@ -4,7 +4,7 @@ import { use } from 'react'
 import UrlList from './UrlList'
 import { getUrlArray } from '../../store/shared'
 import { supabase } from '../../supabaseClient'
-
+import ErrorBoundary from '../ErrorBoundary'
 
 const initialFnPromise = fetchBookmarks()
 
@@ -19,11 +19,12 @@ export default function Bookmark() {
 
       <section className="bookmark-grid">
         {list.map(([name, categoryData]) => (
-          <BookmarkCategory 
-            key={name} 
-            name={name} 
-            data={categoryData} 
-          />
+          <ErrorBoundary key={name} showDetails={false}>
+            <BookmarkCategory 
+              name={name} 
+              data={categoryData} 
+            />
+          </ErrorBoundary>
         ))}
       </section>
     </div>

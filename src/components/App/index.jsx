@@ -4,7 +4,9 @@ import { Suspense } from 'react'
 import AppHeader from '../AppHeader'
 import Footer from '../Footer'
 import useRouteStore from '../../store/route'
+import ErrorBoundary from '../ErrorBoundary'
 import { ROUTES } from '../../config/routes'
+
 
 function LoadingSpinner() {
   return (
@@ -36,9 +38,11 @@ function App() {
 
       <main className="app-main">
         <div className="content-container">
-          <Suspense fallback={<LoadingSpinner />}>
-            <Component />
-          </Suspense>
+          <ErrorBoundary showDetails={import.meta.env.NODE_ENV !== 'production'}>
+            <Suspense fallback={<LoadingSpinner />}>
+              <Component />
+            </Suspense>
+          </ErrorBoundary>
         </div>
       </main>
 
