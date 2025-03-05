@@ -1,3 +1,4 @@
+ /* 基础样式 */
 .app-header {
   position: sticky;
   top: 0;
@@ -18,6 +19,7 @@
   justify-content: space-between;
 }
 
+/* Logo 样式 */
 .logo {
   flex-shrink: 0;
 }
@@ -30,6 +32,7 @@
   -webkit-text-fill-color: transparent;
 }
 
+/* 导航样式 */
 .app-nav {
   flex: 1;
   display: flex;
@@ -74,10 +77,14 @@
   font-weight: 500;
 }
 
+/* 头部操作区域样式 */
 .header-actions {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
 
+/* 主题切换按钮 */
 .theme-toggle {
   padding: 8px;
   border: none;
@@ -91,131 +98,35 @@
   justify-content: center;
   width: 36px;
   height: 36px;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  transform: rotate(15deg);
+}
+
+/* 布局切换按钮 */
+.layout-toggle {
+  padding: 8px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
   margin-right: 8px;
 }
 
 .layout-toggle:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
   transform: translateY(-2px);
 }
 
-.dark-mode .layout-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-/* 底部导航样式 */
-:root.bottom-nav .app-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: var(--bg-primary, #fff);
-  border-top: 1px solid var(--border-color, #eaeaea);
-  padding: 8px 0;
-  z-index: 100;
-  justify-content: space-around;
-}
-
-:root.bottom-nav .app-nav ul {
-  width: 100%;
-  justify-content: space-around;
-  gap: 0;
-}
-
-:root.bottom-nav .nav-item {
-  flex-direction: column;
-  text-align: center;
-  padding: 8px 12px;
-}
-
-:root.bottom-nav .nav-text {
-  font-size: 0.75rem;
-  margin-top: 4px;
-}
-
-:root.bottom-nav .nav-icon {
-  font-size: 1.3rem;
-}
-
-/* 为底部导航添加底部间距，防止内容被遮挡 */
-:root.bottom-nav .app-main {
-  padding-bottom: 70px;
-}
-
-:root.bottom-nav .app-footer {
-  margin-bottom: 60px;
-}
-
-/* 暗色模式下的底部导航 */
-.dark-mode.bottom-nav .app-nav {
-  background-color: var(--bg-primary, #121212);
-  border-top-color: var(--border-color, #333);
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* 移动端样式调整 */
-@media (max-width: 768px) {
-  .app-header {
-    padding: 0 12px;
-  }
-  
-  .header-content {
-    height: 56px;
-  }
-  
-  .logo-text {
-    font-size: 1.2rem;
-  }
-  
-  .theme-toggle, .layout-toggle {
-    width: 32px;
-    height: 32px;
-    font-size: 1rem;
-  }
-  
-  /* 顶部导航的移动端样式 */
-  :root:not(.bottom-nav) .app-nav {
-    justify-content: flex-end;
-    margin-right: 8px;
-  }
-  
-  :root:not(.bottom-nav) .app-nav ul {
-    gap: 4px;
-  }
-  
-  :root:not(.bottom-nav) .nav-text {
-    display: none;
-  }
-  
-  :root:not(.bottom-nav) .nav-item {
-    padding: 8px;
-  }
-  
-  :root:not(.bottom-nav) .nav-icon {
-    font-size: 1.3rem;
-  }
-  
-  /* 底部导航的移动端样式 */
-  :root.bottom-nav .nav-text {
-    display: block;
-    font-size: 0.7rem;
-  }
-  
-  :root.bottom-nav .nav-icon {
-    font-size: 1.5rem;
-  }
-}
-
-/* 针对超小屏幕的额外优化 */
-@media (max-width: 360px) {
-  .logo-text {
-    font-size: 1rem;
-  }
-  
-  :root.bottom-nav .nav-icon {
-    font-size: 1.2rem;
-  }
-}
 /* 暗色主题样式 */
 :root.dark-mode {
   --text-color: #f0f0f0;
@@ -244,61 +155,62 @@
   color: #3a9bff;
 }
 
-.dark-mode .theme-toggle:hover {
+.dark-mode .theme-toggle:hover,
+.dark-mode .layout-toggle:hover {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
+/* 移动端样式 */
 @media (max-width: 768px) {
-  .nav-text {
+  /* 头部样式调整 */
+  .app-header {
+    padding: 0 12px;
+  }
+  
+  .header-content {
+    height: 56px;
+  }
+  
+  .logo-text {
+    font-size: 1.2rem;
+  }
+
+  /* 按钮样式调整 */
+  .theme-toggle,
+  .layout-toggle {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  /* 显示布局切换按钮 */
+  .layout-toggle {
+    display: flex;
+  }
+
+  /* 顶部导航样式 */
+  :root:not(.bottom-nav) .app-nav {
+    justify-content: flex-end;
+    margin-right: 8px;
+  }
+  
+  :root:not(.bottom-nav) .app-nav ul {
+    gap: 4px;
+  }
+  
+  :root:not(.bottom-nav) .nav-text {
     display: none;
   }
   
-  .app-nav ul {
-    gap: 16px;
-  }
-  
-  .nav-item {
+  :root:not(.bottom-nav) .nav-item {
     padding: 8px;
   }
-}
-
-/* 移动端专用元素 */
-.mobile-only {
-  display: none;
-}
-
-/* 布局切换按钮样式 */
-.layout-toggle {
-  padding: 8px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  font-size: 1.2rem;
-  display: none; /* 默认隐藏，只在移动端显示 */
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  margin-right: 8px;
-}
-
-.layout-toggle:hover {
-  background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
-  transform: translateY(-2px);
-}
-
-/* 底部导航样式 - 仅在移动端生效 */
-@media (max-width: 768px) {
-  .mobile-only {
-    display: flex;
-  }
   
-  .layout-toggle {
-    display: flex; /* 在移动端显示 */
+  :root:not(.bottom-nav) .nav-icon {
+    font-size: 1.3rem;
   }
-  
+
+  /* 底部导航样式 */
   :root.bottom-nav .app-nav {
     position: fixed;
     bottom: 0;
@@ -326,15 +238,15 @@
 
   :root.bottom-nav .nav-text {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     margin-top: 4px;
   }
 
   :root.bottom-nav .nav-icon {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
 
-  /* 为底部导航添加底部间距，防止内容被遮挡 */
+  /* 底部导航内容间距调整 */
   :root.bottom-nav .app-main {
     padding-bottom: 70px;
   }
@@ -349,52 +261,9 @@
     border-top-color: var(--border-color, #333);
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
   }
-  
-  /* 顶部导航的移动端样式 */
-  :root:not(.bottom-nav) .app-nav {
-    justify-content: flex-end;
-    margin-right: 8px;
-  }
-  
-  :root:not(.bottom-nav) .app-nav ul {
-    gap: 4px;
-  }
-  
-  :root:not(.bottom-nav) .nav-text {
-    display: none;
-  }
-  
-  :root:not(.bottom-nav) .nav-item {
-    padding: 8px;
-  }
-  
-  :root:not(.bottom-nav) .nav-icon {
-    font-size: 1.3rem;
-  }
 }
 
-/* 其他移动端样式调整 */
-@media (max-width: 768px) {
-  .app-header {
-    padding: 0 12px;
-  }
-  
-  .header-content {
-    height: 56px;
-  }
-  
-  .logo-text {
-    font-size: 1.2rem;
-  }
-  
-  .theme-toggle, .layout-toggle {
-    width: 32px;
-    height: 32px;
-    font-size: 1rem;
-  }
-}
-
-/* 针对超小屏幕的额外优化 */
+/* 超小屏幕优化 */
 @media (max-width: 360px) {
   .logo-text {
     font-size: 1rem;
