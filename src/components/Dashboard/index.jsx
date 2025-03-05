@@ -209,7 +209,9 @@ export default function Dashboard() {
                 {renderList.map(bookmark => (
                   <div key={bookmark.url} className="bookmark-item">
                     <div className="bookmark-icon-wrapper">
-                      <img 
+                      <img
+                        data-name={bookmark.name}
+                        data-category={bookmark.category}
                         src={bookmark.icon} 
                         alt="" 
                         className="bookmark-icon" 

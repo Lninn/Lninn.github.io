@@ -35,6 +35,8 @@ export default function UrlList({ list, searchTerm, category }) {
           >
             <div className="bookmark-icon-wrapper">
               <img
+                data-name={obj.name}
+                data-category={obj.category}
                 src={obj.icon}
                 alt=""
                 className="bookmark-icon"
