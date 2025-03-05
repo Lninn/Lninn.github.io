@@ -43,7 +43,7 @@
 
 .app-nav ul {
   display: flex;
-  gap: 32px;
+  gap: 24px;  /* 调整为 24px 使间距更协调 */
   margin: 0;
   padding: 0;
   list-style: none;
@@ -52,8 +52,8 @@
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
+  gap: 6px;  /* 减小图标和文字的间距 */
+  padding: 8px 12px;  /* 调整内边距使其更紧凑 */
   color: var(--text-secondary, #666);
   text-decoration: none;
   border-radius: 8px;
@@ -100,11 +100,14 @@
   justify-content: center;
   width: 36px;
   height: 36px;
+  color: var(--text-secondary);  /* 添加颜色变量 */
+  transition: all 0.2s ease;
 }
 
 .theme-toggle:hover {
   background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
-  transform: rotate(15deg);
+  transform: rotate(30deg);  /* 增加旋转角度使动画更明显 */
+  color: var(--accent-color, #007cf0);  /* 悬停时改变颜色 */
 }
 
 .dark-mode .app-header {
@@ -154,6 +157,18 @@
   
   .nav-icon {
     font-size: 1.3rem;
+  }
+}
+
+/* 移动端样式优化 */
+@media (max-width: 768px) {
+  .app-nav ul {
+    gap: 8px;  /* 增加间距确保移动端按钮不会太挤 */
+  }
+  
+  .nav-item {
+    padding: 8px;
+    border-radius: 6px;  /* 移动端稍微减小圆角 */
   }
 }
 
