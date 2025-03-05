@@ -7,10 +7,20 @@ import { supabase } from '../../../supabaseClient'
 export default function HistoryList({ onRestore, onNotify }) {
   const [historyList, setHistoryList] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [restoredIds, setRestoredIds] = useState(new Set())
 
   const fetchHistory = async () => {
     setIsLoading(true)
     try {
+      // 获取所有已恢复的记录
+      const { data: restoredData } = await supabase
+        .from('bookmark_history')
+        .select('restored_from_id')
+        .not('restored_from_id', 'is', null)
+
+      const restoredSet = new Set(restoredData?.map(item => item.restored_from_id) || [])
+      setRestoredIds(restoredSet)
+
       const { data, error } = await supabase
         .from('bookmark_history')
         .select('*')
@@ -36,11 +46,25 @@ export default function HistoryList({ onRestore, onNotify }) {
   const handleRestore = async (historyItem) => {
     try {
       const { bookmark_data } = historyItem
-      const { error } = await supabase
+      
+      // 先插入书签
+      const { error: bookmarkError } = await supabase
         .from('bookmark')
         .insert([bookmark_data])
 
-      if (error) throw error
+      if (bookmarkError) throw bookmarkError
+
+      // 记录恢复操作到历史记录
+      const { error: historyError } = await supabase
+        .from('bookmark_history')
+        .insert([{
+          action: 'restore',
+          bookmark_id: bookmark_data.id,
+          bookmark_data: bookmark_data,
+          restored_from_id: historyItem.id // 记录是从哪条历史记录恢复的
+        }])
+
+      if (historyError) throw historyError
 
       onNotify?.({
         type: 'success',
@@ -81,6 +105,7 @@ export default function HistoryList({ onRestore, onNotify }) {
                   {item.action === 'add' && '添加了'}
                   {item.action === 'delete' && '删除了'}
                   {item.action === 'update' && '修改了'}
+                  {item.action === 'restore' && '恢复了'}
                 </span>
                 <span className="history-name">
                   {item.bookmark_data.name}
@@ -92,7 +117,7 @@ export default function HistoryList({ onRestore, onNotify }) {
                   })}
                 </span>
               </div>
-              {item.action === 'delete' && (
+              {item.action === 'delete' && !restoredIds.has(item.id) && (
                 <button
                   className="restore-button"
                   onClick={() => handleRestore(item)}

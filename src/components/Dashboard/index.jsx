@@ -246,7 +246,7 @@ export default function Dashboard() {
                       </button>
                       <button 
                         className="delete-button"
-                        onClick={() => handleDelete(bookmark.url)}
+                        onClick={() => handleDelete(bookmark)}
                         title="删除书签"
                       >
                         <span className="delete-icon">×</span>
