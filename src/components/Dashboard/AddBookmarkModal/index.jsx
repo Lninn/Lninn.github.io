@@ -1,9 +1,11 @@
 import './index.css'
 
-import { useState, } from 'react'
+import { useState, useEffect } from 'react'
 
+import useBookmarkStore from '../../../store/bookmark'
 
 export default function AddBookmarkModal({ onClose, onSubmit }) {
+  const { list: bookmarkList } = useBookmarkStore()
   const [url, setUrl] = useState('')
   const [formData, setFormData] = useState({
     url: '',
@@ -15,31 +17,45 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
   const [analysisStep, setAnalysisStep] = useState(null)
   const [analysisError, setAnalysisError] = useState(null)
   const [analysisComplete, setAnalysisComplete] = useState(false)
+  const [categories, setCategories] = useState([])
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false)
+  
+  useEffect(() => {
+    if (bookmarkList && bookmarkList.length > 0) {
+      const uniqueCategories = [...new Set(bookmarkList.map(item => item.category).filter(Boolean))]
+      setCategories(uniqueCategories)
+    }
+  }, [bookmarkList])
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showCategoryDropdown && !event.target.closest('.category-select-container')) {
+        setShowCategoryDropdown(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showCategoryDropdown])
 
   const analyzeUrl = async () => {
     if (!url || !url.trim()) return
     
-    // 重置状态
     setAnalyzing(true)
     setAnalysisStep('开始分析')
     setAnalysisError(null)
     setAnalysisComplete(false)
     
     try {
-      // 步骤1: 验证URL格式
       setAnalysisStep('验证URL格式')
       let processedUrl = url
       if (!url.startsWith('http://') && !url.startsWith('https://')) {
         processedUrl = 'https://' + url
       }
       
-      // 步骤2: 获取网站元数据
       setAnalysisStep('获取网站元数据')
-      // 这里应该使用后端API来获取网站信息，前端直接请求会有CORS问题
-      // 模拟API调用
       const response = await fetchWebsiteMetadata(processedUrl)
       
-      // 步骤3: 处理结果
       setAnalysisStep('处理分析结果')
       setFormData({
         url: processedUrl,
@@ -190,9 +206,6 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     onSubmit(formData)
-    setUrl('')
-    setFormData({ url: '', name: '', category: '', icon: '' })
-    setAnalysisComplete(false)
     onClose()
   }
 
@@ -201,61 +214,57 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
       <div className="add-bookmark-modal">
         <div className="modal-header">
           <h2>添加新书签</h2>
-          <button className="close-button" onClick={onClose}>×</button>
+          <button className="close-button" onClick={onClose}>&times;</button>
         </div>
-
         <div className="modal-content">
-          <div className="url-input-section">
-            <div className="form-group">
-              <label>输入网站URL</label>
-              <div className="url-input-container">
-                <input
-                  type="text"
-                  value={url}
-                  onChange={e => setUrl(e.target.value)}
-                  placeholder="例如: github.com"
-                  disabled={analyzing}
-                />
-                <button 
-                  type="button" 
-                  className="analyze-button"
-                  onClick={analyzeUrl}
-                  disabled={analyzing || !url.trim()}
-                >
-                  {analyzing ? '分析中...' : '分析'}
-                </button>
-              </div>
+          <div className="form-group">
+            <label>网址</label>
+            <div className="url-input-container">
+              <input
+                type="url"
+                value={url}
+                onChange={e => setUrl(e.target.value)}
+                placeholder="输入网站地址"
+                required
+              />
+              <button
+                type="button"
+                className="analyze-button"
+                onClick={analyzeUrl}
+                disabled={analyzing || !url}
+              >
+                分析
+              </button>
             </div>
           </div>
-          
-          {(analyzing || analysisStep || analysisError) && (
+
+          {analyzing && (
             <div className="analysis-status">
-              <h3>分析进度</h3>
+              <h3>正在分析网站...</h3>
               <div className="analysis-steps">
-                {['验证URL格式', '获取网站元数据', '处理分析结果', '分析完成'].map((step, index) => (
+                {['开始分析', '验证URL格式', '获取网站元数据', '处理分析结果', '分析完成'].map((step, index) => (
                   <div 
                     key={index} 
                     className={`analysis-step ${analysisStep === step ? 'active' : ''} ${
-                      analysisComplete && step === '分析完成' ? 'complete' : ''
+                      ['开始分析', '验证URL格式', '获取网站元数据', '处理分析结果'].indexOf(step) < 
+                      ['开始分析', '验证URL格式', '获取网站元数据', '处理分析结果'].indexOf(analysisStep) ? 'complete' : ''
                     }`}
                   >
-                    <div className="step-indicator">
-                      {analysisComplete && step === '分析完成' ? '✓' : index + 1}
-                    </div>
+                    <div className="step-indicator">{index + 1}</div>
                     <div className="step-label">{step}</div>
                   </div>
                 ))}
               </div>
-              
-              {analysisError && (
-                <div className="analysis-error">
-                  <p>❌ {analysisError}</p>
-                  <p className="error-tip">提示: 请检查URL是否正确，或手动填写书签信息</p>
-                </div>
-              )}
             </div>
           )}
-          
+
+          {analysisError && (
+            <div className="analysis-error">
+              <p>{analysisError}</p>
+              <p className="error-tip">提示：请检查网址是否正确，或稍后再试。</p>
+            </div>
+          )}
+
           {analysisComplete && (
             <form onSubmit={handleSubmit} className="bookmark-form">
               <h3>书签信息</h3>
@@ -265,22 +274,43 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
                   type="text"
                   value={formData.name}
                   onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="书签名称"
                   required
                 />
               </div>
 
               <div className="form-group">
                 <label>分类</label>
-                <input
-                  type="text"
-                  value={formData.category}
-                  onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                  required
-                />
+                <div className="category-select-container">
+                  <input
+                    type="text"
+                    value={formData.category}
+                    onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                    onFocus={() => setShowCategoryDropdown(true)}
+                    placeholder="选择或输入新分类"
+                    required
+                  />
+                  {showCategoryDropdown && categories.length > 0 && (
+                    <div className="category-dropdown">
+                      {categories.map((category, index) => (
+                        <div
+                          key={index}
+                          className={`category-option ${formData.category === category ? 'selected' : ''}`}
+                          onClick={() => {
+                            setFormData(prev => ({ ...prev, category }))
+                            setShowCategoryDropdown(false)
+                          }}
+                        >
+                          {category}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="form-group">
-                <label>图标预览</label>
+                <label>图标</label>
                 <div className="icon-preview">
                   {formData.icon && <img src={formData.icon} alt="网站图标" />}
                   <input
@@ -288,7 +318,6 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
                     value={formData.icon}
                     onChange={e => setFormData(prev => ({ ...prev, icon: e.target.value }))}
                     placeholder="图标URL"
-                    required
                   />
                 </div>
               </div>
