@@ -3,7 +3,6 @@ import './index.css'
 import { useEffect, useState } from 'react'
 import useBookmarkStore from '../../store/bookmark'
 import AddBookmarkModal from './AddBookmarkModal'
-import SyncChangesModal from './SyncChangesModal'
 import { supabase } from '../../supabaseClient'
 import Notification from '../Notification'
 
@@ -15,46 +14,68 @@ export default function Dashboard() {
     fetchBookmarks()
   }, [])
 
-  const [bookmarks, setBookmarks] = useState([])
-  const [showDiff, setShowDiff] = useState(false)
+  // 移除 bookmarks 和 showDiff 状态
   const [showAddModal, setShowAddModal] = useState(false)
   const [notification, setNotification] = useState(null);
 
-  const handleAdd = (newBookmark) => {
-    setBookmarks(prev => [...prev, newBookmark])
-  }
+  // 直接添加书签到数据库
+  const handleAdd = async (newBookmark) => {
+    try {
+      const { error } = await supabase
+        .from('bookmark')
+        .insert([{
+          ...newBookmark,
+          id: renderList.length + 1
+        }])
+        .select()
 
-  const handleDelete = (url) => {
-    setBookmarks(prev => prev.filter(item => item.url !== url))
-  }
-
-  const handleConfirmSync = async () => {
-    insertBookmark(bookmarks)
-    setShowDiff(false)
-  }
-
-  const insertBookmark = async (bookmarks) => {
-    const newData = bookmarks.map(item => {
-      return {
-        ...item,
-        id: renderList.length + 1
+      if (error) {
+        setNotification({
+          type: 'error',
+          message: '添加书签失败，请稍后重试'
+        });
+      } else {
+        setNotification({
+          type: 'success',
+          message: '成功添加书签'
+        });
+        // 刷新书签列表
+        fetchBookmarks();
       }
-    })
-
-    const { data, error } = await supabase
-      .from('bookmark')
-      .insert(newData)
-      .select()
-
-    if (error) {
+    } catch (err) {
+      console.log(err)
       setNotification({
         type: 'error',
-        message: '书签同步失败，请稍后重试'
+        message: '添加书签失败，请稍后重试'
       });
-    } else {
+    }
+  }
+
+  const handleDelete = async (url) => {
+    try {
+      const { error } = await supabase
+        .from('bookmark')
+        .delete()
+        .eq('url', url)
+
+      if (error) {
+        setNotification({
+          type: 'error',
+          message: '删除书签失败，请稍后重试'
+        });
+      } else {
+        setNotification({
+          type: 'success',
+          message: '成功删除书签'
+        });
+        // 刷新书签列表
+        fetchBookmarks();
+      }
+    } catch (err) {
+      console.log(err)
       setNotification({
-        type: 'success',
-        message: `成功同步 ${data.length} 个书签`
+        type: 'error',
+        message: '删除书签失败，请稍后重试'
       });
     }
   }
@@ -71,13 +92,7 @@ export default function Dashboard() {
             <span className="button-icon">+</span>
             添加书签
           </button>
-          <button 
-            className="sync-button"
-            onClick={() => setShowDiff(true)}
-          >
-            <span className="button-icon">↑</span>
-            同步更改
-          </button>
+          {/* 移除同步更改按钮 */}
         </div>
       </div>
 
@@ -117,15 +132,6 @@ export default function Dashboard() {
         <AddBookmarkModal
           onClose={() => setShowAddModal(false)}
           onSubmit={handleAdd}
-        />
-      )}
-
-      {showDiff && (
-        <SyncChangesModal
-          original={[]}
-          modified={bookmarks}
-          onClose={() => setShowDiff(false)}
-          onConfirm={handleConfirmSync}
         />
       )}
 
