@@ -18,7 +18,7 @@ export default defineConfig(({ command }) => ({
     },
     cssCodeSplit: true,
     sourcemap: command === 'serve',
-    minify: 'terser'
+    minify: 'esbuild'
   },
   server: {
     port: 3000,
