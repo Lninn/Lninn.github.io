@@ -2,27 +2,9 @@ import './index.css'
 
 import { Suspense } from 'react'
 import AppHeader from '../AppHeader'
-import Bookmark from '../Bookmark'
-import Article from '../Article'
-import Dashboard from '../Dashboard'
 import Footer from '../Footer'
 import useRouteStore from '../../store/route'
-
-
-const ROUTES = {
-  BOOKMARK: {
-    path: 'bookmark',
-    component: Bookmark
-  },
-  LOG: {
-    path: 'log',
-    component: Article
-  },
-  DASHBOARD: {
-    path: 'dashboard',
-    component: Dashboard
-  }
-}
+import { ROUTES } from '../../config/routes'
 
 function LoadingSpinner() {
   return (

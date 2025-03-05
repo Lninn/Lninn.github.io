@@ -1,27 +1,10 @@
 import './index.css'
 import useRouteStore from '../../store/route'
 import useThemeStore from '../../store/theme'
-
-const NAVIGATION_ITEMS = [
-  {
-    path: 'bookmark',
-    name: '书签',
-    icon: '📚'
-  },
-  {
-    path: 'log',
-    name: '日志',
-    icon: '📝'
-  },
-  {
-    path: 'dashboard',
-    name: '仪表板',
-    icon: '📈'
-  }
-]
+import { NAVIGATION_ITEMS } from '../../config/routes'
 
 export default function AppHeader() {
-  const { darkMode, setDarkMode } = useThemeStore()  // 移除 navPosition 和 setNavPosition
+  const { darkMode, setDarkMode } = useThemeStore()
 
   const toggleTheme = () => {
     setDarkMode(!darkMode)
