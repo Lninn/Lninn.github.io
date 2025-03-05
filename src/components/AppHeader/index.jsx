@@ -21,10 +21,14 @@ const NAVIGATION_ITEMS = [
 ]
 
 export default function AppHeader() {
-  const { darkMode, setDarkMode } = useThemeStore()
+  const { darkMode, setDarkMode, navPosition, setNavPosition } = useThemeStore()
 
   const toggleTheme = () => {
     setDarkMode(!darkMode)
+  }
+
+  const toggleNavPosition = () => {
+    setNavPosition(navPosition === 'top' ? 'bottom' : 'top')
   }
 
   return (
@@ -37,6 +41,14 @@ export default function AppHeader() {
         <AppNav />
 
         <div className="header-actions">
+          <button 
+            className="layout-toggle mobile-only" 
+            aria-label="切换导航位置"
+            onClick={toggleNavPosition}
+            title={navPosition === 'top' ? '切换到底部导航' : '切换到顶部导航'}
+          >
+            {navPosition === 'top' ? '⬇️' : '⬆️'}
+          </button>
           <button 
             className="theme-toggle" 
             aria-label="切换主题"

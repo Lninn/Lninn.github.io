@@ -4,7 +4,7 @@ import './index.css'
 import App from './components/App'
 import useThemeStore from './store/theme'
 
-// 在渲染之前初始化主题
+// 在渲染之前初始化主题和导航位置
 useThemeStore.getState().initTheme()
 
 createRoot(document.getElementById('root')).render(
