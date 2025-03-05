@@ -12,39 +12,41 @@
 }
 
 .add-bookmark-modal {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 12px;
   width: 90%;
   max-width: 550px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
   max-height: 90vh;
   overflow-y: auto;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .modal-header {
   padding: 20px 24px;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
   top: 0;
-  background: white;
+  background: var(--bg-primary);
   z-index: 10;
   border-radius: 12px 12px 0 0;
+  transition: background-color 0.3s ease;
 }
 
 .modal-header h2 {
   margin: 0;
   font-size: 1.25rem;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .close-button {
   background: none;
   border: none;
   font-size: 24px;
-  color: #666;
+  color: var(--text-secondary);
   cursor: pointer;
   padding: 0;
   line-height: 1;
@@ -61,7 +63,7 @@
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  color: #333;
+  color: var(--text-primary);
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -69,16 +71,18 @@
 .form-group input {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 14px;
   transition: all 0.2s;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #007cf0;
-  box-shadow: 0 0 0 3px rgba(0, 124, 240, 0.1);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-bg-subtle);
 }
 
 /* 分类选择器样式 */
@@ -90,11 +94,12 @@
 .category-select-container input {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 14px;
   transition: all 0.2s;
-  background-color: white;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 .category-dropdown {
@@ -102,29 +107,30 @@
   top: 100%;
   left: 0;
   right: 0;
-  background: white;
-  border: 1px solid #ddd;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   margin-top: 4px;
   max-height: 200px;
   overflow-y: auto;
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .category-option {
   padding: 10px 14px;
   cursor: pointer;
   transition: all 0.2s;
+  color: var(--text-primary);
 }
 
 .category-option:hover {
-  background: #f5f5f5;
+  background: var(--bg-hover);
 }
 
 .category-option.selected {
-  background: #e6f7ff;
-  color: #1890ff;
+  background: var(--primary-bg-subtle);
+  color: var(--primary);
 }
 
 .category-dropdown::-webkit-scrollbar {
@@ -132,23 +138,23 @@
 }
 
 .category-dropdown::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--bg-secondary);
   border-radius: 3px;
 }
 
 .category-dropdown::-webkit-scrollbar-thumb {
-  background: #888;
+  background: var(--border-color);
   border-radius: 3px;
 }
 
 .category-dropdown::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--text-secondary);
 }
   
 .category-select-container input:focus {
   outline: none;
-  border-color: #007cf0;
-  box-shadow: 0 0 0 3px rgba(0, 124, 240, 0.1);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-bg-subtle);
 }
   
 /* 自定义 datalist 下拉样式 */
@@ -172,8 +178,8 @@ input::-webkit-calendar-picker-indicator:hover {
 
 .analyze-button {
   padding: 12px 20px;
-  background: #007cf0;
-  color: white;
+  background: var(--primary);
+  color: var(--text-on-primary);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -183,18 +189,19 @@ input::-webkit-calendar-picker-indicator:hover {
 }
 
 .analyze-button:hover {
-  background: #0056b3;
+  background: var(--primary-hover);
 }
 
 .analyze-button:disabled {
-  background: #cccccc;
+  background: var(--disabled-bg);
   cursor: not-allowed;
+  color: var(--disabled-text);
 }
 
 .analysis-status {
   margin: 24px 0;
   padding: 20px;
-  background: #f8f9fa;
+  background: var(--bg-secondary);
   border-radius: 10px;
 }
 
@@ -202,7 +209,7 @@ input::-webkit-calendar-picker-indicator:hover {
   margin-top: 0;
   margin-bottom: 16px;
   font-size: 1rem;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .analysis-steps {
@@ -219,7 +226,7 @@ input::-webkit-calendar-picker-indicator:hover {
   left: 20px;
   right: 20px;
   height: 2px;
-  background: #e0e0e0;
+  background: var(--border-color);
   z-index: 1;
 }
 
@@ -236,55 +243,55 @@ input::-webkit-calendar-picker-indicator:hover {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: #e0e0e0;
+  background: var(--border-color);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 8px;
   font-weight: bold;
-  color: #666;
+  color: var(--text-secondary);
   transition: all 0.3s;
 }
 
 .step-label {
   font-size: 0.8rem;
-  color: #666;
+  color: var(--text-secondary);
   text-align: center;
   transition: all 0.3s;
 }
 
 .analysis-step.active .step-indicator {
-  background: #007cf0;
-  color: white;
+  background: var(--primary);
+  color: var(--text-on-primary);
 }
 
 .analysis-step.active .step-label {
-  color: #007cf0;
+  color: var(--primary);
   font-weight: 500;
 }
 
 .analysis-step.complete .step-indicator {
-  background: #28a745;
-  color: white;
+  background: var(--success);
+  color: var(--text-on-primary);
 }
 
 .analysis-error {
   margin-top: 20px;
   padding: 15px;
-  background: #fff0f0;
-  border-left: 4px solid #dc3545;
+  background: var(--danger-bg-subtle);
+  border-left: 4px solid var(--danger);
   border-radius: 4px;
 }
 
 .analysis-error p {
   margin: 0;
-  color: #dc3545;
+  color: var(--danger);
 }
 
 .error-tip {
   font-size: 0.85rem;
   margin-top: 8px !important;
-  color: #666 !important;
+  color: var(--text-secondary) !important;
 }
 
 .bookmark-form {
@@ -295,7 +302,7 @@ input::-webkit-calendar-picker-indicator:hover {
   margin-top: 0;
   margin-bottom: 20px;
   font-size: 1rem;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .icon-preview {
@@ -309,7 +316,8 @@ input::-webkit-calendar-picker-indicator:hover {
   height: 24px;
   object-fit: contain;
   border-radius: 4px;
-  border: 1px solid #eaeaea;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
 }
 
 .icon-preview input {
@@ -334,19 +342,19 @@ input::-webkit-calendar-picker-indicator:hover {
 }
 
 .cancel-button {
-  background: #f5f5f5;
-  color: #666;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
 }
 
 .cancel-button:hover {
-  background: #eaeaea;
+  background: var(--bg-hover);
 }
 
 .submit-button {
-  background: #007cf0;
-  color: white;
+  background: var(--primary);
+  color: var(--text-on-primary);
 }
 
 .submit-button:hover {
-  background: #0056b3;
+  background: var(--primary-hover);
 }
