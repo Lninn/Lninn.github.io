@@ -14,7 +14,7 @@ export default function Dashboard() {
   const { list: renderList, fetchBookmarks } = useBookmarkStore()
 
   useEffect(() => {
-    console.log('Dashboard component mount.')
+    // console.log('Dashboard component mount.')
     const loadBookmarks = async () => {
       setIsLoading(true)
       await fetchBookmarks()
