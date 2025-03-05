@@ -5,7 +5,7 @@ const useBookmarkStore = create((set) => ({
   list: [],
   
   fetchBookmarks: async () => {
-    const { data, error } = await supabase.from('bookmark').select('*')
+    const { data, error } = await supabase.from('bookmark').select('*').order('create_at', { ascending: false })
     
     if (error) {
       console.error('Failed to fetch bookmark data:', error)

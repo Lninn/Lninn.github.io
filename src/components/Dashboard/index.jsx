@@ -115,7 +115,7 @@ export default function Dashboard() {
                     className="bookmark-icon" 
                     loading="lazy"
                     onError={(e) => {
-                      e.target.src = '/fallback-icon.png';
+                      e.target.src = '/fallback-icon.svg';
                     }}
                   />
                 </div>
