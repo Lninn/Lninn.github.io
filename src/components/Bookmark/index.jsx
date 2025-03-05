@@ -8,8 +8,46 @@ import ErrorBoundary from '../ErrorBoundary'
 
 const initialFnPromise = fetchBookmarks()
 
+async function fetchBookmarks() {
+  // 获取书签数据
+  const { data: bookmarks, error: bookmarkError } = await supabase
+    .from('bookmark')
+    .select('*')
+    
+  if (bookmarkError) {
+    console.error('Failed to fetch bookmark data:', bookmarkError)
+    return { list: [], viewsMap: new Map() }
+  }
+
+  // 获取分类访问量数据
+  const { data: viewsData, error: viewsError } = await supabase
+    .from('category_views')
+    .select('*')
+
+  if (viewsError) {
+    console.error('Failed to fetch views data:', viewsError)
+  }
+
+  // 创建访问量映射
+  const viewsMap = new Map(
+    viewsData?.map(item => [item.category, item.view_count]) || []
+  )
+
+  // 对数据进行分组
+  const groupedData = getUrlArray(bookmarks)
+
+  // 按访问量排序
+  const sortedData = groupedData.sort((a, b) => {
+    const viewsA = viewsMap.get(a[0]) || 0
+    const viewsB = viewsMap.get(b[0]) || 0
+    return viewsB - viewsA
+  })
+
+  return { list: sortedData, viewsMap }
+}
+
 export default function Bookmark() {
-  const list = use(initialFnPromise)
+  const { list, viewsMap } = use(initialFnPromise)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('全部')
 
@@ -94,6 +132,7 @@ export default function Bookmark() {
                 name={name} 
                 data={categoryData}
                 searchTerm={searchTerm}
+                viewCount={viewsMap.get(name) || 0}
               />
             </ErrorBoundary>
           ))
@@ -116,23 +155,15 @@ export default function Bookmark() {
   )
 }
 
-function BookmarkCategory({ name, data }) {
+function BookmarkCategory({ name, data, searchTerm }) {
   return (
     <div className="bookmark-category">
       <h2 className="category-title">{name}</h2>
-      <UrlList list={data} />
+      <UrlList 
+        list={data} 
+        searchTerm={searchTerm}
+        category={name}
+      />
     </div>
   )
-}
-
-async function fetchBookmarks() {
-  const { data, error } = await supabase.from('bookmark').select('*')
-    
-  if (error) {
-    console.error('Failed to fetch bookmark data:', error)
-    return
-  }
-
-  const groupedData = getUrlArray(data)
-  return groupedData
 }

@@ -1,4 +1,22 @@
-export default function UrlList({ list, searchTerm }) {
+import { supabase } from '../../supabaseClient'
+
+
+export default function UrlList({ list, searchTerm, category }) {
+  const handleClick = async (url) => {
+    try {
+      await supabase
+        .from('bookmark_views')
+        .insert([
+          { 
+            category: category,
+            url: url
+          }
+        ])
+    } catch (error) {
+      console.error('Failed to record view:', error)
+    }
+  }
+
   const highlightText = (text, highlight) => {
     if (!highlight) return text
     
@@ -23,7 +41,11 @@ export default function UrlList({ list, searchTerm }) {
               e.target.src = '/fallback-icon.svg';
             }}
           />
-          <a href={obj.url} target='_blank'>
+          <a 
+            href={obj.url} 
+            target='_blank'
+            onClick={() => handleClick(obj.url)}
+          >
             {highlightText(obj.name, searchTerm)}
           </a>
         </li>
