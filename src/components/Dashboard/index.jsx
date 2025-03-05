@@ -18,6 +18,23 @@ export default function Dashboard() {
   const [showAddModal, setShowAddModal] = useState(false)
   const [notification, setNotification] = useState(null);
 
+  // 添加复制URL功能
+  const handleCopyUrl = (url) => {
+    navigator.clipboard.writeText(url)
+      .then(() => {
+        setNotification({
+          type: 'success',
+          message: 'URL已复制到剪贴板'
+        });
+      })
+      .catch(() => {
+        setNotification({
+          type: 'error',
+          message: '复制失败，请手动复制'
+        });
+      });
+  }
+
   // 直接添加书签到数据库
   const handleAdd = async (newBookmark) => {
     try {
@@ -122,9 +139,21 @@ export default function Dashboard() {
                 <div className="bookmark-info">
                   <h3>{bookmark.name}</h3>
                   <p className="category-tag">{bookmark.category}</p>
-                  <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
-                    {bookmark.url}
-                  </a>
+                  <div className="url-container">
+                    <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
+                      {bookmark.url}
+                    </a>
+                    <button 
+                      className="copy-button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleCopyUrl(bookmark.url);
+                      }}
+                      title="复制URL"
+                    >
+                      📋
+                    </button>
+                  </div>
                 </div>
                 <button 
                   className="delete-button"

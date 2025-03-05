@@ -263,3 +263,46 @@
     margin-left: 0.5rem;
   }
 }
+
+/* 添加到现有CSS文件中 */
+
+/* URL容器样式 */
+.url-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.url-container a {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copy-button {
+  opacity: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px 8px;
+  margin-left: 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  background-color: var(--bg-secondary);
+}
+
+.url-container:hover .copy-button {
+  opacity: 1;
+}
+
+.copy-button:hover {
+  background-color: var(--hover-bg);
+  transform: scale(1.1);
+}
+
+.copy-button:active {
+  transform: scale(0.95);
+}
