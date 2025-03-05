@@ -1,17 +1,12 @@
+import './UrlList.css'
 import { supabase } from '../../supabaseClient'
-
 
 export default function UrlList({ list, searchTerm, category }) {
   const handleClick = async (url) => {
     try {
       await supabase
         .from('bookmark_views')
-        .insert([
-          { 
-            category: category,
-            url: url
-          }
-        ])
+        .insert([{ category, url }])
     } catch (error) {
       console.error('Failed to record view:', error)
     }
@@ -28,25 +23,32 @@ export default function UrlList({ list, searchTerm, category }) {
   }
 
   return (
-    <ul>
+    <ul className="bookmark-list">
       {list.map(obj => (
-        <li key={obj.name} style={{ marginBlockEnd: 8 }}>
-          <img
-            height={24}
-            width={24}
-            src={obj.icon}
-            style={{ verticalAlign: 'bottom', paddingRight: 8 }}
-            loading="lazy"
-            onError={(e) => {
-              e.target.src = '/fallback-icon.svg';
-            }}
-          />
+        <li key={obj.name} className="bookmark-item">
           <a 
             href={obj.url} 
-            target='_blank'
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bookmark-link"
             onClick={() => handleClick(obj.url)}
           >
-            {highlightText(obj.name, searchTerm)}
+            <div className="bookmark-icon-wrapper">
+              <img
+                src={obj.icon}
+                alt=""
+                className="bookmark-icon"
+                loading="lazy"
+                onError={(e) => {
+                  e.target.src = '/fallback-icon.svg'
+                }}
+              />
+            </div>
+            <div className="bookmark-content">
+              <div className="bookmark-name">
+                {highlightText(obj.name, searchTerm)}
+              </div>
+            </div>
           </a>
         </li>
       ))}
