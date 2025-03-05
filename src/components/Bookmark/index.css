@@ -108,6 +108,7 @@
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s ease;
+  text-transform: uppercase;
 }
 
 .category-filter-btn:hover {
@@ -217,6 +218,7 @@
   border-bottom: 1px solid var(--border-color);
   letter-spacing: 0.5px;
   font-weight: 600;
+  text-transform: uppercase;
 }
 
 /* 添加无结果样式 */
