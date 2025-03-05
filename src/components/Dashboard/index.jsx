@@ -92,7 +92,6 @@ export default function Dashboard() {
             <span className="button-icon">+</span>
             添加书签
           </button>
-          {/* 移除同步更改按钮 */}
         </div>
       </div>
 
