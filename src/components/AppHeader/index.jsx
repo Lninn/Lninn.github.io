@@ -1,7 +1,6 @@
 import './index.css'
-
 import useRouteStore from '../../store/route'
-
+import useThemeStore from '../../store/theme'
 
 const NAVIGATION_ITEMS = [
   {
@@ -22,6 +21,12 @@ const NAVIGATION_ITEMS = [
 ]
 
 export default function AppHeader() {
+  const { darkMode, setDarkMode } = useThemeStore()
+
+  const toggleTheme = () => {
+    setDarkMode(!darkMode)
+  }
+
   return (
     <header className="app-header">
       <div className="header-content">
@@ -32,8 +37,12 @@ export default function AppHeader() {
         <AppNav />
 
         <div className="header-actions">
-          <button className="theme-toggle" aria-label="切换主题">
-            🌙
+          <button 
+            className="theme-toggle" 
+            aria-label="切换主题"
+            onClick={toggleTheme}
+          >
+            {darkMode ? '☀️' : '🌙'}
           </button>
         </div>
       </div>

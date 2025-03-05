@@ -66,3 +66,70 @@ code.hljs {
     background-color: #f9f9f9;
   }
 }
+
+/* 在文件末尾添加以下代码 */
+
+/* 暗色主题基本样式 */
+:root {
+  --text-color: #333;
+  --background-color: #fff;
+  --border-color: #eaeaea;
+  --hover-bg: rgba(0, 0, 0, 0.05);
+  --active-bg: rgba(0, 124, 240, 0.1);
+  
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+:root.dark-mode {
+  --text-color: #f0f0f0;
+  --background-color: #121212;
+  --border-color: #333;
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  --active-bg: rgba(0, 124, 240, 0.2);
+}
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+:root {
+  /* 亮色主题变量 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --border-color: #eaeaea;
+  --hover-bg: rgba(0, 0, 0, 0.05);
+  --active-color: #007cf0;
+  --active-bg: rgba(0, 124, 240, 0.1);
+  --card-bg: #ffffff;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --modal-overlay: rgba(0, 0, 0, 0.5);
+  --header-bg: rgba(255, 255, 255, 0.8);
+}
+
+:root.dark-mode {
+  /* 暗色主题变量 */
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --text-primary: #f0f0f0;
+  --text-secondary: #aaaaaa;
+  --border-color: #333333;
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  --active-color: #3a9bff;
+  --active-bg: rgba(0, 124, 240, 0.2);
+  --card-bg: #1e1e1e;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --modal-overlay: rgba(0, 0, 0, 0.7);
+  --header-bg: rgba(18, 18, 18, 0.8);
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

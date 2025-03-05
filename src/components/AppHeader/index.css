@@ -6,6 +6,7 @@
   backdrop-filter: blur(8px);
   border-bottom: 1px solid #eaeaea;
   padding: 0 20px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .header-content {
@@ -83,11 +84,50 @@
   background: none;
   cursor: pointer;
   border-radius: 50%;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
 }
 
 .theme-toggle:hover {
   background-color: rgba(0, 0, 0, 0.05);
+  transform: rotate(15deg);
+}
+
+/* 暗色主题样式 */
+:root.dark-mode {
+  --text-color: #f0f0f0;
+  --background-color: #121212;
+  --border-color: #333;
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  --active-bg: rgba(0, 124, 240, 0.2);
+}
+
+.dark-mode .app-header {
+  background-color: rgba(18, 18, 18, 0.8);
+  border-bottom-color: #333;
+}
+
+.dark-mode .nav-item {
+  color: #aaa;
+}
+
+.dark-mode .nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #f0f0f0;
+}
+
+.dark-mode .nav-item.active {
+  background-color: rgba(0, 124, 240, 0.2);
+  color: #3a9bff;
+}
+
+.dark-mode .theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 @media (max-width: 768px) {
