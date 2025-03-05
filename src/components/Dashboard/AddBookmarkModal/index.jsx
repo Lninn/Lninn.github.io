@@ -1,5 +1,7 @@
+import './index.css'
+
 import { useState, } from 'react'
-import './AddBookmarkModal.css'
+
 
 export default function AddBookmarkModal({ onClose, onSubmit }) {
   const [url, setUrl] = useState('')
