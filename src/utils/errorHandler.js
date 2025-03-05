@@ -81,8 +81,7 @@ export const reportErrorToServer = (error, componentInfo = '', userInfo = {}) =>
     timestamp: new Date().toISOString(),
     environment: import.meta.env.MODE,
     url: window.location.href,
-    user_agent: navigator.userAgent,
-    queue_time: Date.now()
+    user_agent: navigator.userAgent
   }
 
   ERROR_QUEUE.items.push(errorData)
