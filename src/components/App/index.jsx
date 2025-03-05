@@ -5,6 +5,7 @@ import AppHeader from '../AppHeader'
 import Bookmark from '../Bookmark'
 import Article from '../Article'
 import Dashboard from '../Dashboard'
+import Footer from '../Footer'
 import useRouteStore from '../../store/route'
 
 
@@ -59,11 +60,7 @@ function App() {
         </div>
       </main>
 
-      <footer className="app-footer">
-        <div className="footer-content">
-          <p>Powered by Deepseek</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
