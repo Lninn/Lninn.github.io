@@ -4,8 +4,8 @@ import { lazy } from 'react'
 const Bookmark = lazy(() => import('../components/Bookmark'))
 const Article = lazy(() => import('../components/Article'))
 const Dashboard = lazy(() => import('../components/Dashboard'))
+const ErrorLogs = lazy(() => import('../components/Dashboard/ErrorLogs'))
 
-// 统一的路由配置
 const ROUTES_CONFIG = [
   {
     path: '/bookmark',
@@ -24,6 +24,12 @@ const ROUTES_CONFIG = [
     name: '仪表板',
     icon: '📈',
     component: Dashboard
+  },
+  {
+    path: '/error-logs',
+    name: '错误日志',
+    icon: '🔍',
+    component: ErrorLogs
   }
 ]
 

@@ -1,3 +1,6 @@
+import { supabase } from '../supabaseClient'
+
+
 /**
  * 统一的错误处理工具
  */
@@ -42,16 +45,27 @@ export const handleApiError = (error, fallbackMessage = '操作失败，请稍�
 
 // 上报错误到服务器（示例函数）
 export const reportErrorToServer = async (error, componentInfo = '', userInfo = {}) => {
-  // 这里可以实现错误上报逻辑
-  // 例如发送到后端API或第三方服务
   try {
-    console.log('错误已上报', { error, componentInfo, userInfo })
-    // 实际项目中可以替换为真实的API调用
-    // await fetch('/api/error-report', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ error: formatError(error), componentInfo, userInfo })
-    // })
+    const errorData = {
+      error: formatError(error),
+      component_info: componentInfo,
+      user_info: userInfo,
+      timestamp: new Date().toISOString(),
+      environment: import.meta.env.MODE,
+      url: window.location.href,
+      user_agent: navigator.userAgent
+    }
+
+    const { error: supabaseError } = await supabase
+      .from('error_logs')
+      .insert([errorData])
+
+    if (supabaseError) {
+      console.error('错误上报失败:', supabaseError)
+      return
+    }
+
+    console.log('错误已记录到数据库')
   } catch (reportError) {
     console.error('错误上报失败:', reportError)
   }
