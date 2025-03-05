@@ -9,6 +9,10 @@ export default function UrlList({ list }) {
                 width={24}
                 src={obj.icon}
                 style={{ verticalAlign: 'bottom', paddingRight: 8 }}
+                loading="lazy"
+                onError={(e) => {
+                  e.target.src = '/fallback-icon.svg';
+                }}
               />
               <a href={obj.url} target='_blank'>{obj.name}</a>
             </li>

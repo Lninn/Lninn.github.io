@@ -19,31 +19,6 @@
   overflow-x: hidden;
 }
 
-/* 优化响应式设计 */
-@media (max-width: 768px) {
-  .app-main {
-    padding: 12px 8px;
-  }
-  
-  .content-container {
-    padding: 16px 12px;
-    border-radius: 8px;
-    margin: 0;
-    box-shadow: none;
-  }
-  
-  .loading-container {
-    min-height: 150px;
-  }
-}
-
-/* 添加平板设备的中间断点 */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .content-container {
-    max-width: 90%;
-  }
-}
-
 /* 优化加载动画 */
 .spinner {
   width: 36px;
@@ -86,43 +61,61 @@
   margin-bottom: 1.5rem;
 }
 
+/* 404页面样式 */
 .not-found {
   text-align: center;
   padding: 48px 0;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .not-found h2 {
   font-size: 48px;
   margin: 0 0 16px;
-  color: #333;
+  color: var(--text-primary);
 }
 
+/* 页脚样式 */
 .app-footer {
-  border-top: 1px solid #eaeaea;
+  border-top: 1px solid var(--border-color);
   padding: 24px;
-  background-color: #fff;
+  background-color: var(--bg-primary);
 }
 
 .footer-content {
   max-width: 1200px;
   margin: 0 auto;
   text-align: center;
-  color: #666;
+  color: var(--text-secondary);
 }
 
+/* 动画 */
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
 
+/* 响应式样式 - 合并重复的媒体查询 */
 @media (max-width: 768px) {
   .app-main {
-    padding: 16px;
+    padding: 12px 8px;
   }
-
+  
   .content-container {
-    padding: 16px;
+    padding: 16px 12px;
+    border-radius: 8px;
+    margin: 0;
+    box-shadow: none;
+  }
+  
+  .loading-container {
+    min-height: 150px;
+  }
+}
+
+/* 添加平板设备的中间断点 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .content-container {
+    max-width: 90%;
   }
 }
