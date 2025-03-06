@@ -5,7 +5,7 @@ import useBookmarkStore from '#/store/bookmark'
 import { fetchWebsiteMetadata, checkUrlExists } from '#/utils/bookmarkAnalyzer'
 import BookmarkForm from './BookmarkForm'
 import AnalysisStatus from './AnalysisStatus'
-
+import Modal from '#/components/Modal'
 
 export default function AddBookmarkModal({ onClose, onSubmit }) {
   const { list: bookmarkList } = useBookmarkStore()
@@ -31,6 +31,7 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
   }, [bookmarkList])
 
   const analyzeUrl = async () => {
+    // 保持原有分析逻辑不变
     if (!url || !url.trim()) return
     
     setAnalyzing(true)
@@ -48,9 +49,7 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
       
       // 检查URL是否已存在
       const normalizedUrl = processedUrl.toLowerCase().replace(/\/$/, '')
-      const exists = bookmarkList.some(bookmark => 
-        bookmark.url.toLowerCase().replace(/\/$/, '') === normalizedUrl
-      )
+      const exists = checkUrlExists(normalizedUrl, bookmarkList)
       
       if (exists) {
         setUrlExists(true)
@@ -94,53 +93,54 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
     onClose()
   }
 
+  // 使用通用 Modal 组件替代自定义模态框结构
   return (
-    <div className="modal-overlay">
-      <div className="add-bookmark-modal">
-        <div className="modal-header">
-          <h2>添加新书签</h2>
-          <button className="close-button" onClick={onClose}>&times;</button>
-        </div>
-        <div className="modal-content">
-          <div className="form-group">
-            <label>网址</label>
-            <div className="url-input-container">
-              <input
-                type="url"
-                value={url}
-                onChange={e => setUrl(e.target.value)}
-                placeholder="输入网站地址"
-                required
-              />
-              <button
-                type="button"
-                className="analyze-button"
-                onClick={analyzeUrl}
-                disabled={analyzing || !url}
-              >
-                分析
-              </button>
-            </div>
-          </div>
-
-          <AnalysisStatus 
-            analyzing={analyzing}
-            analysisStep={analysisStep}
-            analysisError={analysisError}
-            urlExists={urlExists}
-          />
-
-          {analysisComplete && (
-            <BookmarkForm 
-              formData={formData}
-              setFormData={setFormData}
-              categories={categories}
-              onSubmit={handleSubmit}
-              onCancel={onClose}
+    <Modal 
+      isOpen={true} 
+      onClose={onClose} 
+      title="添加新书签"
+      size="md"
+      position="center"
+    >
+      <div className="bookmark-modal-content">
+        <div className="form-group">
+          <label>网址</label>
+          <div className="url-input-container">
+            <input
+              type="url"
+              value={url}
+              onChange={e => setUrl(e.target.value)}
+              placeholder="输入网站地址"
+              required
             />
-          )}
+            <button
+              type="button"
+              className="analyze-button"
+              onClick={analyzeUrl}
+              disabled={analyzing || !url}
+            >
+              分析
+            </button>
+          </div>
         </div>
+
+        <AnalysisStatus 
+          analyzing={analyzing}
+          analysisStep={analysisStep}
+          analysisError={analysisError}
+          urlExists={urlExists}
+        />
+
+        {analysisComplete && (
+          <BookmarkForm 
+            formData={formData}
+            setFormData={setFormData}
+            categories={categories}
+            onSubmit={handleSubmit}
+            onCancel={onClose}
+          />
+        )}
       </div>
-    </div>
+    </Modal>
   )
 }
