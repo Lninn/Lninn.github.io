@@ -2,3 +2,51 @@
 .bookmark-modal-content {
   padding: 10px 0;
 }
+
+/* 修复分类下拉框的滚动条问题 */
+.category-dropdown {
+  position: absolute;
+  z-index: 100;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+/* 提交按钮的 loading 效果 */
+.submit-button.loading {
+  position: relative;
+  color: transparent;
+  pointer-events: none;
+}
+
+.submit-button.loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-top: -8px;
+  margin-left: -8px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 禁用按钮样式 */
+.submit-button:disabled {
+  background: var(--disabled-bg, #e0e0e0);
+  color: var(--disabled-text, #a0a0a0);
+  cursor: not-allowed;
+}
+
+.cancel-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

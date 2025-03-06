@@ -1,5 +1,5 @@
 import './index.css'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import useBookmarkStore from '#/store/bookmark'
 import Modal from '#/components/Modal'
 
@@ -12,10 +12,27 @@ export default function EditBookmarkModal({ bookmark, onClose, onSubmit }) {
   const [formData, setFormData] = useState({
     name: bookmark.name,
     category: bookmark.category,
-    icon: bookmark.icon  // 添加 icon 字段
+    icon: bookmark.icon
   })
   const [categories, setCategories] = useState([])
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [hasChanges, setHasChanges] = useState(false)
+  const initialFormData = useRef({
+    name: bookmark.name,
+    category: bookmark.category,
+    icon: bookmark.icon
+  }).current
+
+  // 检测表单是否有变更
+  useEffect(() => {
+    const changed = 
+      formData.name !== initialFormData.name ||
+      formData.category !== initialFormData.category ||
+      formData.icon !== initialFormData.icon
+    
+    setHasChanges(changed)
+  }, [formData, initialFormData])
 
   useEffect(() => {
     if (bookmarkList && bookmarkList.length > 0) {
@@ -36,12 +53,29 @@ export default function EditBookmarkModal({ bookmark, onClose, onSubmit }) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [showCategoryDropdown])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    onSubmit({
-      ...bookmark,
-      ...formData
-    })
+    
+    if (!hasChanges || isSubmitting) return
+    
+    setIsSubmitting(true)
+    
+    try {
+      // 提交表单数据
+      await onSubmit({
+        ...bookmark,
+        ...formData
+      })
+      
+      // 成功后关闭模态框
+      onClose()
+    } catch (error) {
+      // 处理错误情况
+      console.error('保存书签失败:', error)
+      // 这里可以添加错误提示
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -115,11 +149,20 @@ export default function EditBookmarkModal({ bookmark, onClose, onSubmit }) {
           </div>
 
           <div className="modal-actions">
-            <button type="button" className="cancel-button" onClick={onClose}>
+            <button 
+              type="button" 
+              className="cancel-button" 
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
               取消
             </button>
-            <button type="submit" className="submit-button">
-              保存修改
+            <button 
+              type="submit" 
+              className={`submit-button ${isSubmitting ? 'loading' : ''}`}
+              disabled={!hasChanges || isSubmitting}
+            >
+              {isSubmitting ? '保存中...' : '保存修改'}
             </button>
           </div>
         </form>
