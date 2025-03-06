@@ -29,10 +29,12 @@ export function DashboardHeader({ onAddClick, activeTab, onTabChange }) {
       </div>
       
       <div className="header-actions">
-        <button className="add-button" onClick={onAddClick}>
-          <span className="button-icon"><FiPlus /></span>
-          添加书签
-        </button>
+        {activeTab === 'bookmarks' && (
+          <button className="add-button" onClick={onAddClick}>
+            <span className="button-icon"><FiPlus /></span>
+            添加书签
+          </button>
+        )}
       </div>
     </div>
   )

@@ -13,7 +13,7 @@ export function BookmarkItem({ bookmark, onEdit, onDelete, onCopyUrl }) {
               src={bookmark.icon} 
               alt={bookmark.name} 
               className="bookmark-icon" 
-              onError={(e) => e.target.src = '/favicon.ico'}
+              onError={(e) => e.target.src = '/fallback-icon.svg'}
             />
           ) : (
             <div className="bookmark-icon-placeholder"></div>
