@@ -36,7 +36,7 @@ export default function BookmarkList({
         <h2>书签列表</h2>
         <span className="item-count">{bookmarks.length} 个书签</span>
       </div>
-      <div className="bookmark-list">
+      <div className="bookmark-list bookmark-list-wrap">
         {bookmarks.map(bookmark => (
           <BookmarkItem 
             key={bookmark.id} 

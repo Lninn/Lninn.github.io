@@ -31,7 +31,7 @@
   border-radius: 1rem;
 }
 
-.bookmark-list {
+.bookmark-list.bookmark-list-wrap {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1rem;
