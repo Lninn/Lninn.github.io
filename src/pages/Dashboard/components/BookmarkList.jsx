@@ -7,8 +7,6 @@ export function BookmarkList({
   onDelete, 
   onCopyUrl 
 }) {
-  console.log('BookmarkList 渲染:', { isLoading, bookmarksLength: bookmarks?.length }) // 添加调试信息
-  
   if (isLoading) {
     return (
       <div className="loading-state">
@@ -29,6 +27,12 @@ export function BookmarkList({
   
   return (
     <div className="bookmark-list">
+      <div className="section-header">
+        <h2>操作历史</h2>
+        <span className="history-count">
+          {isLoading ? '加载中...' : `${bookmarks?.length} 条记录`}
+        </span>
+      </div>
       {bookmarks.map(bookmark => (
         <BookmarkItem 
           key={bookmark.id} 

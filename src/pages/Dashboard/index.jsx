@@ -83,10 +83,6 @@ export default function Dashboard() {
         
         <div className="dashboard-content">
           <div className="list-section">
-            <div className="section-header">
-              <h2>{activeTab === 'bookmarks' ? '书签列表' : '历史记录'}</h2>
-            </div>
-            
             {activeTab === 'bookmarks' ? (
               <BookmarkList 
                 bookmarks={bookmarkList}
