@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import UrlList from './UrlList'
 import { getUrlArray } from '../../store/shared'
 import { supabase } from '../../supabaseClient'
-import ErrorBoundary from '../ErrorBoundary'
+import ErrorBoundary from '../../components/ErrorBoundary'
 import { createResource } from '../../utils/createResource'
 
 const bookmarkResource = createResource(fetchBookmarks())

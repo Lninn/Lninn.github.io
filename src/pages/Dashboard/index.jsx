@@ -5,7 +5,7 @@ import useBookmarkStore from '../../store/bookmark'
 import AddBookmarkModal from './AddBookmarkModal'
 import EditBookmarkModal from './EditBookmarkModal'
 import { supabase } from '../../supabaseClient'
-import Notification from '../Notification'
+import Notification from '../../components/Notification'
 import HistoryList from './HistoryList'
 
 export default function Dashboard() {

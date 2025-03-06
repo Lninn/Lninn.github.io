@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
-import { supabase } from '../../../supabaseClient'
+import { supabase } from '../../supabaseClient'
 import './index.css'
 
 // TODO:
