@@ -9,7 +9,6 @@ import { useNotification } from '#/hooks/useNotification'
 import { useBookmarkActions } from '#/hooks/useBookmarkActions'
 import { DashboardHeader } from './components/DashboardHeader'
 import { BookmarkList } from './components/BookmarkList'
-import { TabSelector } from './components/TabSelector'
 import ErrorBoundary from '#/components/ErrorBoundary'
 
 export default function Dashboard() {
@@ -76,12 +75,11 @@ export default function Dashboard() {
         <DashboardHeader 
           onAddClick={() => setShowAddModal(true)}
           bookmarkCount={bookmarkList?.length || 0}
-        />
-
-        <TabSelector 
           activeTab={activeTab}
           onTabChange={setActiveTab}
         />
+        
+        {/* 移除独立的 TabSelector 组件 */}
         
         <div className="dashboard-content">
           <div className="list-section">
