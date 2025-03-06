@@ -78,19 +78,25 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
     }
   }
 
-  const handleSubmit = (formData) => {
-    // 再次检查URL是否已存在（以防用户修改了表单数据）
-    const normalizedUrl = formData.url.toLowerCase().replace(/\/$/, '')
-    const exists = checkUrlExists(normalizedUrl, bookmarkList)
-    
-    if (exists) {
-      setUrlExists(true)
-      setAnalysisError('该URL已存在于您的书签中')
-      return
+  const handleSubmit = async (formData) => {
+    try {
+      // 再次检查URL是否已存在
+      const normalizedUrl = formData.url.toLowerCase().replace(/\/$/, '')
+      const exists = checkUrlExists(normalizedUrl, bookmarkList)
+      
+      if (exists) {
+        setUrlExists(true)
+        setAnalysisError('该URL已存在于您的书签中')
+        return
+      }
+      
+      // 等待提交完成
+      await onSubmit(formData)
+      onClose()
+    } catch (error) {
+      console.error('添加书签失败:', error)
+      setAnalysisError('添加书签失败，请重试')
     }
-    
-    onSubmit(formData)
-    onClose()
   }
 
   // 使用通用 Modal 组件替代自定义模态框结构
@@ -115,11 +121,11 @@ export default function AddBookmarkModal({ onClose, onSubmit }) {
             />
             <button
               type="button"
-              className="analyze-button"
+              className={`analyze-button ${analyzing ? 'loading' : ''}`}
               onClick={analyzeUrl}
               disabled={analyzing || !url}
             >
-              分析
+              {analyzing ? '分析中...' : '分析'}
             </button>
           </div>
         </div>

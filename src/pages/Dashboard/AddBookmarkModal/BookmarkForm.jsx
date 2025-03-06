@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
  */
 export default function BookmarkForm({ formData, setFormData, categories, onSubmit, onCancel }) {
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -18,9 +19,19 @@ export default function BookmarkForm({ formData, setFormData, categories, onSubm
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [showCategoryDropdown])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    onSubmit(formData)
+    if (isSubmitting) return
+
+    setIsSubmitting(true)
+    try {
+      await onSubmit(formData)
+    } catch {
+      // 错误会在父组件中处理
+      throw new Error('添加书签失败')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -69,20 +80,41 @@ export default function BookmarkForm({ formData, setFormData, categories, onSubm
 
       <div className="form-group">
         <label>图标</label>
-        <div className="icon-preview">
-          {formData.icon && <img src={formData.icon} alt="网站图标" />}
+        <div className="icon-input-container">
           <input
             type="text"
             value={formData.icon}
             onChange={e => setFormData(prev => ({ ...prev, icon: e.target.value }))}
             placeholder="图标URL"
           />
+          {formData.icon && (
+            <div className="icon-preview">
+              <img 
+                src={formData.icon} 
+                alt="网站图标"
+                onError={(e) => e.target.src = '/fallback-icon.svg'}
+              />
+            </div>
+          )}
         </div>
       </div>
 
       <div className="modal-actions">
-        <button type="button" className="cancel-button" onClick={onCancel}>取消</button>
-        <button type="submit" className="submit-button">添加书签</button>
+        <button 
+          type="button" 
+          className="cancel-button" 
+          onClick={onCancel}
+          disabled={isSubmitting}
+        >
+          取消
+        </button>
+        <button 
+          type="submit" 
+          className={`submit-button ${isSubmitting ? 'loading' : ''}`}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? '添加中...' : '添加书签'}
+        </button>
       </div>
     </form>
   )
