@@ -204,27 +204,28 @@
     gap: 1.5rem;
   }
 
-  .dashboard-header {
+  .header-title {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
-    padding-bottom: 1rem;
+    gap: 0.5rem;
   }
   
-  .dashboard-header h1 {
-    font-size: 1.5rem;
+  .bookmark-counter {
+    font-size: 0.875rem;
   }
-  
-  .section-header {
-    padding: 1rem 1.25rem;
+
+  .header-actions {
+    width: 100%;
   }
-  
-  .section-header h2 {
-    font-size: 1.125rem;
+
+  .add-button {
+    width: 100%;
+    justify-content: center;
   }
   
   .dashboard-tabs {
     width: 100%;
+    margin-bottom: 1rem;
   }
   
   .tab-button {
@@ -234,8 +235,25 @@
   }
   
   .bookmark-list {
-    padding: 1rem;
+    padding: 0.75rem;
     gap: 0.625rem;
+  }
+
+  /* 修复书签项在移动端的样式 */
+  .bookmark-item {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .bookmark-info {
+    width: 100%;
+  }
+
+  .bookmark-actions {
+    width: 100%;
+    justify-content: flex-end;
+    gap: 0.5rem;
   }
 }
 

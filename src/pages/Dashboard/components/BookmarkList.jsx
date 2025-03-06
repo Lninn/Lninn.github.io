@@ -7,6 +7,8 @@ export function BookmarkList({
   onDelete, 
   onCopyUrl 
 }) {
+  console.log('BookmarkList 渲染:', { isLoading, bookmarksLength: bookmarks?.length }) // 添加调试信息
+  
   if (isLoading) {
     return (
       <div className="loading-state">

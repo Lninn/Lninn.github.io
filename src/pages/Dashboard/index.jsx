@@ -10,6 +10,7 @@ import { useBookmarkActions } from '#/hooks/useBookmarkActions'
 import { DashboardHeader } from './components/DashboardHeader'
 import { BookmarkList } from './components/BookmarkList'
 import { TabSelector } from './components/TabSelector'
+import ErrorBoundary from '#/components/ErrorBoundary'
 
 export default function Dashboard() {
   // 状态管理
@@ -34,15 +35,17 @@ export default function Dashboard() {
       setIsLoading(true)
       try {
         await fetchBookmarks()
-      } catch {
+        console.log('书签加载完成') // 添加日志以便调试
+      } catch (error) {
+        console.error('加载书签失败:', error) // 详细记录错误
         notify('error', '加载书签失败')
       } finally {
-        setIsLoading(false)
+        setIsLoading(false) // 确保无论成功失败都会设置 isLoading 为 false
       }
     }
+    
     loadBookmarks()
-    // 添加正确的依赖项
-  }, [fetchBookmarks, notify])
+  }, [])
   
   // 处理书签操作
   const handleAddBookmark = async (newBookmark) => {
@@ -68,70 +71,72 @@ export default function Dashboard() {
   }
   
   return (
-    <div className="dashboard">
-      <DashboardHeader 
-        onAddClick={() => setShowAddModal(true)}
-        bookmarkCount={bookmarkList?.length || 0}
-      />
-      
-      <TabSelector 
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-      />
-      
-      <div className="dashboard-content">
-        <div className="list-section">
-          <div className="section-header">
-            <h2>{activeTab === 'bookmarks' ? '我的书签' : '历史记录'}</h2>
-            {activeTab === 'bookmarks' && (
-              <span className="bookmark-count">
-                {isLoading ? '加载中...' : `${bookmarkList?.length || 0} 个书签`}
-              </span>
+    <ErrorBoundary>
+      <div className="dashboard">
+        <DashboardHeader 
+          onAddClick={() => setShowAddModal(true)}
+          bookmarkCount={bookmarkList?.length || 0}
+        />
+        
+        <TabSelector 
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
+        
+        <div className="dashboard-content">
+          <div className="list-section">
+            <div className="section-header">
+              <h2>{activeTab === 'bookmarks' ? '我的书签' : '历史记录'}</h2>
+              {activeTab === 'bookmarks' && (
+                <span className="bookmark-count">
+                  {isLoading ? '加载中...' : `${bookmarkList?.length || 0} 个书签`}
+                </span>
+              )}
+            </div>
+            
+            {activeTab === 'bookmarks' ? (
+              <BookmarkList 
+                bookmarks={bookmarkList}
+                isLoading={isLoading}
+                onEdit={setEditingBookmark}
+                onDelete={handleDeleteBookmark}
+                onCopyUrl={copyUrl}
+              />
+            ) : (
+              <HistoryList 
+                onRestore={handleRestoreBookmark}
+                onNotify={notify}
+              />
             )}
           </div>
-          
-          {activeTab === 'bookmarks' ? (
-            <BookmarkList 
-              bookmarks={bookmarkList}
-              isLoading={isLoading}
-              onEdit={setEditingBookmark}
-              onDelete={handleDeleteBookmark}
-              onCopyUrl={copyUrl}
-            />
-          ) : (
-            <HistoryList 
-              onRestore={handleRestoreBookmark}
-              onNotify={notify}
-            />
-          )}
         </div>
+        
+        {/* 添加书签模态框 */}
+        {showAddModal && (
+          <AddBookmarkModal 
+            onClose={() => setShowAddModal(false)}
+            onSubmit={handleAddBookmark}
+          />
+        )}
+        
+        {/* 编辑书签模态框 */}
+        {editingBookmark && (
+          <EditBookmarkModal 
+            bookmark={editingBookmark}
+            onClose={() => setEditingBookmark(null)}
+            onSubmit={handleEditBookmark}
+          />
+        )}
+        
+        {/* 通知组件 */}
+        {notification && (
+          <Notification 
+            type={notification.type}
+            message={notification.message}
+            onClose={clearNotification}
+          />
+        )}
       </div>
-      
-      {/* 添加书签模态框 */}
-      {showAddModal && (
-        <AddBookmarkModal 
-          onClose={() => setShowAddModal(false)}
-          onSubmit={handleAddBookmark}
-        />
-      )}
-      
-      {/* 编辑书签模态框 */}
-      {editingBookmark && (
-        <EditBookmarkModal 
-          bookmark={editingBookmark}
-          onClose={() => setEditingBookmark(null)}
-          onSubmit={handleEditBookmark}
-        />
-      )}
-      
-      {/* 通知组件 */}
-      {notification && (
-        <Notification 
-          type={notification.type}
-          message={notification.message}
-          onClose={clearNotification}
-        />
-      )}
-    </div>
+    </ErrorBoundary>
   )
 }
