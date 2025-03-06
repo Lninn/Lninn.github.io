@@ -22,12 +22,13 @@ export function BookmarkItem({ bookmark, onEdit, onDelete, onCopyUrl }) {
         
         <div className="bookmark-title-container">
           <h3 title={bookmark.name}>{bookmark.name}</h3>
-          <span className="bookmark-domain">{domain}</span>
+          <div className="bookmark-meta-info">
+            <span className="bookmark-domain">{domain}</span>
+            {bookmark.category && (
+              <span className="category-tag">{bookmark.category}</span>
+            )}
+          </div>
         </div>
-        
-        {bookmark.category && (
-          <span className="category-tag">{bookmark.category}</span>
-        )}
       </div>
       
       <div className="bookmark-card-body">
