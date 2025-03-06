@@ -1,7 +1,7 @@
 import './index.css'
 import { BookmarkItem } from './BookmarkItem'
 
-export function BookmarkList({ 
+export default function BookmarkList({ 
   bookmarks, 
   isLoading, 
   onEdit, 

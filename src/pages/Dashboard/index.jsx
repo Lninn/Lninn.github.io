@@ -4,12 +4,13 @@ import useBookmarkStore from '#/store/bookmark'
 import AddBookmarkModal from './AddBookmarkModal'
 import EditBookmarkModal from './EditBookmarkModal'
 import Notification from '#/components/Notification'
+import BookmarkList from './BookmarkList'
 import HistoryList from './HistoryList'
 import { useNotification } from '#/hooks/useNotification'
 import { useBookmarkActions } from '#/hooks/useBookmarkActions'
 import { DashboardHeader } from './components/DashboardHeader'
-import { BookmarkList } from './components/BookmarkList'
 import ErrorBoundary from '#/components/ErrorBoundary'
+
 
 export default function Dashboard() {
   // 状态管理
