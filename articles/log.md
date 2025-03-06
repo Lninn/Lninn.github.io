@@ -1,4 +1,4 @@
 ## 2025-03-06
 - **Author**: Lninn
-- **Message**: 通用的 Modal 组件替代了自定义的模态框结构
+- **Message**: 重构使 EditBookmarkModal 组件能够复用项目中的通用 Modal 组件
 
