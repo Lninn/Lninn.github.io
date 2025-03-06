@@ -75,6 +75,7 @@ export default function Dashboard() {
       <div className="dashboard">
         <DashboardHeader 
           onAddClick={() => setShowAddModal(true)}
+          bookmarkCount={bookmarkList?.length || 0}
         />
 
         <TabSelector 
@@ -85,12 +86,7 @@ export default function Dashboard() {
         <div className="dashboard-content">
           <div className="list-section">
             <div className="section-header">
-              <h2>{activeTab === 'bookmarks' ? '我的书签' : '历史记录'}</h2>
-              {activeTab === 'bookmarks' && (
-                <span className="bookmark-count">
-                  {isLoading ? '加载中...' : `${bookmarkList?.length || 0} 个书签`}
-                </span>
-              )}
+              <h2>{activeTab === 'bookmarks' ? '书签列表' : '历史记录'}</h2>
             </div>
             
             {activeTab === 'bookmarks' ? (
