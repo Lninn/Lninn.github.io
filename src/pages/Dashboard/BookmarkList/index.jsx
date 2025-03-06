@@ -32,6 +32,10 @@ export default function BookmarkList({
   
   return (
     <div className="list-section">
+      <div className="section-header">
+        <h2>书签列表</h2>
+        <span className="item-count">{bookmarks.length} 个书签</span>
+      </div>
       <div className="bookmark-list">
         {bookmarks.map(bookmark => (
           <BookmarkItem 

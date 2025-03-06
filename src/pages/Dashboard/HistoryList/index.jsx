@@ -82,53 +82,65 @@ export default function HistoryList({ onRestore, onNotify }) {
     }
   }
 
-  return (
-    <div className="list-section">
-      <div className="section-header">
-        <h2>操作历史</h2>
-        <span className="history-count">
-          {isLoading ? '加载中...' : `${historyList.length} 条记录`}
-        </span>
-      </div>
-      
-      {isLoading ? (
+  if (isLoading) {
+    return (
+      <div className="list-section">
         <div className="loading-state">
           <div className="loading-spinner"></div>
           <p>正在加载历史记录...</p>
         </div>
-      ) : (
-        <div className="history-list">
-          {historyList.map(item => (
-            <div key={item.id} className="history-item">
-              <div className="history-content">
-                <span className="history-action">
-                  {item.action === 'add' && '添加了'}
-                  {item.action === 'delete' && '删除了'}
-                  {item.action === 'update' && '修改了'}
-                  {item.action === 'restore' && '恢复了'}
-                </span>
-                <span className="history-name">
-                  {item.bookmark_data.name}
-                </span>
-                <span className="history-time">
-                  {formatDistanceToNow(new Date(item.created_at), {
-                    addSuffix: true,
-                    locale: zhCN
-                  })}
-                </span>
-              </div>
-              {item.action === 'delete' && !restoredIds.has(item.id) && (
-                <button
-                  className="restore-button"
-                  onClick={() => handleRestore(item)}
-                >
-                  恢复
-                </button>
-              )}
-            </div>
-          ))}
+      </div>
+    )
+  }
+
+  if (!historyList || historyList.length === 0) {
+    return (
+      <div className="list-section">
+        <div className="empty-state">
+          <p>暂无历史记录</p>
+          <p className="empty-tip">操作书签后将显示在这里</p>
         </div>
-      )}
+      </div>
+    )
+  }
+
+  return (
+    <div className="list-section">
+      <div className="section-header">
+        <h2>操作历史</h2>
+        <span className="item-count">{historyList.length} 条记录</span>
+      </div>
+      <div className="history-list">
+        {historyList.map(item => (
+          <div key={item.id} className="history-item">
+            <div className="history-content">
+              <span className="history-action">
+                {item.action === 'add' && '添加了'}
+                {item.action === 'delete' && '删除了'}
+                {item.action === 'update' && '修改了'}
+                {item.action === 'restore' && '恢复了'}
+              </span>
+              <span className="history-name">
+                {item.bookmark_data.name}
+              </span>
+              <span className="history-time">
+                {formatDistanceToNow(new Date(item.created_at), {
+                  addSuffix: true,
+                  locale: zhCN
+                })}
+              </span>
+            </div>
+            {item.action === 'delete' && !restoredIds.has(item.id) && (
+              <button
+                className="restore-button"
+                onClick={() => handleRestore(item)}
+              >
+                恢复
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
