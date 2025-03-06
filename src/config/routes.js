@@ -5,6 +5,7 @@ const BookmarkPage = lazy(() => import('#/pages/Bookmark'))
 const ArticlePage = lazy(() => import('#/pages/Article'))
 const DashboardPage = lazy(() => import('#/pages/Dashboard'))
 const ErrorLogsPage = lazy(() => import('#/pages/ErrorLogs'))
+const ComponentDemoPage = lazy(() => import('#/pages/ComponentDemo'))
 
 const ROUTES_CONFIG = [
   {
@@ -30,6 +31,12 @@ const ROUTES_CONFIG = [
     name: '错误日志',
     icon: '🔍',
     component: ErrorLogsPage
+  },
+  {
+    path: '/component-demo',
+    name: '组件演示',
+    icon: '🧩',
+    component: ComponentDemoPage
   }
 ]
 
