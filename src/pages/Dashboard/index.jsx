@@ -80,25 +80,21 @@ export default function Dashboard() {
           onTabChange={setActiveTab}
         />
         
-        {/* 移除独立的 TabSelector 组件 */}
-        
         <div className="dashboard-content">
-          <div className="list-section">
-            {activeTab === 'bookmarks' ? (
-              <BookmarkList 
-                bookmarks={bookmarkList}
-                isLoading={isLoading}
-                onEdit={setEditingBookmark}
-                onDelete={handleDeleteBookmark}
-                onCopyUrl={copyUrl}
-              />
-            ) : (
-              <HistoryList 
-                onRestore={handleRestoreBookmark}
-                onNotify={notify}
-              />
-            )}
-          </div>
+          {activeTab === 'bookmarks' ? (
+            <BookmarkList 
+              bookmarks={bookmarkList}
+              isLoading={isLoading}
+              onEdit={setEditingBookmark}
+              onDelete={handleDeleteBookmark}
+              onCopyUrl={copyUrl}
+            />
+          ) : (
+            <HistoryList 
+              onRestore={handleRestoreBookmark}
+              onNotify={notify}
+            />
+          )}
         </div>
         
         {/* 添加书签模态框 */}
