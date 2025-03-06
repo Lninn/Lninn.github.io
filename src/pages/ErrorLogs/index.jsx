@@ -1,44 +1,24 @@
 import './index.css'
-import { useState, useEffect } from 'react'
-import { formatDistanceToNow } from 'date-fns'
-import { zhCN } from 'date-fns/locale'
+import { useState } from 'react'
+import { useErrorLogs } from '#/hooks/useErrorLogs'
 import { errorLogsApi } from '#/api/errorLogs'
+import { LogFilters } from './components/LogFilters'
+import { LogItem } from './components/LogItem'
+import { DeleteConfirmModal } from './components/DeleteConfirmModal'
 
 export default function ErrorLogs() {
-  const [logs, setLogs] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
-  
-  // 筛选状态
-  const [environment, setEnvironment] = useState('')
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
-  const [searchTerm, setSearchTerm] = useState('')
+  const { 
+    logs, 
+    isLoading, 
+    error, 
+    filters, 
+    environments, 
+    updateFilter,
+    fetchLogs 
+  } = useErrorLogs()
 
-  // 获取环境列表
-  const environments = [...new Set(logs.map(log => log.environment))]
-
-  const fetchLogs = async () => {
-    try {
-      setIsLoading(true)
-      const data = await errorLogsApi.fetchLogs({
-        environment,
-        startDate,
-        endDate,
-        searchTerm
-      })
-      setLogs(data)
-      setError(null)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchLogs()
-  }, [environment, startDate, endDate, searchTerm])
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deleteDate, setDeleteDate] = useState(30)
 
   const handleExport = async () => {
     const blob = await errorLogsApi.exportLogs(logs)
@@ -53,15 +33,14 @@ export default function ErrorLogs() {
   }
 
   const handleDeleteOld = async () => {
-    if (!window.confirm('确定要删除30天前的错误记录吗？')) return
-    
     try {
-      const thirtyDaysAgo = new Date()
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-      await errorLogsApi.deleteLogs(thirtyDaysAgo.toISOString())
+      const daysAgo = new Date()
+      daysAgo.setDate(daysAgo.getDate() - deleteDate)
+      await errorLogsApi.deleteLogs(daysAgo.toISOString())
+      setShowDeleteModal(false)
       fetchLogs()
     } catch (err) {
-      setError(err.message)
+      console.error('Error deleting logs:', err)
     }
   }
 
@@ -74,41 +53,20 @@ export default function ErrorLogs() {
             {isLoading ? '加载中...' : `${logs.length} 条记录`}
           </span>
           <button onClick={handleExport}>导出日志</button>
-          <button onClick={handleDeleteOld}>清理旧记录</button>
+          <button 
+            className="danger-outline" 
+            onClick={() => setShowDeleteModal(true)}
+          >
+            删除历史日志
+          </button>
         </div>
       </div>
 
-      <div className="filters">
-        <select 
-          value={environment} 
-          onChange={e => setEnvironment(e.target.value)}
-        >
-          <option value="">所有环境</option>
-          {environments.map(env => (
-            <option key={env} value={env}>{env}</option>
-          ))}
-        </select>
-
-        <input
-          type="date"
-          value={startDate}
-          onChange={e => setStartDate(e.target.value)}
-          placeholder="开始日期"
-        />
-        <input
-          type="date"
-          value={endDate}
-          onChange={e => setEndDate(e.target.value)}
-          placeholder="结束日期"
-        />
-
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
-          placeholder="搜索错误信息..."
-        />
-      </div>
+      <LogFilters 
+        filters={filters}
+        environments={environments}
+        onFilterChange={updateFilter}
+      />
 
       {error && (
         <div className="error-message">{error}</div>
@@ -121,29 +79,23 @@ export default function ErrorLogs() {
         </div>
       ) : (
         <div className="logs-list">
-          {logs.map(log => (
-            <div key={log.id} className="log-item">
-              <div className="log-header">
-                <span className="log-time">
-                  {formatDistanceToNow(new Date(log.timestamp), {
-                    addSuffix: true,
-                    locale: zhCN
-                  })}
-                </span>
-                <span className="log-environment">{log.environment}</span>
-              </div>
-              <div className="log-content">
-                <div className="log-component">{log.component_info}</div>
-                <div className="log-message">{log.error}</div>
-                <div className="log-url">{log.url}</div>
-              </div>
-              <div className="log-footer">
-                <span className="log-user-agent">{log.user_agent}</span>
-              </div>
+          {logs.length > 0 ? (
+            logs.map(log => <LogItem key={log.id} log={log} />)
+          ) : (
+            <div className="no-logs">
+              <p>没有找到符合条件的错误日志</p>
             </div>
-          ))}
+          )}
         </div>
       )}
+
+      <DeleteConfirmModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteOld}
+        deleteDate={deleteDate}
+        onDateChange={setDeleteDate}
+      />
     </div>
   )
 }
