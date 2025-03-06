@@ -1,12 +1,12 @@
 import './index.css'
 
 import { useEffect, useState } from 'react'
-import useBookmarkStore from '../../store/bookmark'
+import useBookmarkStore from '#/store/bookmark'
 import AddBookmarkModal from './AddBookmarkModal'
 import EditBookmarkModal from './EditBookmarkModal'
-import { supabase } from '../../supabaseClient'
-import Notification from '../../components/Notification'
+import Notification from '#/components/Notification'
 import HistoryList from './HistoryList'
+import { bookmarkApi } from '#/api/bookmark' // 使用 # 别名导入 bookmarkApi
 
 export default function Dashboard() {
   // 添加加载状态
@@ -44,24 +44,10 @@ export default function Dashboard() {
       });
   }
 
-  // 修改现有的操作方法，添加历史记录
+  // 修改现有的操作方法，使用 bookmarkApi
   const handleAdd = async (newBookmark) => {
     try {
-      const uniqueId = Date.now() + Math.floor(Math.random() * 1000)
-      const bookmarkData = {
-        ...newBookmark,
-        id: uniqueId,
-        create_at: new Date().toISOString()
-      }
-      
-      const { error } = await supabase
-        .from('bookmark')
-        .insert([bookmarkData])
-        .select()
-
-      if (error) throw error
-      
-      await recordHistory('add', bookmarkData)
+      await bookmarkApi.create(newBookmark)
       
       setNotification({
         type: 'success',
@@ -79,15 +65,7 @@ export default function Dashboard() {
 
   const handleDelete = async (bookmark) => {
     try {
-      const { error } = await supabase
-        .from('bookmark')
-        .delete()
-        .eq('url', bookmark.url)
-
-      if (error) throw error
-      
-      // 记录删除历史
-      await recordHistory('delete', bookmark)
+      await bookmarkApi.delete(bookmark)
       
       setNotification({
         type: 'success',
@@ -116,19 +94,7 @@ export default function Dashboard() {
   // 处理更新书签
   const handleUpdate = async (updatedBookmark) => {
     try {
-      const { error } = await supabase
-        .from('bookmark')
-        .update({
-          name: updatedBookmark.name,
-          category: updatedBookmark.category,
-          icon: updatedBookmark.icon  // 添加 icon 字段
-        })
-        .eq('url', updatedBookmark.url)
-    
-      if (error) throw error
-      
-      // 记录更新历史
-      await recordHistory('update', updatedBookmark)
+      await bookmarkApi.update(updatedBookmark)
       
       setNotification({
         type: 'success',
@@ -147,21 +113,6 @@ export default function Dashboard() {
   }
 
   const [showHistory, setShowHistory] = useState(false)
-
-  // 添加记录历史的方法
-  const recordHistory = async (action, bookmarkData) => {
-    try {
-      await supabase
-        .from('bookmark_history')
-        .insert([{
-          action,
-          bookmark_id: bookmarkData.id,
-          bookmark_data: bookmarkData
-        }])
-    } catch (err) {
-      console.error('记录历史失败:', err)
-    }
-  }
 
   return (
     <div className="dashboard">
