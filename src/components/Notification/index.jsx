@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
 import './index.css';
+import { useEffect } from 'react';
+
 
 export default function Notification({ message, type = 'success', onClose, duration = 3000 }) {
   useEffect(() => {

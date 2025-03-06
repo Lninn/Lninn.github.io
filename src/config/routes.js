@@ -1,10 +1,10 @@
 import { lazy } from 'react'
 
 // 使用 lazy 进行代码分割
-const BookmarkPage = lazy(() => import('../pages/Bookmark'))
-const ArticlePage = lazy(() => import('../pages/Article'))
-const DashboardPage = lazy(() => import('../pages/Dashboard'))
-const ErrorLogsPage = lazy(() => import('../pages/ErrorLogs'))
+const BookmarkPage = lazy(() => import('#/pages/Bookmark'))
+const ArticlePage = lazy(() => import('#/pages/Article'))
+const DashboardPage = lazy(() => import('#/pages/Dashboard'))
+const ErrorLogsPage = lazy(() => import('#/pages/ErrorLogs'))
 
 const ROUTES_CONFIG = [
   {

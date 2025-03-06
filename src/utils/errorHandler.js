@@ -1,4 +1,4 @@
-import { supabase } from '../supabaseClient'
+import { supabase } from '#/supabaseClient'
 
 // 错误队列及其配置
 const ERROR_QUEUE = {

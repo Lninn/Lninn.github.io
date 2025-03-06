@@ -1,7 +1,7 @@
 import './index.css'
 import { NavLink } from 'react-router-dom'
-import useThemeStore from '../../store/theme'
-import { NAVIGATION_ITEMS } from '../../config/routes'
+import useThemeStore from '#/store/theme'
+import { NAVIGATION_ITEMS } from '#/config/routes'
 
 export default function AppHeader() {
   const { darkMode, setDarkMode } = useThemeStore()

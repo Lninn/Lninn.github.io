@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase } from '../supabaseClient'
+import { supabase } from '#/supabaseClient'
 
 const useBookmarkStore = create((set) => ({
   list: [],

@@ -1,8 +1,9 @@
+import './index.css'
 import { useState, useEffect } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
-import { supabase } from '../../supabaseClient'
-import './index.css'
+import { supabase } from '#/supabaseClient'
+
 
 // TODO:
 // - 按环境筛选

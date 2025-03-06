@@ -1,11 +1,12 @@
 import './index.css'
 import { Suspense } from 'react'
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
-import AppHeader from '../AppHeader'
-import Footer from '../Footer'
-import ErrorBoundary from '../ErrorBoundary'
-import ROUTES_CONFIG from '../../config/routes'
+import AppHeader from '#/components/AppHeader'
+import Footer from '#/components/Footer'
+import ErrorBoundary from '#/components/ErrorBoundary'
+import ROUTES_CONFIG from '#/config/routes'
 
+// ... 其余代码保持不变
 function LoadingSpinner() {
   return (
     <div className="loading-container">

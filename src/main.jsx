@@ -1,10 +1,11 @@
+import './index.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './components/App'
-import useThemeStore from './store/theme'
-import ErrorBoundary from './components/ErrorBoundary'
-import { logError, reportErrorToServer } from './utils/errorHandler'
+import App from '#/components/App'
+import useThemeStore from '#/store/theme'
+import ErrorBoundary from '#/components/ErrorBoundary'
+import { logError, reportErrorToServer } from '#/utils/errorHandler'
+
 
 // 添加全局错误处理
 window.addEventListener('error', (event) => {
