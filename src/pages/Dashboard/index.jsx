@@ -75,9 +75,8 @@ export default function Dashboard() {
       <div className="dashboard">
         <DashboardHeader 
           onAddClick={() => setShowAddModal(true)}
-          bookmarkCount={bookmarkList?.length || 0}
         />
-        
+
         <TabSelector 
           activeTab={activeTab}
           onTabChange={setActiveTab}

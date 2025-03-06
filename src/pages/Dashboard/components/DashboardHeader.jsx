@@ -1,14 +1,11 @@
 import { FiPlus } from 'react-icons/fi'
 
 // 确保使用 export 关键字导出组件
-export function DashboardHeader({ onAddClick, bookmarkCount }) {
+export function DashboardHeader({ onAddClick }) {
   return (
     <div className="dashboard-header">
       <div className="header-title">
         <h1>我的书签</h1>
-        {bookmarkCount !== undefined && (
-          <span className="bookmark-counter">{bookmarkCount} 个书签</span>
-        )}
       </div>
       <div className="header-actions">
         <button className="add-button" onClick={onAddClick}>
