@@ -1,4 +1,4 @@
 ## 2025-03-06
 - **Author**: Lninn
-- **Message**: 重构使 EditBookmarkModal 组件能够复用项目中的通用 Modal 组件
+- **Message**: 表单变更检测,保存按钮 loading 效果
 
