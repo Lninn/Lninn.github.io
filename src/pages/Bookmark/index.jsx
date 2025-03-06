@@ -1,55 +1,34 @@
 import './index.css'
 
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import ErrorBoundary from '#/components/ErrorBoundary'
+import { bookmarkApi } from '#/api/bookmark'
 import UrlList from './UrlList'
-import { getUrlArray } from '../../store/shared'
-import { supabase } from '../../supabaseClient'
-import ErrorBoundary from '../../components/ErrorBoundary'
-import { createResource } from '../../utils/createResource'
 
-const bookmarkResource = createResource(fetchBookmarks())
-
-async function fetchBookmarks() {
-  // 获取书签数据
-  const { data: bookmarks, error: bookmarkError } = await supabase
-    .from('bookmark')
-    .select('*')
-    
-  if (bookmarkError) {
-    throw bookmarkError
-  }
-
-  // 获取分类访问量数据
-  const { data: viewsData, error: viewsError } = await supabase
-    .from('category_views')
-    .select('*')
-
-  if (viewsError) {
-    throw viewsError
-  }
-
-  // 创建访问量映射
-  const viewsMap = new Map(
-    viewsData?.map(item => [item.category, item.view_count]) || []
-  )
-
-  // 对数据进行分组
-  const groupedData = getUrlArray(bookmarks)
-
-  // 按访问量排序
-  const sortedData = groupedData.sort((a, b) => {
-    const viewsA = viewsMap.get(a[0]) || 0
-    const viewsB = viewsMap.get(b[0]) || 0
-    return viewsB - viewsA
-  })
-
-  return { list: sortedData, viewsMap }
-}
 
 export default function Bookmark() {
-  const { list, viewsMap } = bookmarkResource.read()
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [bookmarkData, setBookmarkData] = useState({ list: [], viewsMap: new Map() })
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('全部')
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const data = await bookmarkApi.fetchBookmarksWithViews()
+        setBookmarkData(data)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadData()
+  }, [])
+
+  const { list, viewsMap } = bookmarkData
 
   // 获取所有唯一分类
   const categories = useMemo(() => {
@@ -61,12 +40,10 @@ export default function Bookmark() {
     if (!searchTerm && selectedCategory === '全部') return list
 
     return list.map(([category, items]) => {
-      // 如果选择了特定分类且不匹配，返回空数组
       if (selectedCategory !== '全部' && category !== selectedCategory) {
         return [category, []]
       }
 
-      // 过滤项目
       const filteredItems = items.filter(item => {
         const searchLower = searchTerm.toLowerCase()
         return (
@@ -78,6 +55,24 @@ export default function Bookmark() {
       return [category, filteredItems]
     }).filter(([, items]) => items.length > 0)
   }, [list, searchTerm, selectedCategory])
+
+  if (isLoading) {
+    return (
+      <div className="loading-state">
+        <div className="loading-spinner"></div>
+        <p>正在加载书签...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="error-state">
+        <p>加载失败: {error}</p>
+        <button onClick={() => window.location.reload()}>重试</button>
+      </div>
+    )
+  }
 
   return (
     <div className="bookmark-container">
