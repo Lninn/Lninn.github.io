@@ -1,3 +1,4 @@
+import './LogFilters.css'
 export function LogFilters({ filters, environments, onFilterChange }) {
   return (
     <div className="filters">

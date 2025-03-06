@@ -1,0 +1,25 @@
+.filters {
+  margin: 1rem 0;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filters select,
+.filters input {
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.25rem;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-width: 150px;
+}
+
+.filters input[type="date"] {
+  min-width: 120px;
+}
+
+.filters input[type="text"] {
+  flex: 1;
+  min-width: 200px;
+}

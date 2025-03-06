@@ -14,7 +14,8 @@ export default function ErrorLogs() {
     filters, 
     environments, 
     updateFilter,
-    fetchLogs 
+    fetchLogs,
+    setError
   } = useErrorLogs()
 
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -41,6 +42,9 @@ export default function ErrorLogs() {
       fetchLogs()
     } catch (err) {
       console.error('Error deleting logs:', err)
+      // 使用 useErrorLogs 中的 setError 方法
+      setError(err.message || '删除日志失败')
+      setShowDeleteModal(false)
     }
   }
 

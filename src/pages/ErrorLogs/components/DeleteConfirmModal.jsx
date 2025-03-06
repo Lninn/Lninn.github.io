@@ -1,4 +1,5 @@
 import Modal from '#/components/Modal'
+import './DeleteConfirmModal.css'
 
 export function DeleteConfirmModal({ 
   isOpen, 
