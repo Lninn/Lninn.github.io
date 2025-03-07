@@ -41,6 +41,7 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
+  padding: 16px;  /* 添加内边距 */
 }
 
 .nav-config-list {
@@ -146,6 +147,16 @@
 .nav-config-sublist {
   margin-left: 0;
   background-color: var(--bg-tertiary, #f9f9f9);
+  border-radius: 6px;  /* 添加圆角 */
+  margin-top: 8px;     /* 添加上边距 */
+  margin-bottom: 8px;  /* 添加下边距 */
+  overflow: hidden;    /* 确保圆角生效 */
+}
+
+/* 为子项添加左侧边框，增强层次感 */
+.nav-config-item-wrapper .nav-config-sublist {
+  border-left: 2px solid var(--border-color);
+  margin-left: 20px;   /* 左侧缩进 */
 }
 
 /* ===== 空状态 ===== */
