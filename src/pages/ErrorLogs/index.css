@@ -25,7 +25,19 @@
 }
 
 .loading-spinner {
-  /* 保持原有的 loading 样式 */
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--bg-secondary);
+  border-radius: 50%;
+  border-top-color: var(--primary);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .error-message {
@@ -43,4 +55,50 @@
   background: var(--bg-secondary);
   border-radius: 0.5rem;
   border: 1px dashed var(--border-color);
+}
+
+.view-toggle {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  background: var(--bg-secondary);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.view-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-toggle-btn:hover {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.view-toggle-btn.active {
+  background: var(--bg-primary);
+  color: var(--primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .header-actions {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  
+  .view-toggle {
+    order: -1;
+    margin-right: auto;
+  }
 }

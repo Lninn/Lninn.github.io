@@ -1,0 +1,74 @@
+.log-table-wrapper {
+  background: var(--bg-primary);
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+  overflow-x: auto;
+}
+
+.log-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.log-table th {
+  background: var(--bg-secondary);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.log-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+}
+
+.log-table tr:last-child td {
+  border-bottom: none;
+}
+
+.log-table tbody tr {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.log-table tbody tr:hover {
+  background-color: var(--bg-secondary);
+}
+
+.env-badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  background: var(--bg-secondary);
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.error-cell {
+  color: var(--error);
+  max-width: 400px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.url-cell {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.url-cell a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.url-cell a:hover {
+  text-decoration: underline;
+}

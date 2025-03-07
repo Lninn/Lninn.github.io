@@ -9,7 +9,7 @@ export function LogItem({ log }) {
   const [showDetails, setShowDetails] = useState(false)
   
   // 截断长文本
-  const truncateText = (text, maxLength = 80) => {
+  const truncateText = (text, maxLength = 120) => {
     if (!text) return '';
     return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
   }
@@ -28,15 +28,23 @@ export function LogItem({ log }) {
   return (
     <>
       <div className="log-item">
-        <div className="log-item-main">
-          <div className="log-item-header">
-            <div className="log-item-time">{formattedTime}</div>
-            <div className="log-item-env">{log.environment}</div>
-          </div>
-          
-          <div className="log-item-error">
-            <div className="log-item-component">{log.component_info}</div>
-            <div className="log-item-message">{truncateText(log.error)}</div>
+        <div className="log-item-header">
+          <div className="log-item-time">{formattedTime}</div>
+          <div className="log-item-env">{log.environment}</div>
+        </div>
+        
+        <div className="log-item-content">
+          <div className="log-item-component">{log.component_info}</div>
+          <div className="log-item-message">{log.error}</div>
+          <div className="log-item-url">
+            <a 
+              href={log.url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              title={log.url}
+            >
+              {truncateText(log.url, 50)}
+            </a>
           </div>
         </div>
         
@@ -45,6 +53,10 @@ export function LogItem({ log }) {
             className="log-item-details-btn"
             onClick={() => setShowDetails(true)}
           >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
             查看详情
           </button>
         </div>
