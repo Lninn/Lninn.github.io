@@ -13,9 +13,7 @@ setupGlobalErrorHandlers()
 useThemeStore.getState().initTheme()
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <ErrorBoundary showDetails={import.meta.env.NODE_ENV !== 'production'}>
-      <App />
-    </ErrorBoundary>
-  </StrictMode>,
+  <ErrorBoundary showDetails={import.meta.env.NODE_ENV !== 'production'}>
+    <App />
+  </ErrorBoundary>
 )

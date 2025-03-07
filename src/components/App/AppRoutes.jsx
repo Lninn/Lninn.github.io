@@ -47,6 +47,8 @@ export const AppRoutes = () => {
         );
       }
 
+      console.log('debug ', route)
+
       // 没有子路由，直接渲染
       return (
         <Route
@@ -62,9 +64,13 @@ export const AppRoutes = () => {
     });
   };
 
+  console.log('debug render routes: before ', routes)
+
   if (loading) {
     return <LoadingSpinner fullScreen />;
   }
+
+  console.log('debug render routes: ', routes)
 
   return (
     <Suspense fallback={<LoadingSpinner fullScreen />}>

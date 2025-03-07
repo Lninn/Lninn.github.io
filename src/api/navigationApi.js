@@ -202,6 +202,7 @@ const dynamicImportComponent = (componentPath) => {
   // 这里需要根据实际情况实现动态导入
   // 简化示例，实际实现可能需要更复杂的逻辑
   const componentMap = {
+    'test': () => import('#/pages/NavConfig'),
     'BookmarkPage': () => import('#/pages/Bookmark'),
     'ArticlePage': () => import('#/pages/Article'),
     'DashboardPage': () => import('#/pages/Dashboard'),

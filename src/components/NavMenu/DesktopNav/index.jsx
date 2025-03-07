@@ -2,6 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useRoutesConfig } from '#/config/routes';
 import { FiChevronDown } from 'react-icons/fi';
+// 导入可能用到的所有图标组件
+import * as BsIcons from 'react-icons/bs';
+import * as MdIcons from 'react-icons/md';
+import * as VscIcons from 'react-icons/vsc';
+import * as HiIcons from 'react-icons/hi';
+import * as FiIcons from 'react-icons/fi';
 import './styles.css';
 
 const DesktopNav = () => {
@@ -39,6 +45,34 @@ const DesktopNav = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  // 根据字符串获取对应的图标组件
+  const getIconComponent = (iconName) => {
+    if (!iconName || typeof iconName !== 'string') return null;
+    
+    // 根据前缀确定图标库
+    if (iconName.startsWith('Bs')) {
+      return BsIcons[iconName];
+    } else if (iconName.startsWith('Md')) {
+      return MdIcons[iconName];
+    } else if (iconName.startsWith('Vsc')) {
+      return VscIcons[iconName];
+    } else if (iconName.startsWith('Hi')) {
+      return HiIcons[iconName];
+    } else if (iconName.startsWith('Fi')) {
+      return FiIcons[iconName];
+    }
+    
+    return null;
+  };
+
+  // 渲染图标组件
+  const renderIcon = (iconName) => {
+    if (!iconName) return null;
+    
+    const IconComponent = getIconComponent(iconName);
+    return IconComponent ? <IconComponent /> : null;
+  };
 
   const toggleSubMenu = (path, e) => {
     if (e) {
@@ -80,8 +114,6 @@ const DesktopNav = () => {
     }
   };
 
-  // 删除未使用的 isActive 函数
-
   const isSubMenuActive = (parent) => {
     if (!parent.children) return false;
     return parent.children.some(child => location.pathname.startsWith(child.path));
@@ -110,7 +142,7 @@ const DesktopNav = () => {
                   aria-expanded={openSubMenus[route.path]}
                   aria-haspopup="true"
                 >
-                  <span className="nav-icon">{route.icon && <route.icon />}</span>
+                  <span className="nav-icon">{renderIcon(route.icon)}</span>
                   <span className="nav-text">{route.name}</span>
                   <FiChevronDown className={`submenu-arrow ${openSubMenus[route.path] ? 'open' : ''}`} />
                 </NavLink>
@@ -122,7 +154,7 @@ const DesktopNav = () => {
                         to={child.path} 
                         className={({ isActive }) => `submenu-link ${isActive ? 'active' : ''}`}
                       >
-                        <span className="nav-icon">{child.icon && <child.icon />}</span>
+                        <span className="nav-icon">{renderIcon(child.icon)}</span>
                         <span className="nav-text">{child.name}</span>
                       </NavLink>
                     </li>
@@ -134,7 +166,7 @@ const DesktopNav = () => {
                 to={route.path} 
                 className={({ isActive }) => `desktop-nav-link ${isActive ? 'active' : ''}`}
               >
-                <span className="nav-icon">{route.icon && <route.icon />}</span>
+                <span className="nav-icon">{renderIcon(route.icon)}</span>
                 <span className="nav-text">{route.name}</span>
               </NavLink>
             )}
