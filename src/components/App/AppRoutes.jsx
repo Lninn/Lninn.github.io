@@ -1,16 +1,10 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { Suspense } from 'react'
-import { ROUTES_CONFIG } from '#/config/routes'
+import { Suspense, useEffect } from 'react'
+import { useRoutesConfig } from '#/config/routes';
 import PageContainer from '#/components/PageContainer'
+import ErrorBoundary from '#/components/ErrorBoundary'
+import LoadingSpinner from '#/components/LoadingSpinner'
 
-// 加载指示器组件
-function LoadingFallback() {
-  return (
-    <div style={{ textAlign: 'center', padding: '2rem' }}>
-      加载中...
-    </div>
-  )
-}
 
 // 404 页面组件
 function NotFound() {
@@ -27,62 +21,60 @@ function NotFound() {
   )
 }
 
-export function AppRoutes() {
-  return (
-    <PageContainer>
-      <Routes>
-        <Route path="/" element={<Navigate to="/bookmarks" replace />} />
-        
-        {ROUTES_CONFIG.map(route => {
-          const Component = route.component;
-          
-          if (route.children) {
-            return (
-              <Route key={route.path} path={route.path}>
-                <Route 
-                  index 
-                  element={
-                    <Suspense fallback={<LoadingFallback />}>
-                      <Component />
-                    </Suspense>
-                  } 
-                />
-                
-                {route.children.map(child => {
-                  const ChildComponent = child.component;
-                  const relativePath = child.path.replace(route.path, '').replace(/^\//, '');
-                  
-                  return (
-                    <Route
-                      key={child.path}
-                      path={relativePath}
-                      element={
-                        <Suspense fallback={<LoadingFallback />}>
-                          {ChildComponent ? <ChildComponent /> : <Component />}
-                        </Suspense>
-                      }
-                    />
-                  );
-                })}
-              </Route>
-            );
-          }
-          
-          return (
+export const AppRoutes = () => {
+  const { routes, loading, error } = useRoutesConfig();
+
+  useEffect(() => {
+    if (error) {
+      console.error('路由加载错误:', error);
+    }
+  }, [error]);
+
+  // 递归渲染路由
+  const renderRoutes = (routesList) => {
+    return routesList.map((route) => {
+      // 如果有子路由，递归渲染
+      if (route.children && route.children.length > 0) {
+        return (
+          <Route key={route.path} path={route.path} element={<route.component />}>
+            {renderRoutes(route.children)}
+            {/* 默认重定向到第一个子路由 */}
             <Route
-              key={route.path}
-              path={route.path}
-              element={
-                <Suspense fallback={<LoadingFallback />}>
-                  <Component />
-                </Suspense>
-              }
+              index
+              element={<Navigate to={route.children[0].path} replace />}
             />
-          );
-        })}
-        
+          </Route>
+        );
+      }
+
+      // 没有子路由，直接渲染
+      return (
+        <Route
+          key={route.path}
+          path={route.path}
+          element={
+            <ErrorBoundary>
+              <route.component />
+            </ErrorBoundary>
+          }
+        />
+      );
+    });
+  };
+
+  if (loading) {
+    return <LoadingSpinner fullScreen />;
+  }
+
+  return (
+    <Suspense fallback={<LoadingSpinner fullScreen />}>
+      <Routes>
+        {renderRoutes(routes)}
+        {/* 默认重定向到第一个路由 */}
+        <Route path="/" element={<Navigate to={routes[0].path} replace />} />
+        {/* 404页面 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </PageContainer>
+    </Suspense>
   );
-}
+};

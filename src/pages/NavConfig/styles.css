@@ -1,0 +1,193 @@
+.nav-config-page {
+  width: 100%;
+}
+
+.nav-config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.nav-config-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+.nav-config-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--accent-color, #007cf0);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.nav-config-add-btn:hover {
+  background-color: var(--accent-color-dark, #0060b6);
+}
+
+.nav-config-container {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-config-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-config-item {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.nav-config-item:last-child {
+  border-bottom: none;
+}
+
+.nav-config-item.disabled .nav-config-item-content {
+  opacity: 0.6;
+}
+
+.nav-config-item-content {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  transition: background-color 0.2s;
+}
+
+.nav-config-item-content:hover {
+  background-color: var(--hover-bg);
+}
+
+.nav-config-item-drag {
+  margin-right: 12px;
+  color: var(--text-secondary);
+  cursor: move;
+}
+
+.nav-config-item-info {
+  flex: 1;
+}
+
+.nav-config-item-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.nav-config-item-path {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.nav-config-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-config-btn {
+  background: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-config-btn:hover {
+  background-color: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.nav-config-btn.edit:hover {
+  color: var(--accent-color);
+}
+
+.nav-config-btn.delete:hover {
+  color: var(--error-color, #e53935);
+}
+
+.nav-config-btn.add-child:hover {
+  color: var(--success-color, #43a047);
+}
+
+.nav-config-sublist {
+  margin-left: 0;
+  background-color: var(--bg-tertiary, #f9f9f9);
+}
+
+.nav-config-empty {
+  padding: 32px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.nav-config-empty button {
+  margin-top: 16px;
+  padding: 8px 16px;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.nav-config-empty button:hover {
+  background-color: var(--accent-color-dark, #0060b6);
+}
+
+.nav-config-loading {
+  padding: 32px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.nav-config-error {
+  padding: 16px;
+  margin-bottom: 16px;
+  background-color: rgba(229, 57, 53, 0.1);
+  border-left: 4px solid var(--error-color, #e53935);
+  border-radius: 4px;
+  color: var(--text-primary);
+}
+
+.nav-config-error button {
+  margin-top: 8px;
+  padding: 6px 12px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-config-error button:hover {
+  background-color: var(--hover-bg);
+}
+
+/* 暗色模式适配 */
+.dark-mode .nav-config-sublist {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* 拖拽时的样式 */
+.nav-config-item.dragging {
+  background-color: var(--accent-color-light, rgba(0, 124, 240, 0.1));
+  border: 1px dashed var(--accent-color);
+}

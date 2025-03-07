@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { ROUTES_CONFIG } from '#/config/routes';
+import { useRoutesConfig } from '#/config/routes';
 import { FiChevronDown } from 'react-icons/fi';
 import './styles.css';
 
@@ -8,11 +8,12 @@ const DesktopNav = () => {
   const location = useLocation();
   const [openSubMenus, setOpenSubMenus] = useState({});
   const menuRef = useRef(null);
+  const { routes } = useRoutesConfig();
   
   // 初始化时根据当前路径设置打开的子菜单
   useEffect(() => {
     const initialState = {};
-    ROUTES_CONFIG.forEach(route => {
+    routes.forEach(route => {
       if (route.children) {
         const isActive = route.children.some(child => 
           location.pathname.startsWith(child.path)
@@ -23,7 +24,7 @@ const DesktopNav = () => {
       }
     });
     setOpenSubMenus(initialState);
-  }, []);
+  }, [location.pathname, routes]);
 
   // 点击外部区域关闭所有子菜单
   useEffect(() => {
@@ -79,9 +80,7 @@ const DesktopNav = () => {
     }
   };
 
-  const isActive = (path) => {
-    return location.pathname.startsWith(path);
-  };
+  // 删除未使用的 isActive 函数
 
   const isSubMenuActive = (parent) => {
     if (!parent.children) return false;
@@ -91,7 +90,7 @@ const DesktopNav = () => {
   return (
     <nav className="desktop-nav" ref={menuRef}>
       <ul className="desktop-nav-list">
-        {ROUTES_CONFIG.map((route) => (
+        {routes.map((route) => (
           <li 
             key={route.path} 
             className="desktop-nav-item"
@@ -100,16 +99,21 @@ const DesktopNav = () => {
           >
             {route.children ? (
               <div className={`desktop-nav-link-container ${isSubMenuActive(route) ? 'active' : ''}`}>
-                <button 
-                  className={`desktop-nav-link with-submenu ${isActive(route.path) ? 'active' : ''}`}
-                  onClick={(e) => toggleSubMenu(route.path, e)}
+                <NavLink 
+                  to={route.path}
+                  className={({ isActive }) => `desktop-nav-link with-submenu ${isActive ? 'active' : ''}`}
+                  onClick={(e) => {
+                    // 阻止导航，只切换子菜单显示状态
+                    e.preventDefault();
+                    toggleSubMenu(route.path, e);
+                  }}
                   aria-expanded={openSubMenus[route.path]}
                   aria-haspopup="true"
                 >
                   <span className="nav-icon">{route.icon && <route.icon />}</span>
                   <span className="nav-text">{route.name}</span>
                   <FiChevronDown className={`submenu-arrow ${openSubMenus[route.path] ? 'open' : ''}`} />
-                </button>
+                </NavLink>
                 
                 <ul className={`submenu ${openSubMenus[route.path] ? 'submenu-open' : ''}`}>
                   {route.children.map((child) => (
