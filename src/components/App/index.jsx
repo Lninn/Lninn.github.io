@@ -3,7 +3,7 @@ import { Suspense } from 'react'
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import AppHeader from '#/components/AppHeader'
 import Footer from '#/components/Footer'
-import ROUTES_CONFIG from '#/config/routes'
+import { ROUTES_CONFIG } from '#/config/routes'
 
 function LoadingSpinner() {
   return (

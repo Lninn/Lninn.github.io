@@ -7,7 +7,7 @@ const DashboardPage = lazy(() => import('#/pages/Dashboard'))
 const ErrorLogsPage = lazy(() => import('#/pages/ErrorLogs'))
 const ComponentDemoPage = lazy(() => import('#/pages/ComponentDemo'))
 
-const ROUTES_CONFIG = [
+export const ROUTES_CONFIG = [
   {
     path: '/bookmarks',
     name: '书签',
@@ -18,7 +18,19 @@ const ROUTES_CONFIG = [
     path: '/articles',
     name: '文章',
     icon: '📝',
-    component: ArticlePage
+    component: ArticlePage,
+    children: [
+      {
+        path: '/articles/tech',
+        name: '技术',
+        icon: '💻'
+      },
+      {
+        path: '/articles/life',
+        name: '生活',
+        icon: '🌱'
+      }
+    ]
   },
   {
     path: '/dashboard',
@@ -39,7 +51,3 @@ const ROUTES_CONFIG = [
     component: ComponentDemoPage
   }
 ]
-
-export const NAVIGATION_ITEMS = ROUTES_CONFIG
-
-export default ROUTES_CONFIG
