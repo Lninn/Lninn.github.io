@@ -41,6 +41,10 @@
 .mobile-nav-item .nav-icon {
   font-size: 1.4rem;
   margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
 }
 
 .mobile-nav-item .nav-text {
@@ -76,6 +80,13 @@
   font-size: inherit;
   padding: 8px;
   cursor: pointer;
+}
+
+.submenu-toggle .nav-icon,
+.submenu-toggle .nav-text,
+.submenu-toggle .submenu-arrow {
+  display: flex;
+  align-items: center;
 }
 
 .has-submenu .submenu-arrow {
@@ -148,7 +159,8 @@
 }
 
 .mobile-submenu-item .nav-text {
-  display: block;
+  display: flex;
+  align-items: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
