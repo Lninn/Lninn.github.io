@@ -94,17 +94,20 @@
 .mobile-submenu {
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  padding: 8px 0;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 12px 0;
   pointer-events: auto;
-  animation: slideUp 0.2s ease;
+  animation: slideUp 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  max-width: 280px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -115,12 +118,14 @@
 .mobile-submenu-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
+  gap: 12px;
+  padding: 14px 20px;
   color: var(--text-secondary);
   text-decoration: none;
-  font-size: 0.9em;
+  font-size: 0.95em;
   transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .mobile-submenu-item:active {
@@ -129,6 +134,17 @@
 
 .mobile-submenu-item.active {
   color: var(--accent-color);
+  background-color: var(--active-bg, rgba(0, 124, 240, 0.08));
+}
+
+.mobile-submenu-item .nav-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
 }
 
 .mobile-submenu-item .nav-text {
@@ -137,4 +153,51 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+  font-weight: 500;
+}
+
+/* 添加分割线 */
+.mobile-submenu li:not(:last-child) .mobile-submenu-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+  right: 20px;
+  height: 1px;
+  background-color: var(--border-color-light, rgba(0, 0, 0, 0.05));
+}
+
+/* 添加涟漪效果 */
+.mobile-submenu-item::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: var(--ripple-color, rgba(0, 0, 0, 0.05));
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: width 0.4s ease-out, height 0.4s ease-out, opacity 0.4s ease-out;
+  z-index: -1;
+}
+
+.mobile-submenu-item:active::before {
+  width: 150px;
+  height: 150px;
+  opacity: 1;
+}
+
+/* 暗色模式适配 */
+.dark-mode .mobile-submenu {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .mobile-submenu-item::after {
+  background-color: var(--border-color-light, rgba(255, 255, 255, 0.05));
+}
+
+.dark-mode .mobile-submenu-item::before {
+  background: var(--ripple-color, rgba(255, 255, 255, 0.05));
 }

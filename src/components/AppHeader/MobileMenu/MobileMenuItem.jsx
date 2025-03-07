@@ -17,6 +17,8 @@ export function MobileMenuItem({
             e.stopPropagation()
             onToggleSubmenu(item, e.currentTarget)
           }}
+          aria-expanded={isExpanded}
+          aria-haspopup="true"
         >
           <span className="nav-icon">{item.icon}</span>
           <span className="nav-text">{item.name}</span>
