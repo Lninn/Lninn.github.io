@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import './form-styles.css';
+import './form-styles.css' // 确保样式被导入
+
 
 const NavItemForm = ({ item, onSubmit, onCancel, availableIcons, availableComponents }) => {
   const [formData, setFormData] = useState(item || {

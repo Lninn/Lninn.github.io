@@ -14,7 +14,9 @@ import PageContainer from '#/components/PageContainer'
 import Modal from '#/components/Modal'
 import { FiPlus } from 'react-icons/fi'
 import DroppableNavList from './DroppableNavList'
+import NavItemForm from './NavItemForm' // 导入表单组件
 import './styles.css'
+
 
 const NavConfigPage = () => {
   const [navItems, setNavItems] = useState([])
@@ -75,14 +77,12 @@ const NavConfigPage = () => {
   }
 
   // 处理表单提交
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    
+  const handleFormSubmit = async (formData) => {
     try {
       if (formMode === 'add') {
-        await createNavigationItem(currentItem)
+        await createNavigationItem(formData)
       } else {
-        await updateNavigationItem(currentItem.id, currentItem)
+        await updateNavigationItem(formData.id, formData)
       }
       
       setShowModal(false)
@@ -113,15 +113,6 @@ const NavConfigPage = () => {
     } catch (err) {
       setError(err.message)
     }
-  }
-
-  // 处理表单输入变化
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setCurrentItem({
-      ...currentItem,
-      [name]: type === 'checkbox' ? checked : value
-    })
   }
 
   // 处理拖拽结束
@@ -280,43 +271,42 @@ const NavConfigPage = () => {
     <PageContainer>
       <div className="nav-config-page">
         <div className="nav-config-header">
-          <h1>导航配置管理</h1>
+          <h1>导航配置</h1>
           <button 
-            className="nav-config-add-btn" 
+            className="nav-config-add-btn"
             onClick={() => handleAddItem()}
           >
-            <FiPlus /> 添加导航项
+            <FiPlus size={18} />
+            添加导航项
           </button>
         </div>
 
         {error && (
           <div className="nav-config-error">
-            <p>加载出错: {error}</p>
-            <button onClick={loadNavItems}>重试</button>
+            {error}
+            <button onClick={() => setError(null)}>关闭</button>
           </div>
         )}
 
         {loading ? (
           <div className="nav-config-loading">加载中...</div>
+        ) : navItems.length === 0 ? (
+          <div className="nav-config-empty">
+            <p>暂无导航项</p>
+            <button onClick={() => handleAddItem()}>添加导航项</button>
+          </div>
         ) : (
           <div className="nav-config-container">
-            {navItems.length === 0 ? (
-              <div className="nav-config-empty">
-                <p>暂无导航项</p>
-                <button onClick={() => handleAddItem()}>添加第一个导航项</button>
-              </div>
-            ) : (
-              <DragDropContext onDragEnd={handleDragEnd}>
-                <DroppableNavList
-                  items={navItems}
-                  droppableId="nav-list-root"
-                  onAddChild={handleAddItem}
-                  onEdit={handleEditItem}
-                  onToggleStatus={handleToggleStatus}
-                  onDelete={handleDelete}
-                />
-              </DragDropContext>
-            )}
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <DroppableNavList
+                items={navItems}
+                droppableId="root"
+                onAddChild={handleAddItem}
+                onEdit={handleEditItem}
+                onToggleStatus={handleToggleStatus}
+                onDelete={handleDelete}
+              />
+            </DragDropContext>
           </div>
         )}
 
@@ -327,97 +317,13 @@ const NavConfigPage = () => {
             title={formMode === 'add' ? '添加导航项' : '编辑导航项'}
             size="md"
           >
-            <form onSubmit={handleSubmit} className="nav-config-form">
-              <div className="form-group">
-                <label htmlFor="name">名称</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={currentItem.name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="path">路径</label>
-                <input
-                  type="text"
-                  id="path"
-                  name="path"
-                  value={currentItem.path}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="icon">图标</label>
-                <select
-                  id="icon"
-                  name="icon"
-                  value={currentItem.icon}
-                  onChange={handleInputChange}
-                >
-                  <option value="">无图标</option>
-                  {availableIcons.map(icon => (
-                    <option key={icon.value} value={icon.value}>
-                      {icon.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="component">组件</label>
-                <select
-                  id="component"
-                  name="component"
-                  value={currentItem.component}
-                  onChange={handleInputChange}
-                  required
-                >
-                  {availableComponents.map(comp => (
-                    <option key={comp.value} value={comp.value}>
-                      {comp.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="order_index">排序索引</label>
-                <input
-                  type="number"
-                  id="order_index"
-                  name="order_index"
-                  value={currentItem.order_index}
-                  onChange={handleInputChange}
-                  min="0"
-                />
-              </div>
-
-              <div className="form-group checkbox">
-                <input
-                  type="checkbox"
-                  id="is_enabled"
-                  name="is_enabled"
-                  checked={currentItem.is_enabled}
-                  onChange={handleInputChange}
-                />
-                <label htmlFor="is_enabled">启用</label>
-              </div>
-
-              <div className="form-actions">
-                <button type="button" onClick={() => setShowModal(false)}>
-                  取消
-                </button>
-                <button type="submit" className="primary">
-                  {formMode === 'add' ? '添加' : '保存'}
-                </button>
-              </div>
-            </form>
+            <NavItemForm 
+              item={currentItem}
+              onSubmit={handleFormSubmit}
+              onCancel={() => setShowModal(false)}
+              availableIcons={availableIcons}
+              availableComponents={availableComponents}
+            />
           </Modal>
         )}
       </div>
