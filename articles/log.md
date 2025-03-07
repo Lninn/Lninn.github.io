@@ -1,4 +1,4 @@
 ## 2025-03-07
 - **Author**: Lninn
-- **Message**: 代码重构
+- **Message**: 增加导航配置
 
