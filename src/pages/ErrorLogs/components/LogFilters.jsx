@@ -40,7 +40,7 @@ export function LogFilters({ filters, environments, onFilterChange }) {
               value={filters.searchTerm}
               onChange={e => onFilterChange('searchTerm', e.target.value)}
               placeholder="搜索错误信息、组件或URL..."
-              className="filter-input search-input"
+              className="filter-input search-input log-search-input"
             />
             {filters.searchTerm && (
               <button 
