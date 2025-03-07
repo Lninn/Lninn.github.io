@@ -2,12 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useRoutesConfig } from '#/config/routes';
 import { FiChevronDown } from 'react-icons/fi';
-// 导入可能用到的所有图标组件
-import * as BsIcons from 'react-icons/bs';
-import * as MdIcons from 'react-icons/md';
-import * as VscIcons from 'react-icons/vsc';
-import * as HiIcons from 'react-icons/hi';
-import * as FiIcons from 'react-icons/fi';
+// import { DEFAULT_ICONS_MAP } from '#/config/nav-shared';
 import './styles.css';
 
 const DesktopNav = () => {
@@ -47,31 +42,19 @@ const DesktopNav = () => {
   }, []);
 
   // 根据字符串获取对应的图标组件
-  const getIconComponent = (iconName) => {
-    if (!iconName || typeof iconName !== 'string') return null;
-    
-    // 根据前缀确定图标库
-    if (iconName.startsWith('Bs')) {
-      return BsIcons[iconName];
-    } else if (iconName.startsWith('Md')) {
-      return MdIcons[iconName];
-    } else if (iconName.startsWith('Vsc')) {
-      return VscIcons[iconName];
-    } else if (iconName.startsWith('Hi')) {
-      return HiIcons[iconName];
-    } else if (iconName.startsWith('Fi')) {
-      return FiIcons[iconName];
-    }
-    
-    return null;
-  };
+  // const getIconComponent = (iconName) => {
+  //   if (!iconName || typeof iconName !== 'string') return null;
+
+  //   return DEFAULT_ICONS_MAP[iconName] || null
+  // };
 
   // 渲染图标组件
-  const renderIcon = (iconName) => {
-    if (!iconName) return null;
+  const renderIcon = (IconComponent) => {
+    if (!IconComponent) return null;
     
-    const IconComponent = getIconComponent(iconName);
-    return IconComponent ? <IconComponent /> : null;
+    // const IconComponent = getIconComponent(iconName);
+    // return IconComponent ? <IconComponent /> : null;
+    return <IconComponent />
   };
 
   const toggleSubMenu = (path, e) => {

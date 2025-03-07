@@ -1,4 +1,6 @@
 import { supabase } from '#/supabaseClient'
+import { DEFAULT_ICONS_MAP, DEFAULT_COMPONENTS_MAP } from '#/config/nav-shared'
+
 
 // 获取所有导航项
 export const fetchNavigationItems = async (includeDisabled = false) => {
@@ -55,6 +57,9 @@ export const createNavigationItem = async (navigationItem) => {
 
 // 更新导航项
 export const updateNavigationItem = async (id, updates) => {
+  // 不需要更新 children
+  delete updates.children
+
   const { data, error } = await supabase
     .from('navigation_items')
     .update({
@@ -184,32 +189,20 @@ export const convertToRouteConfig = async (includeDisabled = false) => {
 const dynamicImportIcon = (iconName) => {
   // 这里需要根据实际情况实现动态导入
   // 简化示例，实际实现可能需要更复杂的逻辑
-  const iconMap = {
-    'BsBookmark': () => import('react-icons/bs').then(mod => mod.BsBookmark),
-    'BsFileText': () => import('react-icons/bs').then(mod => mod.BsFileText),
-    'BsGear': () => import('react-icons/bs').then(mod => mod.BsGear),
-    'BsFlower1': () => import('react-icons/bs').then(mod => mod.BsFlower1),
-    'MdDashboard': () => import('react-icons/md').then(mod => mod.MdDashboard),
-    'VscError': () => import('react-icons/vsc').then(mod => mod.VscError),
-    'HiOutlinePuzzle': () => import('react-icons/hi').then(mod => mod.HiOutlinePuzzle)
-  }
-  
-  return iconMap[iconName] || null
+  // const iconMap = {
+  //   'BsBookmark': () => import('react-icons/bs').then(mod => mod.BsBookmark),
+  // }
+
+  return DEFAULT_ICONS_MAP[iconName] || null
 }
 
 // 动态导入页面组件
 const dynamicImportComponent = (componentPath) => {
   // 这里需要根据实际情况实现动态导入
   // 简化示例，实际实现可能需要更复杂的逻辑
-  const componentMap = {
-    'test': () => import('#/pages/NavConfig'),
-    'BookmarkPage': () => import('#/pages/Bookmark'),
-    'ArticlePage': () => import('#/pages/Article'),
-    'DashboardPage': () => import('#/pages/Dashboard'),
-    'ErrorLogsPage': () => import('#/pages/ErrorLogs'),
-    'ComponentDemoPage': () => import('#/pages/ComponentDemo'),
-    'PlaceholderPage': () => import('#/pages/PlaceholderPage')
-  }
+  // const componentMap = {
+  //   'test': lazy(() => import('#/pages/NavConfig')),
+  // }
   
-  return componentMap[componentPath] || (() => import('#/pages/PlaceholderPage'))
+  return DEFAULT_COMPONENTS_MAP[componentPath] || (() => import('#/pages/PlaceholderPage'))
 }

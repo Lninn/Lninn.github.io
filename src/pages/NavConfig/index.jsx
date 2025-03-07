@@ -9,6 +9,7 @@ import {
   toggleNavigationItemStatus,
   updateNavigationOrder
 } from '#/api/navigationApi'
+import { DEFAULT_ICONS_OPTIONS, DEFAULT_COMPONENTS_OPTIONS } from '#/config/nav-shared'
 import PageContainer from '#/components/PageContainer'
 import Modal from '#/components/Modal'
 import { FiPlus } from 'react-icons/fi'
@@ -41,24 +42,9 @@ const NavConfigPage = () => {
   // 加载可用的图标和组件
   const loadAvailableOptions = async () => {
     // 实际项目中，这些数据可能来自API
-    setAvailableIcons([
-      { value: 'BsBookmark', label: 'Bookmark' },
-      { value: 'BsFileText', label: 'File Text' },
-      { value: 'BsGear', label: 'Gear' },
-      { value: 'BsFlower1', label: 'Flower' },
-      { value: 'MdDashboard', label: 'Dashboard' },
-      { value: 'VscError', label: 'Error' },
-      { value: 'HiOutlinePuzzle', label: 'Puzzle' }
-    ])
+    setAvailableIcons(DEFAULT_ICONS_OPTIONS)
     
-    setAvailableComponents([
-      { value: 'BookmarkPage', label: '收藏夹页面' },
-      { value: 'ArticlePage', label: '文章页面' },
-      { value: 'DashboardPage', label: '数据概览页面' },
-      { value: 'ErrorLogsPage', label: '错误日志页面' },
-      { value: 'ComponentDemoPage', label: '组件演示页面' },
-      { value: 'PlaceholderPage', label: '占位页面' }
-    ])
+    setAvailableComponents(DEFAULT_COMPONENTS_OPTIONS)
   }
 
   useEffect(() => {
