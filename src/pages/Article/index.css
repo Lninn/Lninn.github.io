@@ -5,7 +5,7 @@
   gap: 32px;
   min-height: calc(100vh - 200px);
   background-color: var(--bg-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.3s ease;
   position: relative;
   padding: 0 16px;
   max-width: 1400px;
@@ -51,6 +51,7 @@
   color: var(--text-secondary);
   padding: 4px 8px;
   border-radius: 4px;
+  transition: all 0.2s ease;
 }
 
 .close-sidebar-btn:hover {
@@ -58,27 +59,36 @@
   color: var(--text-primary);
 }
 
+/* 滚动条样式 */
+.article-list ul,
+.article-toc {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+.article-list ul::-webkit-scrollbar,
+.article-toc::-webkit-scrollbar {
+  width: 6px;
+}
+
+.article-list ul::-webkit-scrollbar-track,
+.article-toc::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.article-list ul::-webkit-scrollbar-thumb,
+.article-toc::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 6px;
+}
+
+/* 文章列表样式 */
 .article-list ul {
   list-style: none;
   padding: 0;
   margin: 0;
   overflow-y: auto;
   flex: 1;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-color) transparent;
-}
-
-.article-list ul::-webkit-scrollbar {
-  width: 6px;
-}
-
-.article-list ul::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.article-list ul::-webkit-scrollbar-thumb {
-  background-color: var(--border-color);
-  border-radius: 6px;
 }
 
 .article-list li {
@@ -120,7 +130,16 @@
   font-size: 1.05rem;
 }
 
-/* 移动端菜单按钮样式优化 */
+.article-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}
+
+/* 移动端菜单按钮样式 */
 .toggle-sidebar-btn {
   display: none;
   align-items: center;
@@ -141,7 +160,106 @@
   color: var(--text-primary);
 }
 
-/* 响应式设计优化 */
+/* 阅读进度指示器 */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent-color) 100%);
+  z-index: 1001;
+  transition: width 0.1s ease;
+}
+
+/* 文章目录样式 */
+.article-toc {
+  position: sticky;
+  top: 80px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  padding-left: 16px;
+  padding-top: 16px;
+  font-size: 0.9rem;
+  display: none;
+}
+
+.toc-title {
+  font-size: 1.1rem;
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.article-toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.article-toc li {
+  margin-bottom: 8px;
+}
+
+.article-toc a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  display: block;
+  padding: 4px 8px;
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease;
+  line-height: 1.4;
+  font-size: 0.9rem;
+  border-radius: 0 4px 4px 0;
+}
+
+.article-toc a:hover {
+  color: var(--text-primary);
+  border-left-color: var(--border-color);
+  background-color: var(--bg-hover);
+}
+
+.article-toc a.active {
+  color: var(--primary);
+  border-left-color: var(--primary);
+  background-color: var(--primary-bg-subtle);
+}
+
+.article-toc .toc-h1 {
+  font-weight: 500;
+}
+
+.article-toc .toc-h2 {
+  padding-left: 16px;
+  font-size: 0.85rem;
+}
+
+.article-toc .toc-h3 {
+  padding-left: 32px;
+  font-size: 0.8rem;
+  color: var(--text-tertiary, #666);
+}
+
+/* 响应式设计 */
+@media (min-width: 1200px) {
+  .article-container {
+    grid-template-columns: 250px minmax(0, 800px) 1fr;
+  }
+  
+  .article-toc {
+    display: block;
+  }
+}
+
+/* 平板设备优化 */
+@media (min-width: 769px) and (max-width: 1199px) {
+  .article-container {
+    grid-template-columns: 250px 1fr;
+  }
+}
+
+/* 移动端优化 */
 @media (max-width: 768px) {
   .article-container {
     grid-template-columns: 1fr;
@@ -317,76 +435,4 @@
   .hljs-type {
     color: #7ec699 !important;
   }
-}
-
-/* 阅读进度指示器 */
-.reading-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--primary) 0%, var(--accent-color) 100%);
-  z-index: 1001;
-  transition: width 0.1s ease;
-}
-
-/* 文章目录样式 */
-.article-toc {
-  position: sticky;
-  top: 80px;
-  max-height: calc(100vh - 100px);
-  overflow-y: auto;
-  padding-left: 16px;
-  font-size: 0.9rem;
-  display: none;
-}
-
-@media (min-width: 1200px) {
-  .article-container {
-    grid-template-columns: 250px minmax(0, 800px) 1fr;
-  }
-  
-  .article-toc {
-    display: block;
-  }
-}
-
-.article-toc ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.article-toc li {
-  margin-bottom: 8px;
-}
-
-.article-toc a {
-  color: var(--text-secondary);
-  text-decoration: none;
-  display: block;
-  padding: 4px 8px;
-  border-left: 2px solid transparent;
-  transition: all 0.2s ease;
-}
-
-.article-toc a:hover {
-  color: var(--text-primary);
-  border-left-color: var(--border-color);
-}
-
-.article-toc a.active {
-  color: var(--primary);
-  border-left-color: var(--primary);
-}
-
-.article-toc .toc-h2 {
-  padding-left: 16px;
-  font-size: 0.85rem;
-}
-
-.article-toc .toc-h3 {
-  padding-left: 32px;
-  font-size: 0.8rem;
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import './ArticleTOC.css';
+// 删除 import './ArticleTOC.css'; 因为样式已合并到 index.css
 
 export function ArticleTOC({ content }) {
   const [headings, setHeadings] = useState([]);
