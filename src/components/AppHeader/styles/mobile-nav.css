@@ -20,6 +20,11 @@
   list-style: none;
 }
 
+.mobile-nav-item-wrapper {
+  width: 100%;
+  max-width: 25%;
+}
+
 .mobile-nav-item {
   display: flex;
   flex-direction: column;
@@ -73,24 +78,6 @@
   cursor: pointer;
 }
 
-.mobile-submenu {
-  max-height: 0;
-  overflow: hidden;
-  padding: 0;
-  margin-top: 0;
-  background: var(--bg-secondary);
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  opacity: 0;
-}
-
-.has-submenu.expanded .mobile-submenu {
-  max-height: 300px; /* 足够容纳内容的高度 */
-  padding: 8px 0;
-  margin-top: 4px;
-  opacity: 1;
-}
-
 .has-submenu .submenu-arrow {
   transition: transform 0.3s ease;
 }
@@ -99,20 +86,7 @@
   transform: rotate(180deg);
 }
 
-.mobile-submenu-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 0.9em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  position: relative; /* 添加定位 */
-  z-index: 2; /* 确保在上层 */
-}
+/* Portal 样式 */
 .mobile-submenu-portal {
   pointer-events: none;
 }
@@ -156,12 +130,6 @@
 .mobile-submenu-item.active {
   color: var(--accent-color);
 }
-  
-  /* 可以删除之前的 .mobile-submenu 相关样式 */
-/* 添加触摸反馈效果 */
-.mobile-submenu-item:active {
-  background-color: var(--bg-hover);
-}
 
 .mobile-submenu-item .nav-text {
   display: block;
@@ -169,8 +137,4 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
-}
-
-.mobile-submenu-item.active {
-  color: var(--primary);
 }

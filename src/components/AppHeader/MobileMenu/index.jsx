@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { MobileMenuItem } from './MobileMenuItem'
-import './styles.css'
 
 export function MobileMenu({ items }) {
   const [expandedItem, setExpandedItem] = useState(null)

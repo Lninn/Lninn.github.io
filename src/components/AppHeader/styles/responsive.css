@@ -20,6 +20,34 @@
     font-size: 1rem;
   }
 
+  /* 导航样式调整 */
+  .app-nav {
+    justify-content: flex-end;
+    margin-right: 8px;
+  }
+  
+  .app-nav ul {
+    gap: 8px;
+  }
+  
+  .nav-text {
+    display: none;
+  }
+  
+  .nav-item {
+    padding: 8px;
+    border-radius: 6px;
+  }
+  
+  .nav-icon {
+    font-size: 1.3rem;
+  }
+
+  /* 显示移动导航 */
+  .mobile-nav {
+    display: block;
+  }
+  
   /* 调整页面内容，为底部导航腾出空间 */
   body {
     padding-bottom: calc(70px + env(safe-area-inset-bottom));
