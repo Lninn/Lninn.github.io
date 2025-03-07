@@ -2,7 +2,7 @@ import './index.css'
 import { useState, useEffect } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
-import { supabase } from '../../../supabaseClient'
+import { supabase } from '#/supabaseClient'
 
 export default function HistoryList({ onRestore, onNotify }) {
   const [historyList, setHistoryList] = useState([])

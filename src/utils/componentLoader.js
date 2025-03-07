@@ -28,7 +28,7 @@ export function loadPageComponents() {
   
   for (const path in allModules) {
     // 跳过 index.jsx 文件和组件内部文件
-    if (path.endsWith('/index.jsx') || path.includes('/components/')) {
+    if (path.endsWith('/index.jsx') || path.includes('/components/') || path.includes('/modules/')) {
       continue;
     }
     
