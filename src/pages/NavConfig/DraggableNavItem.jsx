@@ -13,7 +13,7 @@ const DraggableNavItem = ({
   return (
     <Draggable draggableId={`nav-item-${item.id}`} index={index}>
       {(provided) => (
-        <li 
+        <div 
           className={`nav-config-item ${!item.is_enabled ? 'disabled' : ''}`}
           ref={provided.innerRef}
           {...provided.draggableProps}
@@ -64,24 +64,8 @@ const DraggableNavItem = ({
             </div>
           </div>
           
-          {/* 渲染子项部分保持不变 */}
-          {item.children && item.children.length > 0 && (
-            <ul className="nav-config-sublist">
-              {item.children.map((child, childIndex) => (
-                <DraggableNavItem
-                  key={child.id}
-                  item={child}
-                  index={childIndex}
-                  level={level + 1}
-                  onAddChild={onAddChild}
-                  onEdit={onEdit}
-                  onToggleStatus={onToggleStatus}
-                  onDelete={onDelete}
-                />
-              ))}
-            </ul>
-          )}
-        </li>
+          {/* 移除了子项渲染部分，由DroppableNavList负责 */}
+        </div>
       )}
     </Draggable>
   );

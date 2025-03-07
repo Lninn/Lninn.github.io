@@ -21,7 +21,7 @@ const DroppableNavList = ({
           {...provided.droppableProps}
         >
           {items.map((item, index) => (
-            <div key={item.id}>
+            <li key={item.id} className="nav-config-item-wrapper">
               <DraggableNavItem
                 item={item}
                 index={index}
@@ -31,6 +31,8 @@ const DroppableNavList = ({
                 onToggleStatus={onToggleStatus}
                 onDelete={onDelete}
               />
+              
+              {/* 子项列表渲染 */}
               {item.children && item.children.length > 0 && (
                 <DroppableNavList
                   items={item.children}
@@ -42,8 +44,7 @@ const DroppableNavList = ({
                   onDelete={onDelete}
                 />
               )}
-              {provided.placeholder}
-            </div>
+            </li>
           ))}
           {provided.placeholder}
         </ul>
