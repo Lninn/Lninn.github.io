@@ -21,5 +21,5 @@ export const DEFAULT_ICONS_MAP = {
 export const DEFAULT_ICONS_OPTIONS = createComponentOptions(DEFAULT_ICONS_MAP)
 
 // 自动加载所有页面组件
-export const DEFAULT_COMPONENTS_MAP = loadPageComponents();
+export const DEFAULT_COMPONENTS_MAP = loadPageComponents(0);
 export const DEFAULT_COMPONENTS_OPTIONS = createComponentOptions(DEFAULT_COMPONENTS_MAP);

@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 import { supabase } from '#/supabaseClient'
+import LoadingSpinner from '#/components/LoadingSpinner'
+
 
 export default function HistoryList({ onRestore, onNotify }) {
   const [historyList, setHistoryList] = useState([])
@@ -83,14 +85,7 @@ export default function HistoryList({ onRestore, onNotify }) {
   }
 
   if (isLoading) {
-    return (
-      <div className="list-section">
-        <div className="loading-state">
-          <div className="loading-spinner"></div>
-          <p>正在加载历史记录...</p>
-        </div>
-      </div>
-    )
+    return (<LoadingSpinner text="正在加载历史记录..." />)
   }
 
   if (!historyList || historyList.length === 0) {

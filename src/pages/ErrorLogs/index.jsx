@@ -6,6 +6,8 @@ import { LogFilters } from './components/LogFilters'
 import { LogItem } from './components/LogItem'
 import { DeleteConfirmModal } from './components/DeleteConfirmModal'
 import { LogTable } from './components/LogTable'
+import LoadingSpinner from '#/components/LoadingSpinner'
+
 
 export default function ErrorLogs() {
   const { 
@@ -109,12 +111,7 @@ export default function ErrorLogs() {
           <div className="error-message">{error}</div>
         )}
 
-        {isLoading ? (
-          <div className="loading-state">
-            <div className="loading-spinner"></div>
-            <p>正在加载错误日志...</p>
-          </div>
-        ) : (
+        {isLoading ? (<LoadingSpinner text="正在加载错误日志..." />) : (
           <>
             {viewMode === 'card' ? (
               <div className="logs-list">

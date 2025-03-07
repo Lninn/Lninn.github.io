@@ -2,6 +2,7 @@ import './index.css'
 
 import { useState, useEffect, useMemo } from 'react'
 import ErrorBoundary from '#/components/ErrorBoundary'
+import LoadingSpinner from '#/components/LoadingSpinner'
 import { bookmarkApi } from '#/api/bookmark'
 import UrlList from './UrlList'
 
@@ -57,12 +58,7 @@ export default function Bookmark() {
   }, [list, searchTerm, selectedCategory])
 
   if (isLoading) {
-    return (
-      <div className="loading-state">
-        <div className="loading-spinner"></div>
-        <p>正在加载书签...</p>
-      </div>
-    )
+    return (<LoadingSpinner text="正在加载书签..." />)
   }
 
   if (error) {

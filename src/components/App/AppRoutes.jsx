@@ -67,8 +67,8 @@ export const AppRoutes = () => {
   const routesDom = renderRoutes(routes)
   
   return (
-    <PageContainer>
-      <Suspense fallback={<LoadingSpinner fullScreen={false} text="页面加载中..." />}>
+    <Suspense fallback={<LoadingSpinner fullScreen text="页面加载中..." />} >
+      <PageContainer>
         <Routes>
           {routesDom}
           {/* 默认重定向到第一个路由 */}
@@ -76,7 +76,7 @@ export const AppRoutes = () => {
           {/* 404页面 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </Suspense>
-    </PageContainer>
+      </PageContainer>
+    </Suspense>
   );
 };

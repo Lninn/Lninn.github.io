@@ -1,10 +1,15 @@
 import { lazy } from 'react';
+import { lazyWithDelay } from '#/utils/lazyWithDelay'
+
 
 /**
- * 自动加载页面组件
+ * 加载页面组件
+ * @param {number} delay 延迟加载时间（毫秒）
  * @returns {Object} 组件映射对象
  */
-export function loadPageComponents() {
+export function loadPageComponents(delay = 0) {
+  const hasDelay = typeof delay === 'number' && delay > 0 ;
+
   const pageModules = import.meta.glob('/src/pages/**/index.jsx');
   const components = {};
   
@@ -23,7 +28,8 @@ export function loadPageComponents() {
       : `${componentName}Page`;
     
     // 创建懒加载组件
-    components[formattedName] = lazy(pageModules[path]);
+    const value = pageModules[path];
+    components[formattedName] = hasDelay ? lazyWithDelay(value, delay) : lazy(value);
   }
 
   // 处理特殊组件（非index.jsx文件）
@@ -40,7 +46,8 @@ export function loadPageComponents() {
     
     // 只处理以Page结尾的文件
     if (fileName.endsWith('Page')) {
-      components[fileName] = lazy(allModules[path]);
+      const value = allModules[path]
+      components[fileName] = hasDelay? lazyWithDelay(value, delay) : lazy(value);
     }
   }
   
