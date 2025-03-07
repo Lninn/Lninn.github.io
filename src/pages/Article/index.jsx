@@ -1,15 +1,46 @@
-import { use, useState } from "react"
+import { use, useState, useEffect } from "react"
 import ReactMarkdown from "react-markdown"
 import rehypeHighlight from "rehype-highlight"
+import rehypeSlug from "rehype-slug" // 需要安装这个依赖
 import "highlight.js/styles/github.css"
 import "./index.css"
+import { ArticleTOC } from "./components/ArticleTOC"
 
 const allArticlesPromise = fetchAllArticles()
 
-function ArticleList({ articles, onSelect, activeTitle }) {
+// 阅读进度条组件
+function ReadingProgress() {
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    const updateProgress = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight;
+      const winHeight = window.innerHeight;
+      const scrollPercent = scrollTop / (docHeight - winHeight);
+      setWidth(Math.min(scrollPercent * 100, 100));
+    };
+
+    window.addEventListener('scroll', updateProgress);
+    updateProgress();
+
+    return () => window.removeEventListener('scroll', updateProgress);
+  }, []);
+
+  return <div className="reading-progress" style={{ width: `${width}%` }} />;
+}
+
+function ArticleList({ articles, onSelect, activeTitle, isMobileView, onToggleSidebar }) {
   return (
     <div className="article-list">
-      <h2 className="list-title">文章列表</h2>
+      <div className="list-header">
+        <h2 className="list-title">文章列表</h2>
+        {isMobileView && (
+          <button className="close-sidebar-btn" onClick={onToggleSidebar}>
+            <span>×</span>
+          </button>
+        )}
+      </div>
       <ul>
         {articles.map(item => {
           const [[title, _]] = Object.entries(item)
@@ -21,6 +52,7 @@ function ArticleList({ articles, onSelect, activeTitle }) {
                 onClick={(e) => {
                   e.preventDefault()
                   onSelect(item)
+                  if (isMobileView) onToggleSidebar()
                 }}
               >
                 {title}
@@ -44,7 +76,9 @@ function ArticleContent({ content }) {
 
   return (
     <div className="article-content">
-      <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+      <ReactMarkdown 
+        rehypePlugins={[rehypeHighlight, rehypeSlug]}
+      >
         {content}
       </ReactMarkdown>
     </div>
@@ -54,26 +88,61 @@ function ArticleContent({ content }) {
 export default function Article() {
   const [markdown, setMarkdown] = useState("")
   const [activeTitle, setActiveTitle] = useState("")
+  const [sidebarVisible, setSidebarVisible] = useState(false)
+  const [isMobileView, setIsMobileView] = useState(false)
   const allArticles = use(allArticlesPromise)
+
+  useEffect(() => {
+    const checkMobileView = () => {
+      setIsMobileView(window.innerWidth <= 768)
+    }
+    
+    checkMobileView()
+    window.addEventListener('resize', checkMobileView)
+    
+    return () => window.removeEventListener('resize', checkMobileView)
+  }, [])
 
   const handleArticleSelect = (article) => {
     const [[title, content]] = Object.entries(article)
     setActiveTitle(title)
     setMarkdown(content)
+    
+    // 滚动到顶部
+    window.scrollTo(0, 0)
+  }
+
+  const toggleSidebar = () => {
+    setSidebarVisible(!sidebarVisible)
   }
 
   return (
-    <div className="article-container">
-      <ArticleList 
-        articles={allArticles} 
-        onSelect={handleArticleSelect}
-        activeTitle={activeTitle}
-      />
-      <ArticleContent content={markdown} />
-    </div>
+    <>
+      <ReadingProgress />
+      <div className={`article-container ${isMobileView ? 'mobile-view' : ''} ${sidebarVisible ? 'sidebar-visible' : ''}`}>
+        <div className="article-sidebar">
+          <ArticleList 
+            articles={allArticles} 
+            onSelect={handleArticleSelect}
+            activeTitle={activeTitle}
+            isMobileView={isMobileView}
+            onToggleSidebar={toggleSidebar}
+          />
+        </div>
+        <div className="article-main">
+          <ArticleContent 
+            content={markdown} 
+            isMobileView={isMobileView}
+            onToggleSidebar={toggleSidebar}
+          />
+        </div>
+        <ArticleTOC content={markdown} />
+      </div>
+    </>
   )
 }
 
+// 其余函数保持不变
 function fetchAllArticles() {
   const files = getFiles()
 
@@ -97,7 +166,6 @@ function getFirstLine(markdownText) {
 
   return firstLine;
 }
-
 
 function getFiles() {
   // 使用 import.meta.glob 获取文件列表
