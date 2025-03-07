@@ -2,7 +2,6 @@ import './LogFilters.css'
 import Select from '#/components/Select'
 
 export function LogFilters({ filters, environments, onFilterChange }) {
-  // 构造 Select 组件所需的 options 数组
   const envOptions = [
     { value: '', label: '所有环境' },
     ...environments.map(env => ({
@@ -12,33 +11,51 @@ export function LogFilters({ filters, environments, onFilterChange }) {
   ]
 
   return (
-    <div className="filters">
-      <Select 
-        options={envOptions}
-        value={filters.environment} 
-        onChange={value => onFilterChange('environment', value)}
-        placeholder="选择环境"
-      />
+    <div className="filters-container">
+      <div className="filters-wrapper">
+        <div className="filters-group">
+          <div className="filter-item">
+            <label className="filter-label">环境</label>
+            <Select 
+              options={envOptions}
+              value={filters.environment} 
+              onChange={value => onFilterChange('environment', value)}
+              placeholder="选择环境"
+              className="filter-select"
+            />
+          </div>
 
-      <input
-        type="date"
-        value={filters.startDate}
-        onChange={e => onFilterChange('startDate', e.target.value)}
-        placeholder="开始日期"
-      />
-      <input
-        type="date"
-        value={filters.endDate}
-        onChange={e => onFilterChange('endDate', e.target.value)}
-        placeholder="结束日期"
-      />
+          <div className="filter-item">
+            <label className="filter-label">开始日期</label>
+            <input
+              type="date"
+              value={filters.startDate}
+              onChange={e => onFilterChange('startDate', e.target.value)}
+              className="filter-input"
+            />
+          </div>
+          
+          <div className="filter-item">
+            <label className="filter-label">结束日期</label>
+            <input
+              type="date"
+              value={filters.endDate}
+              onChange={e => onFilterChange('endDate', e.target.value)}
+              className="filter-input"
+            />
+          </div>
+        </div>
 
-      <input
-        type="text"
-        value={filters.searchTerm}
-        onChange={e => onFilterChange('searchTerm', e.target.value)}
-        placeholder="搜索错误信息..."
-      />
+        <div className="filter-item filter-item-search">
+          <input
+            type="text"
+            value={filters.searchTerm}
+            onChange={e => onFilterChange('searchTerm', e.target.value)}
+            placeholder="搜索错误信息..."
+            className="filter-input search-input"
+          />
+        </div>
+      </div>
     </div>
   )
 }
