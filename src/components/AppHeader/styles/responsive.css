@@ -20,50 +20,9 @@
     font-size: 1rem;
   }
 
-  /* 导航样式调整 */
-  .app-nav {
-    justify-content: flex-end;
-    margin-right: 8px;
-  }
-  
-  .app-nav ul {
-    gap: 4px;
-  }
-  
-  .nav-text {
-    display: none;
-  }
-  
-  .nav-item {
-    padding: 8px;
-  }
-  
-  .nav-icon {
-    font-size: 1.3rem;
-  }
-
-  /* 显示移动导航 */
-  .mobile-nav {
-    display: block;
-  }
-  
   /* 调整页面内容，为底部导航腾出空间 */
   body {
-    padding-bottom: 70px;
-  }
-
-  .mobile-nav-item-wrapper {
-    width: 100%;
-    max-width: 25%;
-  }
-  
-  .mobile-submenu {
-    margin: 0 8px;
-    max-width: calc(100vw - 32px);
-  }
-  
-  .mobile-nav-item {
-    max-width: 100%;
+    padding-bottom: calc(70px + env(safe-area-inset-bottom));
   }
 }
 

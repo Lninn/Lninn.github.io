@@ -1,4 +1,4 @@
 @import './base.css';
 @import './desktop-nav.css';
-@import './mobile-nav.css';
+@import '../MobileMenu/styles.css';
 @import './responsive.css';
