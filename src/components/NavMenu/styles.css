@@ -1,0 +1,147 @@
+/* 导航菜单基础样式 */
+.nav-menu {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-menu-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* 导航项样式 */
+.nav-item {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* 导航链接样式 */
+.nav-link,
+.nav-link-container {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 100%;
+  color: var(--text-primary, #333);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-link.with-submenu {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.nav-link:hover,
+.nav-link-container:hover .nav-link {
+  color: var(--accent-color, #007cf0);
+}
+
+.nav-link.active,
+.nav-link-container.active .nav-link {
+  color: var(--accent-color, #007cf0);
+}
+
+.nav-link.active::after,
+.nav-link-container.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+  right: 16px;
+  height: 3px;
+  background: linear-gradient(45deg, #007cf0, #00dfd8);
+  border-radius: 3px 3px 0 0;
+}
+
+/* 图标和文本样式 */
+.nav-icon {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+  font-size: 1.1rem;
+}
+
+.nav-text {
+  font-size: 0.95rem;
+}
+
+/* 子菜单箭头样式 */
+.submenu-arrow {
+  margin-left: 6px;
+  transition: transform 0.2s ease;
+}
+
+.submenu-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* 子菜单样式 */
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background-color: var(--card-bg, #fff);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  z-index: 100;
+  list-style: none;
+  border: 1px solid var(--border-color, #eaeaea);
+  
+  /* 动画效果 */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  pointer-events: none;
+}
+
+.submenu.submenu-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.submenu-item {
+  width: 100%;
+}
+
+.submenu-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  color: var(--text-primary, #333);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.submenu-link:hover {
+  background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
+  color: var(--accent-color, #007cf0);
+}
+
+.submenu-link.active {
+  background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
+  color: var(--accent-color, #007cf0);
+  font-weight: 500;
+}
+
+/* 暗色模式适配 */
+.dark-mode .submenu {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+}
