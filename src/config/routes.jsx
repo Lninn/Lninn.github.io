@@ -83,7 +83,7 @@ export const DEFAULT_ROUTES_CONFIG = [
   },
 ]
 
-function SubPageWrapper() {
+export function SubPageWrapper() {
   return <Outlet />
 }
 

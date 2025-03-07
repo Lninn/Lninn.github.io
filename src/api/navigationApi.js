@@ -1,5 +1,7 @@
 import { supabase } from '#/supabaseClient'
 import { DEFAULT_ICONS_MAP, DEFAULT_COMPONENTS_MAP } from '#/config/nav-shared'
+import { SubPageWrapper } from '#/config/routes'
+import { lazy } from 'react'
 
 
 // 获取所有导航项
@@ -168,11 +170,13 @@ export const convertToRouteConfig = async (includeDisabled = false) => {
   const navItems = await fetchNavigationItems(includeDisabled)
   
   const mapItemToRoute = (item) => {
+    // 当前 item 的children有值，且 parent_id 为空，说明是子级路由
+    const isSubRoute = item.children && item.children.length > 0 && item.parent_id === null
     const route = {
       name: item.name,
       path: item.path,
       icon: item.icon ? dynamicImportIcon(item.icon) : null,
-      component: dynamicImportComponent(item.component)
+      component: isSubRoute ? SubPageWrapper : dynamicImportComponent(item.component),
     }
     
     if (item.children && item.children.length > 0) {
@@ -181,7 +185,7 @@ export const convertToRouteConfig = async (includeDisabled = false) => {
     
     return route
   }
-  
+
   return navItems.map(mapItemToRoute)
 }
 
@@ -198,11 +202,13 @@ const dynamicImportIcon = (iconName) => {
 
 // 动态导入页面组件
 const dynamicImportComponent = (componentPath) => {
+  const c = DEFAULT_COMPONENTS_MAP[componentPath]
+  // console.log('debug-dynamicImportComponent', {  componentPath, c })
   // 这里需要根据实际情况实现动态导入
   // 简化示例，实际实现可能需要更复杂的逻辑
   // const componentMap = {
   //   'test': lazy(() => import('#/pages/NavConfig')),
   // }
   
-  return DEFAULT_COMPONENTS_MAP[componentPath] || (() => import('#/pages/PlaceholderPage'))
+  return c || lazy(() => import('#/pages/PlaceholderPage'))
 }

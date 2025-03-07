@@ -9,15 +9,13 @@ import LoadingSpinner from '#/components/LoadingSpinner'
 // 404 页面组件
 function NotFound() {
   return (
-    <PageContainer>
-      <div className="not-found">
-        <div className="not-found-content">
-          <h2>404</h2>
-          <p>页面不存在</p>
-          <a href="/" className="back-home">返回首页</a>
-        </div>
+    <div className="not-found">
+      <div className="not-found-content">
+        <h2>404</h2>
+        <p>页面不存在</p>
+        <a href="/" className="back-home">返回首页</a>
       </div>
-    </PageContainer>
+    </div>
   )
 }
 
@@ -69,14 +67,16 @@ export const AppRoutes = () => {
   const routesDom = renderRoutes(routes)
   
   return (
-    <Suspense fallback={<LoadingSpinner fullScreen />}>
-      <Routes>
-        {routesDom}
-        {/* 默认重定向到第一个路由 */}
-        <Route path="/" element={<Navigate to={routes[0].path} replace />} />
-        {/* 404页面 */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </Suspense>
+    <PageContainer>
+      <Suspense fallback={<LoadingSpinner fullScreen />}>
+        <Routes>
+          {routesDom}
+          {/* 默认重定向到第一个路由 */}
+          <Route path="/" element={<Navigate to={routes[0].path} replace />} />
+          {/* 404页面 */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+    </PageContainer>
   );
 };

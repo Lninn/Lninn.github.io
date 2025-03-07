@@ -4,7 +4,7 @@ import {
 } from 'react-icons/bs';
 import { MdDashboard, MdArticle } from 'react-icons/md';
 import { FiSettings, FiMenu, FiUser } from 'react-icons/fi';
-import { lazy } from 'react';
+import { loadPageComponents, createComponentOptions } from '#/utils/componentLoader';
 
 export const DEFAULT_ICONS_MAP = {
   "BsHouse": BsHouse,
@@ -18,31 +18,8 @@ export const DEFAULT_ICONS_MAP = {
   "FiMenu": FiMenu,
   "FiUser": FiUser
 }
-export const DEFAULT_ICONS_OPTIONS = createOptions(DEFAULT_ICONS_MAP)
+export const DEFAULT_ICONS_OPTIONS = createComponentOptions(DEFAULT_ICONS_MAP)
 
-export const DEFAULT_COMPONENTS_MAP = {
-  'test': lazy(() => import('#/pages/NavConfig')),
-  'BookmarkPage': lazy(() => import('#/pages/Bookmark')),
-  'ArticlePage': lazy(() => import('#/pages/Article')),
-  'DashboardPage': lazy(() => import('#/pages/Dashboard')),
-  'ErrorLogsPage': lazy(() => import('#/pages/ErrorLogs')),
-  'ComponentDemoPage': lazy(() => import('#/pages/ComponentDemo')),
-  'PlaceholderPage': lazy(() => import('#/pages/NavConfig'))
-}
-export const DEFAULT_COMPONENTS_OPTIONS = createOptions(DEFAULT_COMPONENTS_MAP)
-
-function createOptions(map) {
-  const options = []
-
-  for (const key in map) {
-    if (Object.hasOwnProperty.call(map, key)) {
-      const option = {
-        label: key,
-        value: key
-      }
-      options.push(option)
-    }
-  }
-
-  return options
-}
+// 自动加载所有页面组件
+export const DEFAULT_COMPONENTS_MAP = loadPageComponents();
+export const DEFAULT_COMPONENTS_OPTIONS = createComponentOptions(DEFAULT_COMPONENTS_MAP);
