@@ -11,9 +11,7 @@ export default function App() {
         <AppHeader />
         <main className="app-main">
           <div className="content-wrapper">
-            <div className="page-container">
-              <AppRoutes />
-            </div>
+            <AppRoutes />
           </div>
         </main>
         <Footer />
