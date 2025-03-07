@@ -58,23 +58,19 @@ export default function Bookmark() {
 
   if (isLoading) {
     return (
-      <>
-        <div className="loading-state">
-          <div className="loading-spinner"></div>
-          <p>正在加载书签...</p>
-        </div>
-      </>
+      <div className="loading-state">
+        <div className="loading-spinner"></div>
+        <p>正在加载书签...</p>
+      </div>
     )
   }
 
   if (error) {
     return (
-      <>
-        <div className="error-state">
-          <p>加载失败: {error}</p>
-          <button onClick={() => window.location.reload()}>重试</button>
-        </div>
-      </>
+      <div className="error-state">
+        <p>加载失败: {error}</p>
+        <button onClick={() => window.location.reload()}>重试</button>
+      </div>
     )
   }
 
