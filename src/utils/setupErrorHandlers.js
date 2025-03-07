@@ -24,11 +24,63 @@ function handleResourceError(event) {
   }
   
   event.preventDefault()
+  
+  // 识别错误类型并提取关键信息
+  let errorType = '资源加载错误'
+  let errorMessage = `Failed to load ${target.tagName.toLowerCase()}: ${target.src || target.href}`
+  let errorDetails = {}
+  
+  // 针对图片加载错误的特殊处理
+  if (target.tagName === 'IMG') {
+    errorType = '图片加载错误'
+    
+    // 从outerHTML中提取更多信息
+    const html = target.outerHTML
+    
+    // 提取src属性
+    const srcMatch = html.match(/src=["']([^"']*)["']/)
+    const src = srcMatch ? srcMatch[1] : '未知源'
+    
+    // 提取alt属性
+    const altMatch = html.match(/alt=["']([^"']*)["']/)
+    const alt = altMatch ? altMatch[1] : ''
+    
+    // 提取class属性
+    const classMatch = html.match(/class=["']([^"']*)["']/)
+    const className = classMatch ? classMatch[1] : ''
+    
+    // 提取data-*属性
+    const dataAttrs = {}
+    const dataMatches = html.matchAll(/data-([^=]+)=["']([^"']*)["']/g)
+    for (const match of dataMatches) {
+      dataAttrs[match[1]] = match[2]
+    }
+    
+    // 从URL中提取图片名称
+    // eslint-disable-next-line no-useless-escape
+    const imgNameMatch = src.match(/\/([^\/]+\.(jpg|jpeg|png|gif|svg|webp))($|\?)/i)
+    const imgName = imgNameMatch ? imgNameMatch[1] : '未知图片'
+    
+    // 构建更具体的错误信息
+    errorMessage = `图片加载失败: "${alt || imgName}"`
+    
+    // 收集详细信息
+    errorDetails = {
+      src,
+      alt,
+      className,
+      dataAttributes: Object.keys(dataAttrs).length > 0 ? dataAttrs : undefined,
+      dimensions: `${target.width}x${target.height}`,
+      imgName
+    }
+  }
+  
   reportError({
     type: ERROR_TYPES.RESOURCE,
-    message: `Failed to load ${target.tagName.toLowerCase()}: ${target.src || target.href}`,
-    target: target.outerHTML
-  }, '资源加载错误')
+    message: errorMessage,
+    target: target.outerHTML,
+    details: errorDetails
+  }, errorType)
   
   return true
 }

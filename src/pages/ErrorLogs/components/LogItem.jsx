@@ -3,7 +3,7 @@ import { formatDistanceToNow } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 import Modal from '#/components/Modal'
 import { useState } from 'react'
-
+import JsonViewer from '#/components/JsonViewer'
 
 export function LogItem({ log }) {
   const [showDetails, setShowDetails] = useState(false)
@@ -67,7 +67,7 @@ export function LogItem({ log }) {
         isOpen={showDetails}
         onClose={() => setShowDetails(false)}
         title="错误日志详情"
-        size="md"
+        size="lg"
         footer={modalFooter}
       >
         <div className="log-details">
@@ -89,7 +89,7 @@ export function LogItem({ log }) {
           
           <div className="log-details-section">
             <h4>错误信息</h4>
-            <div className="log-details-error">{log.error}</div>
+            <JsonViewer data={log.error} maxHeight={400} />
           </div>
           
           <div className="log-details-section">

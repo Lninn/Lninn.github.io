@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 import Modal from '#/components/Modal'
+import JsonViewer from '#/components/JsonViewer'
+
 
 export function LogTable({ logs }) {
   const [selectedLog, setSelectedLog] = useState(null)
@@ -79,7 +81,7 @@ export function LogTable({ logs }) {
         isOpen={!!selectedLog}
         onClose={() => setSelectedLog(null)}
         title="错误日志详情"
-        size="md"
+        size="lg"
         footer={modalFooter}
       >
         {selectedLog && (
@@ -104,7 +106,7 @@ export function LogTable({ logs }) {
             
             <div className="log-details-section">
               <h4>错误信息</h4>
-              <div className="log-details-error">{selectedLog.error}</div>
+              <JsonViewer data={selectedLog.error} maxHeight={400} />
             </div>
             
             <div className="log-details-section">
