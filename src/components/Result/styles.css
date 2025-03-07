@@ -1,0 +1,50 @@
+.result-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 48px 32px;
+}
+
+.result-content {
+  text-align: center;
+}
+
+.result-icon {
+  margin-bottom: 24px;
+  font-size: 48px;
+  line-height: 1;
+  color: var(--text-secondary);
+}
+
+.result-title {
+  margin: 0 0 16px;
+  color: var(--text-primary);
+  font-size: 24px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.result-subtitle {
+  margin: 0 0 24px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.result-extra {
+  margin: 24px 0 0;
+}
+
+/* 暗色模式适配 */
+.dark-mode .result-icon {
+  color: var(--text-secondary);
+}
+
+.dark-mode .result-title {
+  color: var(--text-primary);
+}
+
+.dark-mode .result-subtitle {
+  color: var(--text-secondary);
+}

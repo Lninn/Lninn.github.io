@@ -10,6 +10,7 @@ const ArticlePage = lazy(() => import('#/pages/Article'))
 const DashboardPage = lazy(() => import('#/pages/Dashboard'))
 const ErrorLogsPage = lazy(() => import('#/pages/ErrorLogs'))
 const ComponentDemoPage = lazy(() => import('#/pages/ComponentDemo'))
+const PlaceholderPage = lazy(() => import('#/pages/PlaceholderPage'))
 
 export const ROUTES_CONFIG = [
   {
@@ -27,12 +28,14 @@ export const ROUTES_CONFIG = [
       {
         path: '/articles/tech',
         name: '技术专栏',
-        icon: BsGear
+        icon: BsGear,
+        component: () => <PlaceholderPage title="技术专栏" />
       },
       {
         path: '/articles/life',
         name: '生活随笔',
-        icon: BsFlower1
+        icon: BsFlower1,
+        component: () => <PlaceholderPage title="生活随笔" />
       }
     ]
   },
