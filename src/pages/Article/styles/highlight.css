@@ -1,0 +1,72 @@
+/* 深色模式代码高亮 */
+@media (prefers-color-scheme: dark) {
+  .hljs {
+    background: var(--bg-secondary) !important;
+  }
+  
+  .hljs-comment,
+  .hljs-quote {
+    color: #7a7a7a !important;
+  }
+  
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-addition {
+    color: #cc99cd !important;
+  }
+  
+  .hljs-number,
+  .hljs-string,
+  .hljs-meta .hljs-meta-string,
+  .hljs-literal,
+  .hljs-doctag,
+  .hljs-regexp {
+    color: #7ec699 !important;
+  }
+  
+  .hljs-title,
+  .hljs-section,
+  .hljs-name,
+  .hljs-selector-id,
+  .hljs-selector-class {
+    color: #f8c555 !important;
+  }
+  
+  .hljs-attribute,
+  .hljs-attr,
+  .hljs-variable,
+  .hljs-template-variable,
+  .hljs-class .hljs-title,
+  .hljs-type {
+    color: #7ec699 !important;
+  }
+  
+  .hljs-symbol,
+  .hljs-bullet,
+  .hljs-subst,
+  .hljs-meta,
+  .hljs-meta .hljs-keyword,
+  .hljs-selector-attr,
+  .hljs-selector-pseudo,
+  .hljs-link {
+    color: #1c9fee !important;
+  }
+  
+  .hljs-built_in,
+  .hljs-deletion {
+    color: #e06c75 !important;
+  }
+  
+  .hljs-formula {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .hljs-emphasis {
+    font-style: italic;
+  }
+  
+  .hljs-strong {
+    font-weight: bold;
+  }
+}

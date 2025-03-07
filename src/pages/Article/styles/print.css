@@ -1,0 +1,51 @@
+/* 打印样式优化 */
+@media print {
+  .app-header, 
+  .app-footer, 
+  .article-sidebar, 
+  .toggle-sidebar-btn, 
+  .reading-progress {
+    display: none !important;
+  }
+  
+  .article-container {
+    display: block;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .article-content {
+    max-width: 100%;
+    padding: 0;
+    font-size: 12pt;
+  }
+  
+  .markdown-wrapper pre, 
+  .markdown-wrapper code {
+    white-space: pre-wrap;
+    border: 1px solid #ddd;
+    page-break-inside: avoid;
+  }
+  
+  .markdown-wrapper a {
+    color: #000;
+    text-decoration: underline;
+  }
+  
+  .markdown-wrapper img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+    box-shadow: none;
+  }
+  
+  .markdown-wrapper h1, 
+  .markdown-wrapper h2, 
+  .markdown-wrapper h3 {
+    page-break-after: avoid;
+  }
+  
+  .markdown-wrapper p, 
+  .markdown-wrapper li {
+    page-break-inside: avoid;
+  }
+}

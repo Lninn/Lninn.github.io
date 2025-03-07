@@ -1,0 +1,216 @@
+/* Markdown 内容样式 */
+.markdown-wrapper {
+  color: var(--text-primary);
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* 标题样式 */
+.markdown-wrapper h1 {
+  font-size: 2rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.markdown-wrapper h2 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.markdown-wrapper h3 {
+  font-size: 1.25rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* 文本内容样式 */
+.markdown-wrapper p {
+  margin-bottom: 1.25rem;
+  line-height: 1.8;
+}
+
+/* 链接样式 */
+.markdown-wrapper a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.markdown-wrapper a:hover {
+  border-bottom-color: var(--primary);
+}
+
+.markdown-wrapper a::after {
+  content: '↗';
+  display: inline-block;
+  margin-left: 3px;
+  font-size: 0.8em;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.markdown-wrapper a:hover::after {
+  opacity: 1;
+  transform: translateX(2px) translateY(-2px);
+}
+
+/* 列表样式 */
+.markdown-wrapper ul, 
+.markdown-wrapper ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.markdown-wrapper li {
+  margin-bottom: 0.5rem;
+}
+
+/* 引用块样式 */
+.markdown-wrapper blockquote {
+  position: relative;
+  border-left: 4px solid var(--primary);
+  padding: 0.8rem 1.2rem;
+  margin: 1.5rem 0;
+  background-color: var(--bg-secondary);
+  border-radius: 0 4px 4px 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.markdown-wrapper blockquote::before {
+  content: '"';
+  font-size: 2.5rem;
+  color: var(--primary);
+  opacity: 0.2;
+  position: absolute;
+  top: -0.5rem;
+  left: 0.5rem;
+}
+
+/* 代码块样式 */
+.markdown-wrapper pre {
+  position: relative;
+  background-color: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border: 1px solid var(--border-color);
+}
+
+.markdown-wrapper pre::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent-color, #6366f1) 100%);
+  border-radius: 4px 4px 0 0;
+}
+
+.markdown-wrapper code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.9em;
+  padding: 0.2em 0.4em;
+  background-color: var(--bg-secondary);
+  border-radius: 3px;
+}
+
+.markdown-wrapper pre code {
+  padding: 0;
+  background-color: transparent;
+}
+
+/* 图片样式 */
+.markdown-wrapper img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.markdown-wrapper img:hover {
+  transform: scale(1.01);
+}
+
+/* 表格样式 */
+.markdown-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  display: block;
+}
+
+.markdown-wrapper table th,
+.markdown-wrapper table td {
+  border: 1px solid var(--border-color);
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.markdown-wrapper table th {
+  background-color: var(--bg-secondary);
+  font-weight: 600;
+}
+
+.markdown-wrapper table tr:nth-child(even) {
+  background-color: var(--bg-secondary);
+}
+
+.markdown-wrapper table tr:hover {
+  background-color: var(--bg-hover);
+}
+
+/* 水平线样式 */
+.markdown-wrapper hr {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-color) 50%, transparent);
+  border: none;
+  margin: 2rem 0;
+}
+
+/* 任务列表样式 */
+.markdown-wrapper .task-list-item {
+  list-style-type: none;
+  margin-left: -1.5rem;
+}
+
+.markdown-wrapper .task-list-item input {
+  margin-right: 0.5rem;
+}
+
+/* 脚注样式 */
+.markdown-wrapper .footnotes {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color);
+  padding-top: 1rem;
+  margin-top: 2rem;
+}
+
+.markdown-wrapper .footnotes ol {
+  padding-left: 1.5rem;
+}
+
+.markdown-wrapper .footnote-ref {
+  font-size: 0.8rem;
+  vertical-align: super;
+}
+
+.markdown-wrapper .footnote-backref {
+  font-size: 0.8rem;
+}

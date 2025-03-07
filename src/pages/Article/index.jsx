@@ -1,10 +1,10 @@
+import "./index.css"
 import { use, useState, useEffect } from "react"
 import ReactMarkdown from "react-markdown"
 import rehypeHighlight from "rehype-highlight"
 import rehypeSlug from "rehype-slug" // 需要安装这个依赖
 import "highlight.js/styles/github.css"
-import "./index.css"
-import { ArticleTOC } from "./components/ArticleTOC"
+import { ArticleSkeleton } from "./components/ArticleSkeleton"
 
 const allArticlesPromise = fetchAllArticles()
 
@@ -36,10 +36,17 @@ function ArticleList({ articles, onSelect, activeTitle, isMobileView, onToggleSi
       <div className="list-header">
         <h2 className="list-title">文章列表</h2>
         {isMobileView && (
-          <button className="close-sidebar-btn" onClick={onToggleSidebar}>
+          <button className="close-sidebar-btn" onClick={onToggleSidebar} aria-label="关闭侧边栏">
             <span>×</span>
           </button>
         )}
+      </div>
+      <div className="search-container">
+        <input 
+          type="text" 
+          className="article-search" 
+          placeholder="搜索文章..." 
+        />
       </div>
       <ul>
         {articles.map(item => {
@@ -77,7 +84,7 @@ function ArticleContent({ content, isMobileView, onToggleSidebar }) {
   return (
     <div className="article-content">
       {isMobileView && (
-        <button className="toggle-sidebar-btn" onClick={onToggleSidebar}>
+        <button className="toggle-sidebar-btn" onClick={onToggleSidebar} aria-label="打开侧边栏">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -102,6 +109,7 @@ export default function Article() {
   const [activeTitle, setActiveTitle] = useState("")
   const [sidebarVisible, setSidebarVisible] = useState(false)
   const [isMobileView, setIsMobileView] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const allArticles = use(allArticlesPromise)
 
   useEffect(() => {
@@ -112,7 +120,15 @@ export default function Article() {
     checkMobileView()
     window.addEventListener('resize', checkMobileView)
     
-    return () => window.removeEventListener('resize', checkMobileView)
+    // 模拟加载时间
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 800)
+    
+    return () => {
+      window.removeEventListener('resize', checkMobileView)
+      clearTimeout(timer)
+    }
   }, [])
 
   const handleArticleSelect = (article) => {
@@ -126,6 +142,10 @@ export default function Article() {
 
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible)
+  }
+
+  if (isLoading) {
+    return <ArticleSkeleton />
   }
 
   return (
@@ -148,7 +168,7 @@ export default function Article() {
             onToggleSidebar={toggleSidebar}
           />
         </div>
-        <ArticleTOC content={markdown} />
+        {/* 移除 ArticleTOC 组件 */}
       </div>
     </>
   )

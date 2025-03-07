@@ -1,0 +1,38 @@
+/* 基础布局样式 */
+.article-container {
+  display: grid;
+  grid-template-columns: 300px 1fr; /* 移除第三列 */
+  gap: 32px;
+  min-height: calc(100vh - 200px);
+  background-color: var(--bg-primary);
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.article-main {
+  min-width: 0;
+  padding-top: 16px;
+}
+
+/* 其他样式保持不变 */
+.article-content {
+  padding: 0 24px 32px;
+  max-width: 800px;
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+.article-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  background-color: var(--bg-secondary);
+  border-radius: 12px;
+  border: 1px dashed var(--border-color);
+}

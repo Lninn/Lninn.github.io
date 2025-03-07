@@ -1,0 +1,211 @@
+/* 响应式布局 */
+@media (min-width: 1200px) {
+  .article-container {
+    grid-template-columns: 250px minmax(0, 1fr); /* 移除第三列 */
+    gap: 24px;
+    padding: 0;
+  }
+  
+  /* 移除 article-toc 相关样式 */
+}
+
+@media (min-width: 769px) and (max-width: 1199px) {
+  .article-container {
+    grid-template-columns: 250px 1fr;
+  }
+  
+  /* 移除 article-toc 相关样式 */
+}
+
+/* 其他媒体查询保持不变 */
+@media (max-width: 768px) {
+  .article-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 8px;
+  }
+  
+  .article-container.mobile-view .article-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 85%;
+    max-width: 300px;
+    height: 100vh;
+    background-color: var(--bg-primary);
+    z-index: 1000;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .article-container.sidebar-visible .article-sidebar {
+    transform: translateX(0);
+  }
+  
+  .article-list {
+    border-right: none;
+    padding-right: 0;
+  }
+  
+  .article-content {
+    padding: 0 12px 24px;
+  }
+  
+  .article-main {
+    padding-top: 8px;
+  }
+  
+  .article-content pre {
+    margin: 1rem -12px;
+    border-radius: 0;
+    padding: 1rem;
+  }
+  
+  /* 移动端导航按钮样式 */
+  .close-sidebar-btn {
+    display: block;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+  
+  .close-sidebar-btn:hover {
+    background-color: var(--bg-hover);
+    color: var(--text-primary);
+  }
+  
+  .toggle-sidebar-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px 16px;
+    margin-bottom: 24px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  
+  .toggle-sidebar-btn:hover {
+    background-color: var(--bg-hover);
+    color: var(--text-primary);
+  }
+  
+  /* 移动端骨架屏样式 */
+  .article-skeleton {
+    grid-template-columns: 1fr;
+    padding: 0 8px;
+  }
+  
+  .skeleton-sidebar, .skeleton-toc {
+    display: none;
+  }
+  
+  /* 移动端遮罩层 */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .article-container.sidebar-visible .sidebar-overlay {
+    display: block;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .article-container {
+    padding: 0 4px;
+  }
+  
+  .article-content {
+    font-size: 1rem;
+    padding: 0 8px 16px;
+  }
+  
+  .article-content pre {
+    margin: 1rem -8px;
+    font-size: 0.85rem;
+  }
+  
+  .article-content blockquote {
+    padding: 0.6em 1em;
+    margin: 1.2em -8px;
+  }
+  
+  .markdown-wrapper h1 {
+    font-size: 1.6rem;
+  }
+  
+  .markdown-wrapper h2 {
+    font-size: 1.3rem;
+  }
+  
+  .markdown-wrapper h3 {
+    font-size: 1.1rem;
+  }
+  
+  /* 小屏幕导航按钮优化 */
+  .toggle-sidebar-btn {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+  
+  /* 小屏幕搜索框优化 */
+  .search-container {
+    margin-bottom: 12px;
+  }
+  
+  .article-search {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+  
+  /* 小屏幕文章列表优化 */
+  .article-link {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+}
+
+/* 横屏手机优化 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .article-container.mobile-view .article-sidebar {
+    padding-top: 10px;
+  }
+  
+  .list-header {
+    margin-bottom: 8px;
+  }
+  
+  .list-title {
+    font-size: 1.2rem;
+  }
+  
+  .article-list li {
+    margin-bottom: 4px;
+  }
+  
+  .article-link {
+    padding: 8px 12px;
+  }
+}
