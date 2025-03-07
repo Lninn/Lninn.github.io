@@ -5,6 +5,12 @@
   flex-wrap: wrap;
 }
 
+/* 修改 select 容器的宽度 */
+.filters .select-container {
+  width: 200px; /* 设置固定宽度 */
+  flex-shrink: 0; /* 防止在空间不足时被压缩 */
+}
+
 .filters select,
 .filters input {
   padding: 0.5rem;

@@ -1,16 +1,24 @@
 import './LogFilters.css'
+import Select from '#/components/Select'
+
 export function LogFilters({ filters, environments, onFilterChange }) {
+  // 构造 Select 组件所需的 options 数组
+  const envOptions = [
+    { value: '', label: '所有环境' },
+    ...environments.map(env => ({
+      value: env,
+      label: env
+    }))
+  ]
+
   return (
     <div className="filters">
-      <select 
+      <Select 
+        options={envOptions}
         value={filters.environment} 
-        onChange={e => onFilterChange('environment', e.target.value)}
-      >
-        <option value="">所有环境</option>
-        {environments.map(env => (
-          <option key={env} value={env}>{env}</option>
-        ))}
-      </select>
+        onChange={value => onFilterChange('environment', value)}
+        placeholder="选择环境"
+      />
 
       <input
         type="date"

@@ -55,21 +55,20 @@
   transform: rotate(180deg);
 }
 
+/* 修改下拉框样式，移除相对定位 */
 .select-dropdown {
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  left: 0;
-  width: 100%;
+  /* 不再使用相对定位 */
   max-height: 15rem;
   overflow-y: auto;
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: 0.5rem;
   box-shadow: var(--shadow-md);
-  z-index: 100;
+  z-index: 1000; /* 提高 z-index 确保在最上层 */
   animation: dropdown-appear 0.2s ease;
 }
 
+/* 其他样式保持不变 */
 .select-option {
   padding: 0.75rem 1rem;
   cursor: pointer;

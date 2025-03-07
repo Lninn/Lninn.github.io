@@ -1,5 +1,6 @@
 import './index.css';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom'; // 导入 createPortal
 
 /**
  * 现代化的 Select 组件
@@ -25,6 +26,7 @@ export default function Select({
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const selectRef = useRef(null);
   const dropdownRef = useRef(null);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
   
   // 获取当前选中的选项
   const selectedOption = options.find(option => option.value === value);
@@ -32,9 +34,28 @@ export default function Select({
   // 打开/关闭下拉菜单
   const toggleDropdown = useCallback(() => {
     if (!disabled) {
+      if (!isOpen) {
+        // 计算下拉框位置
+        updateDropdownPosition();
+      }
       setIsOpen(prev => !prev);
     }
-  }, [disabled]);
+  }, [disabled, isOpen]);
+  
+  // 更新下拉框位置
+  const updateDropdownPosition = useCallback(() => {
+    if (selectRef.current) {
+      const rect = selectRef.current.getBoundingClientRect();
+      const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      setDropdownPosition({
+        top: rect.bottom + scrollTop,
+        left: rect.left + scrollLeft,
+        width: rect.width // 使用触发元素的宽度
+      });
+    }
+  }, []);
   
   // 选择选项
   const handleSelect = useCallback((option) => {
@@ -62,6 +83,7 @@ export default function Select({
       case 'ArrowDown':
         e.preventDefault();
         if (!isOpen) {
+          updateDropdownPosition();
           setIsOpen(true);
         } else {
           setFocusedIndex(prev => 
@@ -78,20 +100,23 @@ export default function Select({
       case ' ': // 空格键
         if (!isOpen) {
           e.preventDefault();
+          updateDropdownPosition();
           setIsOpen(true);
         }
         break;
       default:
         break;
     }
-  }, [disabled, isOpen, focusedIndex, options, handleSelect, toggleDropdown]);
+  }, [disabled, isOpen, focusedIndex, options, handleSelect, toggleDropdown, updateDropdownPosition]);
   
   // 点击外部关闭下拉菜单
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
         selectRef.current && 
-        !selectRef.current.contains(e.target)
+        !selectRef.current.contains(e.target) &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target)
       ) {
         setIsOpen(false);
       }
@@ -105,6 +130,23 @@ export default function Select({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
+  
+  // 监听窗口大小变化，更新下拉框位置
+  useEffect(() => {
+    const handleResize = () => {
+      if (isOpen) {
+        updateDropdownPosition();
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleResize, true);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleResize, true);
+    };
+  }, [isOpen, updateDropdownPosition]);
   
   // 当下拉菜单打开时，滚动到选中的选项
   useEffect(() => {
@@ -134,6 +176,42 @@ export default function Select({
     }
   }, [isOpen, options, value]);
   
+  // 渲染下拉框
+  const renderDropdown = () => {
+    if (!isOpen) return null;
+    
+    const dropdown = (
+      <div 
+        className="select-dropdown" 
+        ref={dropdownRef} 
+        role="listbox"
+        style={{
+          position: 'fixed',
+          top: `${dropdownPosition.top}px`,
+          left: `${dropdownPosition.left}px`,
+          width: `${dropdownPosition.width}px`, // 直接使用计算好的宽度
+        }}
+      >
+        {options.map((option, index) => (
+          <div
+            key={option.value}
+            className={`select-option ${option.value === value ? 'selected' : ''} ${index === focusedIndex ? 'focused' : ''}`}
+            onClick={() => handleSelect(option)}
+            role="option"
+            aria-selected={option.value === value}
+          >
+            {option.label}
+          </div>
+        ))}
+        {options.length === 0 && (
+          <div className="select-option">无可用选项</div>
+        )}
+      </div>
+    );
+    
+    return createPortal(dropdown, document.body);
+  };
+  
   return (
     <div className={`select-container ${className}`} ref={selectRef}>
       <div
@@ -156,24 +234,7 @@ export default function Select({
         </div>
       </div>
       
-      {isOpen && (
-        <div className="select-dropdown" ref={dropdownRef} role="listbox">
-          {options.map((option, index) => (
-            <div
-              key={option.value}
-              className={`select-option ${option.value === value ? 'selected' : ''} ${index === focusedIndex ? 'focused' : ''}`}
-              onClick={() => handleSelect(option)}
-              role="option"
-              aria-selected={option.value === value}
-            >
-              {option.label}
-            </div>
-          ))}
-          {options.length === 0 && (
-            <div className="select-option">无可用选项</div>
-          )}
-        </div>
-      )}
+      {renderDropdown()}
       
       {error && <div className="select-error-message">{error}</div>}
     </div>
