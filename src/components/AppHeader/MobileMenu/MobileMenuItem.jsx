@@ -20,7 +20,7 @@ export function MobileMenuItem({
           aria-expanded={isExpanded}
           aria-haspopup="true"
         >
-          <span className="nav-icon">{item.icon}</span>
+          <span className="nav-icon">{item.icon && <item.icon />}</span>
           <span className="nav-text">{item.name}</span>
           <span className="submenu-arrow">▾</span>
         </button>
@@ -39,7 +39,7 @@ export function MobileMenuItem({
       to={item.path}
       className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}
     >
-      <span className="nav-icon">{item.icon}</span>
+      <span className="nav-icon">{item.icon && <item.icon />}</span>
       <span className="nav-text">{item.name}</span>
     </NavLink>
   )

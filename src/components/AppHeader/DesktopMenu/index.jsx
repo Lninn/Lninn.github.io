@@ -8,7 +8,7 @@ export function DesktopMenu({ items }) {
           <li key={item.path} className="nav-item-wrapper">
             {item.children ? (
               <div className="nav-item has-submenu">
-                <span className="nav-icon">{item.icon}</span>
+                <span className="nav-icon">{item.icon && <item.icon />}</span>
                 <span className="nav-text">{item.name}</span>
                 <span className="submenu-arrow">▾</span>
                 <ul className="submenu">
@@ -18,7 +18,7 @@ export function DesktopMenu({ items }) {
                         to={child.path}
                         className={({ isActive }) => `submenu-item ${isActive ? 'active' : ''}`}
                       >
-                        <span className="nav-icon">{child.icon}</span>
+                        <span className="nav-icon">{child.icon && <child.icon />}</span>
                         <span className="nav-text">{child.name}</span>
                       </NavLink>
                     </li>
@@ -30,7 +30,7 @@ export function DesktopMenu({ items }) {
                 to={item.path}
                 className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
               >
-                <span className="nav-icon">{item.icon}</span>
+                <span className="nav-icon">{item.icon && <item.icon />}</span>
                 <span className="nav-text">{item.name}</span>
               </NavLink>
             )}

@@ -51,7 +51,7 @@ export function MobileSubmenu({ items, isOpen, onClose, anchorEl }) {
               className={({ isActive }) => `mobile-submenu-item ${isActive ? 'active' : ''}`}
               onClick={onClose}
             >
-              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-icon">{item.icon && <item.icon />}</span>
               <span className="nav-text">{item.name}</span>
             </NavLink>
           </li>
