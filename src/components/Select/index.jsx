@@ -213,7 +213,7 @@ export default function Select({
   };
   
   return (
-    <div className={`select-container ${className}`} ref={selectRef}>
+    <div className={className} ref={selectRef}>
       <div
         className={`select-trigger ${isOpen ? 'open' : ''} ${disabled ? 'disabled' : ''} ${error ? 'error' : ''}`}
         onClick={toggleDropdown}

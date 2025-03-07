@@ -13,10 +13,12 @@
 .filters-wrapper {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem; /* 增加间隙值 */
+  gap: 1.5rem;
   align-items: end;
-  width: 100%; /* 确保容器宽度 */
-  box-sizing: border-box; /* 包含内边距 */
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0; /* 确保没有外边距干扰 */
+  padding: 0; /* 确保没有内边距干扰 */
 }
 
 /* 响应式调整间隙 */
@@ -32,6 +34,12 @@
   }
 }
 
+@media (max-width: 480px) {
+  .filters-wrapper {
+    gap: 0.5rem;
+  }
+}
+
 /* 筛选项基础样式 */
 .filter-item {
   position: relative;
@@ -44,8 +52,7 @@
 }
 
 /* 输入控件统一规范 */
-.filter-input,
-.filter-select {
+.filter-input {
   width: 100%;
   min-height: 40px;
   padding: 0.5rem 1rem;

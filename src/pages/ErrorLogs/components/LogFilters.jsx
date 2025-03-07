@@ -20,7 +20,6 @@ export function LogFilters({ filters, environments, onFilterChange }) {
             options={envOptions}
             value={filters.environment}
             onChange={value => onFilterChange('environment', value)}
-            className="filter-select"
             menuPosition="fixed" // 确保下拉菜单不被裁剪
           />
         </div>
