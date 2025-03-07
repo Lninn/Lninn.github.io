@@ -32,7 +32,7 @@ export default function AppHeader() {
 
           {!isMobile && <AppNav />}
 
-          <div className="header-actions">
+          <div className="app-header-actions">
             <button 
               className="theme-toggle" 
               aria-label="切换主题"
