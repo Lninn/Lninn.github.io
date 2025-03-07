@@ -1,6 +1,6 @@
 /* 容器布局 */
 .bookmark-container {
-  padding: 24px;
+  padding: 0;  /* 原来是 padding: 24px */
 }
 
 /* 头部样式 */

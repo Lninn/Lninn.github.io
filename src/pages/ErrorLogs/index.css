@@ -1,5 +1,6 @@
+/* 调整错误日志容器样式 */
 .error-logs {
-  padding: 1rem;
+  padding: 0;  /* 移除原有padding */
 }
 
 .section-header {

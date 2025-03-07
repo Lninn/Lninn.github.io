@@ -1,17 +1,3 @@
-/* 基础布局 */
-.dashboard {
-  padding: 2rem;
-  max-width: 1280px;
-  margin: 0 auto;
-  min-height: calc(100vh - 64px);
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  transition: all 0.3s ease;
-}
-
 /* 通用列表区块样式 */
 .list-section {
   background: var(--bg-secondary);

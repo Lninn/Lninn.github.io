@@ -9,8 +9,6 @@ import HistoryList from './HistoryList'
 import { useNotification } from '#/hooks/useNotification'
 import { useBookmarkActions } from '#/hooks/useBookmarkActions'
 import { DashboardHeader } from './components/DashboardHeader'
-import ErrorBoundary from '#/components/ErrorBoundary'
-import PageContainer from '#/components/PageContainer'
 
 export default function Dashboard() {
   // 状态管理
@@ -70,58 +68,56 @@ export default function Dashboard() {
   }
   
   return (
-    <ErrorBoundary>
-      <PageContainer className="dashboard">
-        <DashboardHeader 
-          onAddClick={() => setShowAddModal(true)}
-          bookmarkCount={bookmarkList?.length || 0}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
+    <>
+      <DashboardHeader 
+        onAddClick={() => setShowAddModal(true)}
+        bookmarkCount={bookmarkList?.length || 0}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
+      
+      <div className="dashboard-content">
+        {activeTab === 'bookmarks' ? (
+          <BookmarkList 
+            bookmarks={bookmarkList}
+            isLoading={isLoading}
+            onEdit={setEditingBookmark}
+            onDelete={handleDeleteBookmark}
+            onCopyUrl={copyUrl}
+          />
+        ) : (
+          <HistoryList 
+            onRestore={handleRestoreBookmark}
+            onNotify={notify}
+          />
+        )}
+      </div>
+      
+      {/* 添加书签模态框 */}
+      {showAddModal && (
+        <AddBookmarkModal 
+          onClose={() => setShowAddModal(false)}
+          onSubmit={handleAddBookmark}
         />
-        
-        <div className="dashboard-content">
-          {activeTab === 'bookmarks' ? (
-            <BookmarkList 
-              bookmarks={bookmarkList}
-              isLoading={isLoading}
-              onEdit={setEditingBookmark}
-              onDelete={handleDeleteBookmark}
-              onCopyUrl={copyUrl}
-            />
-          ) : (
-            <HistoryList 
-              onRestore={handleRestoreBookmark}
-              onNotify={notify}
-            />
-          )}
-        </div>
-        
-        {/* 添加书签模态框 */}
-        {showAddModal && (
-          <AddBookmarkModal 
-            onClose={() => setShowAddModal(false)}
-            onSubmit={handleAddBookmark}
-          />
-        )}
-        
-        {/* 编辑书签模态框 */}
-        {editingBookmark && (
-          <EditBookmarkModal 
-            bookmark={editingBookmark}
-            onClose={() => setEditingBookmark(null)}
-            onSubmit={handleEditBookmark}
-          />
-        )}
-        
-        {/* 通知组件 */}
-        {notification && (
-          <Notification 
-            type={notification.type}
-            message={notification.message}
-            onClose={clearNotification}
-          />
-        )}
-      </PageContainer>
-    </ErrorBoundary>
+      )}
+      
+      {/* 编辑书签模态框 */}
+      {editingBookmark && (
+        <EditBookmarkModal 
+          bookmark={editingBookmark}
+          onClose={() => setEditingBookmark(null)}
+          onSubmit={handleEditBookmark}
+        />
+      )}
+      
+      {/* 通知组件 */}
+      {notification && (
+        <Notification 
+          type={notification.type}
+          message={notification.message}
+          onClose={clearNotification}
+        />
+      )}
+    </>
   )
 }

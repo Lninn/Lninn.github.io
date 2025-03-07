@@ -243,8 +243,12 @@
 
 /* 响应式设计 */
 @media (min-width: 1200px) {
+  /* 调整文章容器样式 */
   .article-container {
+    display: grid;
     grid-template-columns: 250px minmax(0, 800px) 1fr;
+    gap: 24px;
+    padding: 0;  /* 移除原有padding */
   }
   
   .article-toc {
