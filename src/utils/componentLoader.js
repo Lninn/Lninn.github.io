@@ -10,6 +10,9 @@ export function loadPageComponents() {
   
   // 处理标准页面组件
   for (const path in pageModules) {
+    if (path.includes('/components/') || path.includes('/modules/')) {
+      continue;
+    }
     // 从路径中提取组件名称
     const pathParts = path.split('/');
     const componentName = pathParts[pathParts.length - 2];
@@ -22,7 +25,7 @@ export function loadPageComponents() {
     // 创建懒加载组件
     components[formattedName] = lazy(pageModules[path]);
   }
-  
+
   // 处理特殊组件（非index.jsx文件）
   const allModules = import.meta.glob('/src/pages/**/*.jsx');
   
