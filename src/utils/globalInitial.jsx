@@ -1,9 +1,8 @@
-import { lazy, useEffect, useState } from 'react'
+import { lazy } from 'react'
 import { BsBookmark, BsFileText, BsGear, BsFlower1 } from 'react-icons/bs'
 import { MdDashboard } from 'react-icons/md'
 import { VscError } from 'react-icons/vsc'
 import { HiOutlinePuzzle } from 'react-icons/hi'
-import { convertToRouteConfig } from '#/api/navigationApi'
 import { Outlet } from 'react-router-dom'
 
 // 使用 lazy 进行代码分割
@@ -14,6 +13,13 @@ const ErrorLogsPage = lazy(() => import('#/pages/ErrorLogs'))
 const ComponentDemoPage = lazy(() => import('#/pages/ComponentDemo'))
 const PlaceholderPage = lazy(() => import('#/pages/PlaceholderPage'))
 const NavConfigPage = lazy(() => import('#/pages/NavConfig'))
+
+// 在 window 上挂载一个变量来跟踪 菜单接口是否已经加载
+window.preLoadMenuIsDone = false
+
+export function SubPageWrapper() {
+  return <Outlet />
+}
 
 // 默认路由配置（当API请求失败时使用）
 export const DEFAULT_ROUTES_CONFIG = [
@@ -82,38 +88,3 @@ export const DEFAULT_ROUTES_CONFIG = [
     ]
   },
 ]
-
-export function SubPageWrapper() {
-  return <Outlet />
-}
-
-// 从API获取路由配置的钩子
-export const useRoutesConfig = () => {
-  const [routes, setRoutes] = useState(DEFAULT_ROUTES_CONFIG)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    const fetchRoutes = async () => {
-      try {
-        const apiRoutes = await convertToRouteConfig()
-        if (apiRoutes && apiRoutes.length > 0) {
-          setRoutes(apiRoutes)
-        }
-      } catch (err) {
-        console.error('Failed to load routes from API:', err)
-        setError(err)
-        // 使用默认路由配置
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchRoutes()
-  }, [])
-
-  return { routes, loading, error }
-}
-
-// 为了向后兼容，保留原有的导出
-export const ROUTES_CONFIG = DEFAULT_ROUTES_CONFIG

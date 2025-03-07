@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { useRoutesConfig } from '#/config/routes';
+import useRoutesStore from '#/store/routes'
 import { FiChevronDown } from 'react-icons/fi';
 // import { DEFAULT_ICONS_MAP } from '#/config/nav-shared';
 import './styles.css';
@@ -19,7 +19,7 @@ const DesktopNav = () => {
   const location = useLocation();
   const [openSubMenus, setOpenSubMenus] = useState({});
   const menuRef = useRef(null);
-  const { routes, loading } = useRoutesConfig();
+  const { routes, loading } = useRoutesStore();
   
   // 初始化时根据当前路径设置打开的子菜单
   useEffect(() => {

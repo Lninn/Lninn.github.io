@@ -1,12 +1,15 @@
 import './index.css';
-import { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
+import useRoutesStore from '#/store/routes'
 
 function Footer() {
-  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  
-  useEffect(() => {
-    setCurrentYear(new Date().getFullYear());
-  }, []);
+  const currentYear = new Date().getFullYear();
+  const { routes } = useRoutesStore();
+
+  // 过滤出主导航项
+  const mainNavItems = routes.filter(route => 
+    !route.path.includes('*') && !route.hidden
+  );
 
   return (
     <footer className="app-footer">
@@ -21,9 +24,11 @@ function Footer() {
             <div className="footer-links-column">
               <h4>导航</h4>
               <ul>
-                <li><a href="#bookmark">书签</a></li>
-                <li><a href="#log">文章</a></li>
-                <li><a href="#dashboard">管理</a></li>
+                {mainNavItems.map(route => (
+                  <li key={route.path}>
+                    <NavLink to={route.path}>{route.name}</NavLink>
+                  </li>
+                ))}
               </ul>
             </div>
             

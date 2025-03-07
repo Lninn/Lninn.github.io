@@ -1,6 +1,6 @@
 import { supabase } from '#/supabaseClient'
 import { DEFAULT_ICONS_MAP, DEFAULT_COMPONENTS_MAP } from '#/config/nav-shared'
-import { SubPageWrapper } from '#/config/routes'
+import { SubPageWrapper } from '#/utils/globalInitial'
 import { lazy } from 'react'
 
 

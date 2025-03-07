@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Suspense, useEffect } from 'react'
-import { useRoutesConfig } from '#/config/routes';
+import useRoutesStore from '#/store/routes'
 import PageContainer from '#/components/PageContainer'
 import ErrorBoundary from '#/components/ErrorBoundary'
 import LoadingSpinner from '#/components/LoadingSpinner'
@@ -20,7 +20,7 @@ function NotFound() {
 }
 
 export const AppRoutes = () => {
-  const { routes, loading, error } = useRoutesConfig();
+  const { routes, loading, error } = useRoutesStore();
 
   useEffect(() => {
     if (error) {

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { FiMenu, FiX, FiChevronDown, FiChevronRight, FiSun, FiMoon } from 'react-icons/fi';
-import { useRoutesConfig } from '#/config/routes';
+import useRoutesStore from '#/store/routes'
 import useThemeStore from '#/store/theme';
 import { createPortal } from 'react-dom';
 import './styles.css';
@@ -9,7 +9,7 @@ import './styles.css';
 const MobileNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState({});
-  const { routes, loading } = useRoutesConfig();
+  const { routes, loading } = useRoutesStore();
   const location = useLocation();
   const drawerRef = useRef(null);
   const { darkMode, setDarkMode } = useThemeStore();
