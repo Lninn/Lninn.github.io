@@ -76,15 +76,7 @@
   font-weight: 500;
 }
 
-/* 暗色主题适配 */
-@media (prefers-color-scheme: dark) {
-  .bookmark-icon-wrapper {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-}
-
-/* 移动端适配 */
+/* 响应式布局 */
 @media (max-width: 768px) {
   .bookmark-link {
     padding: 8px;
@@ -93,7 +85,7 @@
   .bookmark-name {
     font-size: 0.85rem;
   }
-  
+
   .bookmark-icon-wrapper {
     width: 28px;
     height: 28px;
