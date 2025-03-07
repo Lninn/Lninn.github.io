@@ -54,8 +54,8 @@ export default function ErrorLogs() {
   return (
     <div className="error-logs">
       <div className="section-header">
-        <h2>错误日志</h2>
-        <div className="header-actions">
+        <div className="section-header-main">
+          <h2>错误日志</h2>
           <div className="view-toggle">
             <button 
               className={`view-toggle-btn ${viewMode === 'card' ? 'active' : ''}`}
@@ -81,16 +81,20 @@ export default function ErrorLogs() {
               </svg>
             </button>
           </div>
+        </div>
+        <div className="header-actions">
           <span className="log-count">
             {isLoading ? '加载中...' : `${logs.length} 条记录`}
           </span>
-          <button onClick={handleExport}>导出日志</button>
-          <button 
-            className="danger-outline" 
-            onClick={() => setShowDeleteModal(true)}
-          >
-            删除历史日志
-          </button>
+          <div className="action-buttons">
+            <button onClick={handleExport}>导出日志</button>
+            <button 
+              className="danger-outline" 
+              onClick={() => setShowDeleteModal(true)}
+            >
+              删除历史日志
+            </button>
+          </div>
         </div>
       </div>
 
