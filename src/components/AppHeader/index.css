@@ -36,13 +36,17 @@
 
 /* 头部操作区域样式 */
 .app-header-actions {
-  flex-shrink: 0;
   display: flex;
   align-items: center;
-  margin-left: 16px;
 }
 
-/* 主题切换按钮 */
+/* 在移动端隐藏主题切换按钮 */
+@media (max-width: 768px) {
+  .app-header-actions {
+    display: none;
+  }
+}
+
 .theme-toggle {
   padding: 8px;
   border: none;

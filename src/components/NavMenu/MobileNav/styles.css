@@ -22,9 +22,250 @@
   color: var(--accent-color, #007cf0);
 }
 
+/* 抽屉背景 */
+.mobile-nav-drawer-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s;
+}
+
+.mobile-nav-drawer-backdrop.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* 抽屉菜单 */
+.mobile-nav-drawer {
+  position: fixed;
+  top: 0;
+  right: -280px;
+  width: 280px;
+  height: 100%;
+  background-color: var(--card-bg, #fff);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  transition: right 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.mobile-nav-drawer.open {
+  right: 0;
+}
+
+/* 抽屉头部 */
+.mobile-nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color, #eaeaea);
+}
+
+.mobile-nav-close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--text-primary, #333);
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.mobile-nav-close:hover {
+  background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
+  color: var(--accent-color, #007cf0);
+}
+
+/* 主题切换按钮 */
+.mobile-nav-theme-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.theme-toggle-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: var(--text-primary, #333);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-button:hover {
+  background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
+}
+
+.theme-toggle-button svg {
+  font-size: 1.1rem;
+}
+
+/* 加载状态 */
+.mobile-nav-loading {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-secondary, #666);
+}
+
+.mobile-nav-empty {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-secondary, #666);
+}
+
+/* 导航菜单 */
+.mobile-nav-menu {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 0;
+}
+
+.mobile-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-nav-item {
+  margin-bottom: 2px;
+}
+
+.mobile-nav-link-container {
+  cursor: pointer;
+}
+
+.mobile-nav-link,
+.mobile-nav-link-container .mobile-nav-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  color: var(--text-primary, #333);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.mobile-nav-link.active,
+.mobile-nav-link-container.active .mobile-nav-link {
+  color: var(--accent-color, #007cf0);
+  background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
+}
+
+.mobile-nav-link .nav-icon,
+.mobile-submenu-link .nav-icon {
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+  font-size: 1.1rem;
+}
+
+.mobile-nav-link .nav-text,
+.mobile-submenu-link .nav-text {
+  flex: 1;
+}
+
+.mobile-nav-link .nav-arrow {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+}
+
+/* 子菜单样式 */
+.mobile-submenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.mobile-submenu.expanded {
+  max-height: 500px; /* 足够大的高度以容纳所有子项 */
+}
+
+.mobile-submenu-item {
+  margin-bottom: 1px;
+}
+
+.mobile-submenu-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px 10px 40px;
+  color: var(--text-primary, #333);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.mobile-submenu-link.active {
+  color: var(--accent-color, #007cf0);
+  background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
+}
+
 /* 移动端显示 */
 @media (max-width: 768px) {
   .mobile-nav {
     display: block;
+  }
+}
+
+/* 暗色模式适配 */
+:root.dark-mode .mobile-nav-drawer,
+.dark-mode .mobile-nav-drawer {
+  background-color: var(--card-bg, #222);
+}
+
+:root.dark-mode .mobile-nav-header,
+.dark-mode .mobile-nav-header {
+  border-color: var(--border-color, #444);
+}
+
+:root.dark-mode .mobile-nav-button,
+:root.dark-mode .mobile-nav-close,
+:root.dark-mode .theme-toggle-button,
+:root.dark-mode .mobile-nav-link,
+:root.dark-mode .mobile-submenu-link,
+.dark-mode .mobile-nav-button,
+.dark-mode .mobile-nav-close,
+.dark-mode .theme-toggle-button,
+.dark-mode .mobile-nav-link,
+.dark-mode .mobile-submenu-link {
+  color: var(--text-primary, #eee);
+}
+
+/* 确保在所有设备上可见 */
+@media screen and (max-width: 768px) {
+  .mobile-nav {
+    display: block;
+    position: relative;
+    z-index: 100;
+  }
+  
+  .mobile-nav-button {
+    display: flex;
+  }
+  
+  .mobile-nav-drawer-backdrop {
+    z-index: 9999;
+  }
+  
+  .mobile-nav-drawer {
+    z-index: 10000;
   }
 }
