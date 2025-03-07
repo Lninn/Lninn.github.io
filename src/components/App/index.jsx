@@ -36,7 +36,7 @@ function App() {
               <Suspense fallback={<LoadingSpinner />}>
                 <Routes>
                   {/* 默认重定向到书签页 */}
-                  <Route path="/" element={<Navigate to="/bookmark" replace />} />
+                  <Route path="/" element={<Navigate to="/bookmarks" replace />} />
                   
                   {/* 动态生成路由 */}
                   {ROUTES_CONFIG.map(route => (
