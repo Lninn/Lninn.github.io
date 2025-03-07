@@ -1,11 +1,11 @@
-/* 导航菜单基础样式 */
-.nav-menu {
+/* 桌面端导航菜单基础样式 */
+.desktop-nav {
   display: flex;
   align-items: center;
   height: 100%;
 }
 
-.nav-menu-list {
+.desktop-nav-list {
   display: flex;
   list-style: none;
   margin: 0;
@@ -14,7 +14,7 @@
 }
 
 /* 导航项样式 */
-.nav-item {
+.desktop-nav-item {
   position: relative;
   height: 100%;
   display: flex;
@@ -22,8 +22,8 @@
 }
 
 /* 导航链接样式 */
-.nav-link,
-.nav-link-container {
+.desktop-nav-link,
+.desktop-nav-link-container {
   display: flex;
   align-items: center;
   padding: 0 16px;
@@ -35,7 +35,7 @@
   position: relative;
 }
 
-.nav-link.with-submenu {
+.desktop-nav-link.with-submenu {
   background: none;
   border: none;
   cursor: pointer;
@@ -43,18 +43,18 @@
   font-family: inherit;
 }
 
-.nav-link:hover,
-.nav-link-container:hover .nav-link {
+.desktop-nav-link:hover,
+.desktop-nav-link-container:hover .desktop-nav-link {
   color: var(--accent-color, #007cf0);
 }
 
-.nav-link.active,
-.nav-link-container.active .nav-link {
+.desktop-nav-link.active,
+.desktop-nav-link-container.active .desktop-nav-link {
   color: var(--accent-color, #007cf0);
 }
 
-.nav-link.active::after,
-.nav-link-container.active::after {
+.desktop-nav-link.active::after,
+.desktop-nav-link-container.active::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -144,4 +144,11 @@
 .dark-mode .submenu {
   background-color: var(--card-bg);
   border-color: var(--border-color);
+}
+
+/* 响应式隐藏 */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
 }

@@ -2,7 +2,6 @@
 import './index.css'
 import useThemeStore from '#/store/theme'
 import NavMenu from '#/components/NavMenu'
-import MobileNavPlaceholder from '#/components/NavMenu/MobileNavPlaceholder'
 
 export default function AppHeader() {
   const { darkMode, setDarkMode } = useThemeStore()
@@ -19,9 +18,7 @@ export default function AppHeader() {
             <span className="logo-text">Lninn's Space</span>
           </div>
 
-          {/* 导航栏菜单 */}
           <NavMenu />
-          <MobileNavPlaceholder />
 
           <div className="app-header-actions">
             <button 

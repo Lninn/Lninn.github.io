@@ -1,8 +1,9 @@
-.mobile-nav-placeholder {
+/* 移动端导航基础样式 */
+.mobile-nav {
   display: none;
 }
 
-.mobile-menu-button {
+.mobile-nav-button {
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -16,18 +17,14 @@
   transition: all 0.2s ease;
 }
 
-.mobile-menu-button:hover {
+.mobile-nav-button:hover {
   background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
   color: var(--accent-color, #007cf0);
 }
 
-/* 移动端样式 */
+/* 移动端显示 */
 @media (max-width: 768px) {
-  .nav-menu {
-    display: none;
-  }
-  
-  .mobile-nav-placeholder {
+  .mobile-nav {
     display: block;
   }
 }

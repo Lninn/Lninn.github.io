@@ -1,15 +1,15 @@
 import { FiMenu } from 'react-icons/fi';
-import './mobile-styles.css';
+import './styles.css';
 
-const MobileNavPlaceholder = () => {
+const MobileNav = () => {
   const handleClick = () => {
     alert('移动端导航功能正在开发中，敬请期待！');
   };
 
   return (
-    <div className="mobile-nav-placeholder">
+    <div className="mobile-nav">
       <button 
-        className="mobile-menu-button" 
+        className="mobile-nav-button" 
         onClick={handleClick}
         aria-label="移动端菜单"
       >
@@ -19,4 +19,4 @@ const MobileNavPlaceholder = () => {
   );
 };
 
-export default MobileNavPlaceholder;
+export default MobileNav;
