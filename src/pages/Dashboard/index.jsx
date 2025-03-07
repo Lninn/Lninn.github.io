@@ -10,7 +10,7 @@ import { useNotification } from '#/hooks/useNotification'
 import { useBookmarkActions } from '#/hooks/useBookmarkActions'
 import { DashboardHeader } from './components/DashboardHeader'
 import ErrorBoundary from '#/components/ErrorBoundary'
-
+import PageContainer from '#/components/PageContainer'
 
 export default function Dashboard() {
   // 状态管理
@@ -35,12 +35,11 @@ export default function Dashboard() {
       setIsLoading(true)
       try {
         await fetchBookmarks()
-        console.log('书签加载完成') // 添加日志以便调试
       } catch (error) {
-        console.error('加载书签失败:', error) // 详细记录错误
+        console.error('加载书签失败:', error)
         notify('error', '加载书签失败')
       } finally {
-        setIsLoading(false) // 确保无论成功失败都会设置 isLoading 为 false
+        setIsLoading(false)
       }
     }
     
@@ -72,7 +71,7 @@ export default function Dashboard() {
   
   return (
     <ErrorBoundary>
-      <div className="dashboard">
+      <PageContainer className="dashboard">
         <DashboardHeader 
           onAddClick={() => setShowAddModal(true)}
           bookmarkCount={bookmarkList?.length || 0}
@@ -122,7 +121,7 @@ export default function Dashboard() {
             onClose={clearNotification}
           />
         )}
-      </div>
+      </PageContainer>
     </ErrorBoundary>
   )
 }

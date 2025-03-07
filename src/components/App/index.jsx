@@ -6,12 +6,11 @@ import Footer from '#/components/Footer'
 import ErrorBoundary from '#/components/ErrorBoundary'
 import ROUTES_CONFIG from '#/config/routes'
 
-// ... 其余代码保持不变
 function LoadingSpinner() {
   return (
     <div className="loading-container">
       <div className="spinner"></div>
-      <span>Loading...</span>
+      <span>加载中...</span>
     </div>
   )
 }
@@ -19,8 +18,11 @@ function LoadingSpinner() {
 function NotFound() {
   return (
     <div className="not-found">
-      <h2>404</h2>
-      <p>页面不存在</p>
+      <div className="not-found-content">
+        <h2>404</h2>
+        <p>页面不存在</p>
+        <a href="/" className="back-home">返回首页</a>
+      </div>
     </div>
   )
 }
@@ -31,27 +33,24 @@ function App() {
       <div className="app-container">
         <AppHeader />
         <main className="app-main">
-          <div className="content-container">
-            <ErrorBoundary showDetails={import.meta.env.NODE_ENV !== 'production'}>
-              <Suspense fallback={<LoadingSpinner />}>
-                <Routes>
-                  {/* 默认重定向到书签页 */}
-                  <Route path="/" element={<Navigate to="/bookmarks" replace />} />
-                  
-                  {/* 动态生成路由 */}
-                  {ROUTES_CONFIG.map(route => (
-                    <Route
-                      key={route.path}
-                      path={route.path}
-                      element={<route.component />}
-                    />
-                  ))}
-
-                  {/* 404 路由 */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </ErrorBoundary>
+          <div className="content-wrapper">
+            <div className="page-container">
+              <ErrorBoundary showDetails={import.meta.env.NODE_ENV !== 'production'}>
+                <Suspense fallback={<LoadingSpinner />}>
+                  <Routes>
+                    <Route path="/" element={<Navigate to="/bookmarks" replace />} />
+                    {ROUTES_CONFIG.map(route => (
+                      <Route
+                        key={route.path}
+                        path={route.path}
+                        element={<route.component />}
+                      />
+                    ))}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </ErrorBoundary>
+            </div>
           </div>
         </main>
         <Footer />
