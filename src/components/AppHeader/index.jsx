@@ -1,22 +1,10 @@
 // 将原来的 import './index.css' 改为：
-import './styles/index.css'
+import './index.css'
 import useThemeStore from '#/store/theme'
-import { ROUTES_CONFIG } from '#/config/routes'
-import { useState, useEffect } from 'react'
-import { Menu } from './Menu'
+
 
 export default function AppHeader() {
   const { darkMode, setDarkMode } = useThemeStore()
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768)
-    }
-    
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
 
   const toggleTheme = () => {
     setDarkMode(!darkMode)
@@ -30,7 +18,7 @@ export default function AppHeader() {
             <span className="logo-text">Lninn's Space</span>
           </div>
 
-          {!isMobile && <Menu items={ROUTES_CONFIG} isMobile={false} />}
+          {/* 导航栏菜单 */}
 
           <div className="app-header-actions">
             <button 
@@ -43,8 +31,6 @@ export default function AppHeader() {
           </div>
         </div>
       </header>
-      
-      {isMobile && <Menu items={ROUTES_CONFIG} isMobile={true} />}
     </>
   )
 }
