@@ -61,14 +61,14 @@ export const AppRoutes = () => {
   };
 
   if (loading) {
-    return <LoadingSpinner fullScreen />;
+    return <LoadingSpinner fullScreen text="系统初始化中..." />;
   }
-  
+
   const routesDom = renderRoutes(routes)
   
   return (
     <PageContainer>
-      <Suspense fallback={<LoadingSpinner fullScreen />}>
+      <Suspense fallback={<LoadingSpinner fullScreen={false} text="页面加载中..." />}>
         <Routes>
           {routesDom}
           {/* 默认重定向到第一个路由 */}

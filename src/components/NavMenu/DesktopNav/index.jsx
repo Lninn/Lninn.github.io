@@ -5,11 +5,21 @@ import { FiChevronDown } from 'react-icons/fi';
 // import { DEFAULT_ICONS_MAP } from '#/config/nav-shared';
 import './styles.css';
 
+// 添加骨架屏组件
+const MenuSkeleton = () => (
+  <div className="desktop-nav-skeleton">
+    <div className="nav-item-skeleton"></div>
+    <div className="nav-item-skeleton"></div>
+    <div className="nav-item-skeleton"></div>
+    <div className="nav-item-skeleton"></div>
+  </div>
+);
+
 const DesktopNav = () => {
   const location = useLocation();
   const [openSubMenus, setOpenSubMenus] = useState({});
   const menuRef = useRef(null);
-  const { routes } = useRoutesConfig();
+  const { routes, loading } = useRoutesConfig();
   
   // 初始化时根据当前路径设置打开的子菜单
   useEffect(() => {
@@ -101,6 +111,10 @@ const DesktopNav = () => {
     if (!parent.children) return false;
     return parent.children.some(child => location.pathname.startsWith(child.path));
   };
+
+  if (loading) {
+    return <MenuSkeleton />
+  }
 
   return (
     <nav className="desktop-nav" ref={menuRef}>
