@@ -1,11 +1,22 @@
 import './LogTable.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 import Modal from '#/components/Modal'
 
 export function LogTable({ logs }) {
   const [selectedLog, setSelectedLog] = useState(null)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+
+  // 监听窗口大小变化
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const handleRowClick = (log) => {
     setSelectedLog(log)
@@ -23,9 +34,9 @@ export function LogTable({ logs }) {
             <tr>
               <th>时间</th>
               <th>环境</th>
-              <th>组件</th>
-              <th>错误信息</th>
-              <th>URL</th>
+              {!isMobile && <th>组件</th>}
+              <th className={isMobile ? "mobile-error-header" : ""}>错误信息</th>
+              {!isMobile && <th>URL</th>}
             </tr>
           </thead>
           <tbody>
@@ -42,18 +53,22 @@ export function LogTable({ logs }) {
                 <td>
                   <span className="env-badge">{log.environment}</span>
                 </td>
-                <td>{log.component_info}</td>
-                <td className="error-cell">{log.error}</td>
-                <td className="url-cell">
-                  <a 
-                    href={log.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    onClick={e => e.stopPropagation()}
-                  >
-                    {log.url}
-                  </a>
+                {!isMobile && <td>{log.component_info}</td>}
+                <td className={`error-cell ${isMobile ? "mobile-error-cell" : ""}`}>
+                  {log.error}
                 </td>
+                {!isMobile && (
+                  <td className="url-cell">
+                    <a 
+                      href={log.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      {log.url}
+                    </a>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

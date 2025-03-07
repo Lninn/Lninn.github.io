@@ -72,3 +72,61 @@
 .url-cell a:hover {
   text-decoration: underline;
 }
+/* 添加到现有样式文件末尾 */
+
+/* 移动端表格样式优化 */
+@media (max-width: 768px) {
+  .log-table th,
+  .log-table td {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .mobile-error-header {
+    width: 60%;
+  }
+  
+  .mobile-error-cell {
+    max-width: none;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.3;
+  }
+  
+  .env-badge {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.7rem;
+  }
+  
+  /* 增强表格行的可点击性提示 */
+  .log-table tbody tr:after {
+    content: "👆";
+    position: absolute;
+    right: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  
+  .log-table tbody tr:hover:after {
+    opacity: 0.5;
+  }
+  
+  /* 表格行相对定位，用于放置点击提示图标 */
+  .log-table tbody tr {
+    position: relative;
+  }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 480px) {
+  .log-table th,
+  .log-table td {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .mobile-error-cell {
+    -webkit-line-clamp: 1;
+  }
+}
