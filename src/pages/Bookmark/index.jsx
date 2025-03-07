@@ -2,9 +2,10 @@ import './index.css'
 
 import { useState, useEffect, useMemo } from 'react'
 import ErrorBoundary from '#/components/ErrorBoundary'
-import LoadingSpinner from '#/components/LoadingSpinner'
 import { bookmarkApi } from '#/api/bookmark'
 import UrlList from './UrlList'
+import BookmarkSkeleton from './BookmarkSkeleton'
+import BookmarkHeader from './BookmarkHeader'
 
 
 export default function Bookmark() {
@@ -57,9 +58,10 @@ export default function Bookmark() {
     }).filter(([, items]) => items.length > 0)
   }, [list, searchTerm, selectedCategory])
 
-  if (isLoading) {
-    return (<LoadingSpinner text="正在加载书签..." />)
-  }
+  // 处理分类选择
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(selectedCategory === category ? '全部' : category);
+  };
 
   if (error) {
     return (
@@ -72,76 +74,47 @@ export default function Bookmark() {
 
   return (
     <>
-      <div className="bookmark-header">
-        <div className="header-top">
-          <h1>我的书签</h1>
-          <div className="search-input-wrapper">
-            <span className="search-icon">🔍</span>
-            <input
-              type="text"
-              className="search-input"
-              placeholder="搜索书签..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            {searchTerm && (
-              <button
-                className="clear-search"
-                onClick={() => setSearchTerm('')}
-                title="清除搜索"
-              >
-                ×
-              </button>
-            )}
-          </div>
-        </div>
-        
-        <div className="category-filter-container">
-          <span className="filter-label">分类筛选:</span>
-          <div className="category-filter">
-            {categories.map(category => (
-              <button
-                key={category}
-                className={`category-filter-btn ${selectedCategory === category ? 'active' : ''}`}
+      <BookmarkHeader 
+        title="我的书签"
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        onClearSearch={() => setSearchTerm('')}
+        categories={categories}
+        selectedCategory={selectedCategory}
+        onCategorySelect={handleCategorySelect}
+      />
+
+      {isLoading ? (
+        <BookmarkSkeleton />
+      ) : (
+        <section className="bookmark-grid">
+          {filteredList.length > 0 ? (
+            filteredList.map(([name, categoryData]) => (
+              <ErrorBoundary key={name} showDetails={false}>
+                <BookmarkCategory 
+                  name={name} 
+                  data={categoryData}
+                  searchTerm={searchTerm}
+                  viewCount={viewsMap.get(name) || 0}
+                />
+              </ErrorBoundary>
+            ))
+          ) : (
+            <div className="no-results">
+              <p>没有找到匹配的书签</p>
+              <button 
+                className="reset-search"
                 onClick={() => {
-                  // 如果点击当前选中的分类，则切换回"全部"
-                  setSelectedCategory(selectedCategory === category ? '全部' : category)
+                  setSearchTerm('')
+                  setSelectedCategory('全部')
                 }}
               >
-                {category}
+                重置搜索
               </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <section className="bookmark-grid">
-        {filteredList.length > 0 ? (
-          filteredList.map(([name, categoryData]) => (
-            <ErrorBoundary key={name} showDetails={false}>
-              <BookmarkCategory 
-                name={name} 
-                data={categoryData}
-                searchTerm={searchTerm}
-                viewCount={viewsMap.get(name) || 0}
-              />
-            </ErrorBoundary>
-          ))
-        ) : (
-          <div className="no-results">
-            <p>没有找到匹配的书签</p>
-            <button 
-              className="reset-search"
-              onClick={() => {
-                setSearchTerm('')
-                setSelectedCategory('全部')
-              }}
-            >
-              重置搜索
-            </button>
-          </div>
-        )}
-      </section>
+            </div>
+          )}
+        </section>
+      )}
     </>
   )
 }
