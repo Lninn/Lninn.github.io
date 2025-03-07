@@ -1,0 +1,70 @@
+/* 基础样式 */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--header-bg, rgba(255, 255, 255, 0.8));
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-color, #eaeaea);
+  padding: 0 20px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo 样式 */
+.logo {
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  background: linear-gradient(45deg, #007cf0, #00dfd8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 头部操作区域样式 */
+.app-header-actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* 主题切换按钮 */
+.theme-toggle {
+  padding: 8px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
+  transform: rotate(30deg);
+  color: var(--accent-color, #007cf0);
+}
+
+.dark-mode .app-header {
+  background-color: var(--header-bg);
+  border-bottom-color: var(--border-color);
+}

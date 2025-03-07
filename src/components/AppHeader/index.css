@@ -348,6 +348,15 @@
   text-decoration: none;
   border-radius: 6px;
   transition: all 0.2s ease;
+  white-space: nowrap; /* 防止文本换行 */
+  overflow: hidden;    /* 超出部分隐藏 */
+  text-overflow: ellipsis; /* 显示省略号 */
+}
+
+.submenu-item .nav-text {
+  white-space: nowrap; /* 防止文本换行 */
+  overflow: hidden;    /* 超出部分隐藏 */
+  text-overflow: ellipsis; /* 显示省略号 */
 }
 
 .submenu-item:hover {
@@ -380,6 +389,7 @@
   cursor: pointer;
 }
 
+/* 修复移动端二级菜单文本换行问题 */
 .mobile-submenu {
   display: none;
   padding: 8px 0;
@@ -404,20 +414,37 @@
   color: var(--text-secondary);
   text-decoration: none;
   font-size: 0.9em;
+  white-space: nowrap; /* 防止文本换行 */
+  overflow: hidden;    /* 超出部分隐藏 */
+  text-overflow: ellipsis; /* 显示省略号 */
+}
+
+.mobile-submenu-item .nav-text {
+  display: block;      /* 确保文本显示 */
+  white-space: nowrap; /* 防止文本换行 */
+  overflow: hidden;    /* 超出部分隐藏 */
+  text-overflow: ellipsis; /* 显示省略号 */
+  max-width: 100%;     /* 限制最大宽度 */
 }
 
 .mobile-submenu-item.active {
   color: var(--primary);
 }
 
-/* 调整移动端间距 */
+/* 调整移动端间距和布局 */
 @media (max-width: 768px) {
   .mobile-nav-item-wrapper {
     width: 100%;
+    max-width: 25%; /* 限制每个导航项的最大宽度 */
   }
   
   .mobile-submenu {
     margin: 0 8px;
+    max-width: calc(100vw - 32px); /* 限制子菜单最大宽度 */
+  }
+  
+  .mobile-nav-item {
+    max-width: 100%; /* 修改为100%以适应父容器 */
   }
   
   body {

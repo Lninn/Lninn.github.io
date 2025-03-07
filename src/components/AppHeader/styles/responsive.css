@@ -1,0 +1,98 @@
+/* 移动端样式 */
+@media (max-width: 768px) {
+  /* 头部样式调整 */
+  .app-header {
+    padding: 0 12px;
+  }
+  
+  .header-content {
+    height: 56px;
+  }
+  
+  .logo-text {
+    font-size: 1.2rem;
+  }
+
+  /* 按钮样式调整 */
+  .theme-toggle {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  /* 导航样式调整 */
+  .app-nav {
+    justify-content: flex-end;
+    margin-right: 8px;
+  }
+  
+  .app-nav ul {
+    gap: 4px;
+  }
+  
+  .nav-text {
+    display: none;
+  }
+  
+  .nav-item {
+    padding: 8px;
+  }
+  
+  .nav-icon {
+    font-size: 1.3rem;
+  }
+
+  /* 显示移动导航 */
+  .mobile-nav {
+    display: block;
+  }
+  
+  /* 调整页面内容，为底部导航腾出空间 */
+  body {
+    padding-bottom: 70px;
+  }
+
+  .mobile-nav-item-wrapper {
+    width: 100%;
+    max-width: 25%;
+  }
+  
+  .mobile-submenu {
+    margin: 0 8px;
+    max-width: calc(100vw - 32px);
+  }
+  
+  .mobile-nav-item {
+    max-width: 100%;
+  }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 360px) {
+  .logo-text {
+    font-size: 1rem;
+  }
+  
+  .mobile-nav-item {
+    padding: 6px 4px;
+  }
+  
+  .mobile-nav-item .nav-icon {
+    font-size: 1.2rem;
+  }
+  
+  .mobile-nav-item .nav-text {
+    font-size: 0.65rem;
+  }
+}
+
+/* 适配安全区域（针对全面屏手机） */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .mobile-nav {
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+  
+  body {
+    padding-bottom: calc(70px + env(safe-area-inset-bottom));
+  }
+}
