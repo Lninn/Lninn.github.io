@@ -14,42 +14,55 @@
   list-style: none;
 }
 
+/* 一级菜单项样式增强 */
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  color: var(--text-secondary, #666);
+  gap: 8px;
+  padding: 10px 16px;
+  color: var(--text-secondary);
   text-decoration: none;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  border-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
+  overflow: hidden;
+  font-weight: 500;
 }
 
 .nav-item:hover {
-  background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
-  color: var(--text-primary, #333);
+  background-color: var(--hover-bg);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .nav-item.active {
-  background-color: var(--active-bg, rgba(0, 124, 240, 0.1));
-  color: var(--accent-color, #007cf0);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  color: white;
+  box-shadow: 0 6px 16px rgba(0, 124, 240, 0.25);
 }
 
 .nav-icon {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.nav-item:hover .nav-icon {
+  transform: scale(1.15);
 }
 
 .nav-text {
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   display: flex;
   align-items: center;
+  letter-spacing: 0.01em;
 }
 
-/* 二级菜单样式 */
+/* 二级菜单样式 - 全新设计 */
 .nav-item-wrapper {
   position: relative;
 }
@@ -59,60 +72,255 @@
 }
 
 .submenu-arrow {
-  font-size: 0.8em;
-  margin-left: 4px;
-  transition: transform 0.2s ease;
+  font-size: 0.85em;
+  margin-left: 6px;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+.has-submenu:hover .submenu-arrow {
+  transform: rotate(180deg);
+}
+
+/* 大型二级菜单 */
 .submenu {
   position: absolute;
-  top: 100%;
-  left: 0;
-  background: var(--bg-primary);
+  top: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(var(--bg-primary-rgb), 0.95);
+  backdrop-filter: blur(15px);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  box-shadow: var(--shadow-md);
-  min-width: 200px;
+  border-radius: 16px;
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.15),
+    0 10px 30px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  min-width: 280px;
+  width: max-content;
+  max-width: 400px;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(10px);
-  transition: all 0.2s ease;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1000;
-  padding: 8px;
+  padding: 16px;
+  overflow: hidden;
 }
 
 .nav-item-wrapper:hover .submenu {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
 }
 
+/* 二级菜单样式 - 修复交互问题 */
+.nav-item-wrapper {
+  position: relative;
+}
+
+/* 添加一个隐形的连接区域，防止鼠标快速移动时菜单消失 */
+.nav-item-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 16px; /* 与二级菜单顶部的距离相同 */
+  background: transparent;
+}
+
+.submenu {
+  position: absolute;
+  top: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(var(--bg-primary-rgb), 0.95);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.15),
+    0 10px 30px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  min-width: 280px;
+  width: max-content;
+  max-width: 400px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); /* 稍微加快过渡时间 */
+  z-index: 1000;
+  padding: 16px;
+  overflow: hidden;
+  /* 添加延迟隐藏 */
+  transition-delay: 0s;
+}
+
+.nav-item-wrapper:hover .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  /* 立即显示，无延迟 */
+  transition-delay: 0s;
+}
+
+/* 当鼠标离开时添加延迟隐藏效果 */
+.nav-item-wrapper .submenu {
+  transition-delay: 0.2s; /* 添加200ms延迟隐藏 */
+}
+
+/* 确保二级菜单本身也能触发悬停状态 */
+.submenu:hover {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  transition-delay: 0s;
+}
+
+/* 三角形指示器 */
+.submenu::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 16px;
+  height: 16px;
+  background: var(--bg-primary);
+  border-left: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-color);
+  z-index: -1;
+}
+
+/* 顶部装饰条 */
+.submenu::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    var(--primary) 0%, 
+    var(--primary-hover) 50%,
+    var(--primary) 100%);
+  background-size: 200% 100%;
+  animation: gradientShift 3s ease infinite;
+  border-radius: 4px 4px 0 0;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 二级菜单项 */
 .submenu-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
+  gap: 12px;
+  padding: 14px 18px;
   color: var(--text-secondary);
   text-decoration: none;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  white-space: nowrap;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  margin-bottom: 6px;
+  position: relative;
   overflow: hidden;
-  text-overflow: ellipsis;
+  border: 1px solid transparent;
+}
+
+.submenu-item .nav-icon {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  background: var(--bg-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .submenu-item .nav-text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
+/* 悬停效果 */
 .submenu-item:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
+  transform: translateX(6px);
+  border-color: var(--border-color);
 }
 
+.submenu-item:hover .nav-icon {
+  color: var(--primary);
+  background: var(--primary-bg-subtle);
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* 激活状态 */
 .submenu-item.active {
   background: var(--primary-bg-subtle);
   color: var(--primary);
+  border-color: var(--primary);
+}
+
+.submenu-item.active .nav-icon {
+  color: white;
+  background: var(--primary);
+}
+
+/* 添加动画效果 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.submenu li {
+  animation: fadeInUp 0.5s ease forwards;
+  animation-delay: calc(0.08s * var(--item-index, 0));
+  opacity: 0;
+}
+
+.submenu li:nth-child(1) { --item-index: 1; }
+.submenu li:nth-child(2) { --item-index: 2; }
+.submenu li:nth-child(3) { --item-index: 3; }
+.submenu li:nth-child(4) { --item-index: 4; }
+.submenu li:nth-child(5) { --item-index: 5; }
+
+/* 添加光效 */
+.submenu-item::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  transform: scale(0.5);
+}
+
+.submenu-item:hover::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 添加这个新的样式类 */
+.submenu-active {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateX(-50%) translateY(0) !important;
+  pointer-events: auto !important;
 }
