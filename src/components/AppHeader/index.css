@@ -178,3 +178,123 @@
     font-size: 1rem;
   }
 }
+
+/* 保留原有的基础样式，添加移动导航样式 */
+
+/* 移动导航样式 */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+  padding: 8px 0;
+}
+
+.mobile-nav ul {
+  display: flex;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 80px;
+}
+
+.mobile-nav-item .nav-icon {
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+}
+
+.mobile-nav-item .nav-text {
+  font-size: 0.7rem;
+  font-weight: 500;
+  display: block;
+  text-align: center;
+}
+
+.mobile-nav-item.active {
+  color: var(--accent-color);
+}
+
+.mobile-nav-item.active .nav-icon {
+  transform: scale(1.1);
+}
+
+/* 移动端样式调整 */
+@media (max-width: 768px) {
+  /* 显示移动导航 */
+  .mobile-nav {
+    display: block;
+  }
+  
+  /* 调整页面内容，为底部导航腾出空间 */
+  body {
+    padding-bottom: 70px;
+  }
+  
+  /* 头部样式调整 */
+  .app-header {
+    padding: 0 16px;
+  }
+  
+  .header-content {
+    height: 56px;
+    justify-content: space-between;
+  }
+  
+  .logo-text {
+    font-size: 1.2rem;
+  }
+  
+  /* 按钮样式调整 */
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 360px) {
+  .logo-text {
+    font-size: 1rem;
+  }
+  
+  .mobile-nav-item {
+    padding: 6px 4px;
+  }
+  
+  .mobile-nav-item .nav-icon {
+    font-size: 1.2rem;
+  }
+  
+  .mobile-nav-item .nav-text {
+    font-size: 0.65rem;
+  }
+}
+
+/* 适配安全区域（针对全面屏手机） */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .mobile-nav {
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+  
+  body {
+    padding-bottom: calc(70px + env(safe-area-inset-bottom));
+  }
+}
