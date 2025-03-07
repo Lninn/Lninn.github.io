@@ -14,47 +14,61 @@ const PlaceholderPage = lazy(() => import('#/pages/PlaceholderPage'))
 
 export const ROUTES_CONFIG = [
   {
-    path: '/bookmarks',
     name: '收藏夹',
+    path: '/bookmarks',
     icon: BsBookmark,
     component: BookmarkPage
   },
   {
-    path: '/articles',
     name: '博客文章',
+    path: '/articles',
     icon: BsFileText,
     component: ArticlePage,
     children: [
       {
-        path: '/articles/tech',
         name: '技术专栏',
+        path: '/articles/tech',
         icon: BsGear,
         component: () => <PlaceholderPage title="技术专栏" />
       },
       {
-        path: '/articles/life',
         name: '生活随笔',
+        path: '/articles/life',
         icon: BsFlower1,
         component: () => <PlaceholderPage title="生活随笔" />
       }
     ]
   },
   {
-    path: '/dashboard',
     name: '数据概览',
+    path: '/dashboard',
     icon: MdDashboard,
     component: DashboardPage
   },
   {
-    path: '/error-logs',
     name: '系统日志',
+    path: '/error-logs',
     icon: VscError,
     component: ErrorLogsPage
   },
   {
-    path: '/component-demo',
-    name: 'UI组件库',
+    name: '数据中心',
+    path: '/data-center',
     icon: HiOutlinePuzzle,
-    component: ComponentDemoPage
-  }
+    component: ComponentDemoPage,
+    children: [
+      {
+        name: '组件演示',
+        path: '/data-center/component-demo',
+        icon: BsGear,
+        component: ComponentDemoPage
+      },
+      {
+        name: '系统设置',
+        path: '/data-center/system-settings',
+        icon: BsFlower1,
+        component: () => <PlaceholderPage title="系统设置" />
+      }
+    ]
+  },
 ]
