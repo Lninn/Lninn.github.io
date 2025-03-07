@@ -13,45 +13,47 @@ export function LogFilters({ filters, environments, onFilterChange }) {
   return (
     <div className="filters-container">
       <div className="filters-wrapper">
-        <div className="filters-group">
-          <div className="filter-item">
-            <label className="filter-label">环境</label>
-            <Select 
-              options={envOptions}
-              value={filters.environment} 
-              onChange={value => onFilterChange('environment', value)}
-              placeholder="选择环境"
-              className="filter-select"
-            />
-          </div>
-
-          <div className="filter-item">
-            <label className="filter-label">开始日期</label>
-            <input
-              type="date"
-              value={filters.startDate}
-              onChange={e => onFilterChange('startDate', e.target.value)}
-              className="filter-input"
-            />
-          </div>
-          
-          <div className="filter-item">
-            <label className="filter-label">结束日期</label>
-            <input
-              type="date"
-              value={filters.endDate}
-              onChange={e => onFilterChange('endDate', e.target.value)}
-              className="filter-input"
-            />
-          </div>
+        {/* 环境选择器 */}
+        <div className="filter-item">
+          <label className="filter-label">运行环境</label>
+          <Select
+            options={envOptions}
+            value={filters.environment}
+            onChange={value => onFilterChange('environment', value)}
+            className="filter-select"
+            menuPosition="fixed" // 确保下拉菜单不被裁剪
+          />
         </div>
 
+        {/* 日期选择组 */}
+        <div className="filter-item">
+          <label className="filter-label">起始日期</label>
+          <input
+            type="date"
+            value={filters.startDate}
+            onChange={e => onFilterChange('startDate', e.target.value)}
+            className="filter-input"
+          />
+        </div>
+
+        <div className="filter-item">
+          <label className="filter-label">截止日期</label>
+          <input
+            type="date"
+            value={filters.endDate}
+            onChange={e => onFilterChange('endDate', e.target.value)}
+            className="filter-input"
+          />
+        </div>
+
+        {/* 搜索框独立成组 */}
         <div className="filter-item filter-item-search">
+          <label className="filter-label">全局搜索</label>
           <input
             type="text"
             value={filters.searchTerm}
             onChange={e => onFilterChange('searchTerm', e.target.value)}
-            placeholder="搜索错误信息..."
+            placeholder="搜索错误信息、组件或用户..."
             className="filter-input search-input"
           />
         </div>
