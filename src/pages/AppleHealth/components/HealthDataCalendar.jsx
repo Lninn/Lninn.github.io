@@ -7,7 +7,8 @@ import {
   Row, 
   Col, 
   CalendarIcon, 
-  FireIcon 
+  FireIcon,
+  Message // 添加 Message 导入
 } from './UIComponents';
 import { getColorIntensity } from '../utils/dataProcessor';
 import './HealthDataCalendar.css';
