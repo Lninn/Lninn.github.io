@@ -15,6 +15,8 @@ export default function AppleHealthPage() {
   const [cachedFiles, setCachedFiles] = useState([]);
   const [showCacheManager, setShowCacheManager] = useState(false);
   const [lastProcessed, setLastProcessed] = useState(null);
+  // 添加日志状态
+  const [logs, setLogs] = useState([]);
   const workerRef = useRef(null);
   const currentFileRef = useRef(null);
 
@@ -22,6 +24,11 @@ export default function AppleHealthPage() {
   useEffect(() => {
     loadCachedFilesList();
   }, []);
+
+  // 添加日志函数
+  const addLog = (message) => {
+    setLogs(prevLogs => [...prevLogs, { time: new Date().toLocaleTimeString(), message }]);
+  };
 
   const loadCachedFilesList = async () => {
     try {
@@ -69,8 +76,11 @@ export default function AppleHealthPage() {
     setProgress(0);
     setProgressText('正在解压文件...');
     setHealthData(null);
+    // 清空之前的日志
+    setLogs([]);
   
     console.log(`开始处理文件: ${file.name}, 大小: ${Math.round(file.size / 1024)} KB`);
+    addLog(`开始处理文件: ${file.name}, 大小: ${Math.round(file.size / 1024)} KB`);
     
     const zip = new JSZip();
     try {
@@ -131,6 +141,7 @@ export default function AppleHealthPage() {
     }
     
     console.log('创建新的 Worker 实例');
+    addLog('创建新的 Worker 实例');
     workerRef.current = new Worker(new URL('./utils/xmlWorker.js', import.meta.url));
     
     try {
@@ -138,15 +149,19 @@ export default function AppleHealthPage() {
         workerRef.current.onmessage = (e) => {
           const { type, data } = e.data;
           console.log(`收到 Worker 消息: ${type}`);
+          addLog(`收到 Worker 消息: ${type}`);
           
           if (type === 'result') {
             console.log('处理完成，收到结果数据');
+            addLog('处理完成，收到结果数据');
             resolve(data);
           } else if (type === 'error') {
             console.error('Worker 报错:', data.message);
+            addLog(`Worker 报错: ${data.message}`);
             reject(new Error(data.message));
           } else if (type === 'progress') {
             console.log(`进度: ${data.progress}%, ${data.message}`);
+            addLog(`进度: ${data.progress}%, ${data.message}`);
             setProgress(data.progress);
             setProgressText(data.message);
           }
@@ -154,10 +169,12 @@ export default function AppleHealthPage() {
         
         workerRef.current.onerror = (error) => {
           console.error('Worker 错误事件:', error);
+          addLog(`Worker 错误事件: ${error.message}`);
           reject(new Error(`Worker 错误: ${error.message}`));
         };
         
         console.log('向 Worker 发送 XML 数据');
+        addLog('向 Worker 发送 XML 数据');
         workerRef.current.postMessage({ xmlContent });
       });
       
@@ -166,6 +183,7 @@ export default function AppleHealthPage() {
       // 清理 Worker
       if (workerRef.current) {
         console.log('终止 Worker');
+        addLog('终止 Worker');
         workerRef.current.terminate();
         workerRef.current = null;
       }
@@ -277,6 +295,24 @@ export default function AppleHealthPage() {
     );
   };
 
+  // 渲染日志组件
+  const renderLogs = () => {
+    if (logs.length === 0) return null;
+    
+    return (
+      <Card title="处理日志" className="logs-card">
+        <div className="logs-container">
+          {logs.map((log, index) => (
+            <div key={index} className="log-entry">
+              <span className="log-time">[{log.time}]</span>
+              <span className="log-message">{log.message}</span>
+            </div>
+          ))}
+        </div>
+      </Card>
+    );
+  };
+
   return (
     <div className="apple-health-container">
       <ErrorBoundary>
@@ -314,6 +350,9 @@ export default function AppleHealthPage() {
             </div>
           )}
         </Card>
+        
+        {/* 添加日志显示区域 */}
+        {loading && renderLogs()}
         
         {healthData && (
           <>
