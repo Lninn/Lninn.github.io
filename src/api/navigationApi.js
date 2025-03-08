@@ -202,7 +202,6 @@ export const convertToRouteConfig = async (includeDisabled = false) => {
   }
 
   const result = navItems.map(item => mapItemToRoute(item))
-  console.log('debug-convertToRouteConfig', result)
 
   return result
 }
