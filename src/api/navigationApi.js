@@ -166,27 +166,45 @@ const buildNavigationTree = (items) => {
 }
 
 // 将数据库格式转换为前端路由格式
+// ... existing code ...
+
+// 将数据库格式转换为前端路由格式
 export const convertToRouteConfig = async (includeDisabled = false) => {
   const navItems = await fetchNavigationItems(includeDisabled)
   
-  const mapItemToRoute = (item) => {
+  const mapItemToRoute = (item, parentPath = '') => {
     // 当前 item 的children有值，且 parent_id 为空，说明是子级路由
     const isSubRoute = item.children && item.children.length > 0 && item.parent_id === null
+    
+    // 确保路径格式正确
+    let fullPath = item.path
+    if (parentPath && !item.path.startsWith('/')) {
+      // 如果父路径存在且当前路径不是以/开头，则拼接路径
+      fullPath = `${parentPath}/${item.path}`
+    } else if (parentPath && item.path.startsWith('/')) {
+      // 如果父路径存在且当前路径以/开头，则使用当前路径（绝对路径）
+      fullPath = item.path
+    }
+    
     const route = {
       name: item.name,
-      path: item.path,
+      path: fullPath,
       icon: item.icon ? dynamicImportIcon(item.icon) : null,
       component: isSubRoute ? SubPageWrapper : dynamicImportComponent(item.component),
     }
     
     if (item.children && item.children.length > 0) {
-      route.children = item.children.map(mapItemToRoute)
+      // 将当前路径传递给子路由
+      route.children = item.children.map(child => mapItemToRoute(child, fullPath))
     }
     
     return route
   }
 
-  return navItems.map(mapItemToRoute)
+  const result = navItems.map(item => mapItemToRoute(item))
+  console.log('debug-convertToRouteConfig', result)
+
+  return result
 }
 
 // 动态导入图标组件
