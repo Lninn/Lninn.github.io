@@ -1,4 +1,4 @@
 ## 2025-03-08
 - **Author**: Lninn
-- **Message**: remove unused code
+- **Message**: 开屏加载处理
 
