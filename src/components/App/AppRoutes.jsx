@@ -3,36 +3,7 @@ import { Suspense } from 'react'
 import PageContainer from '#/components/PageContainer'
 import ErrorBoundary from '#/components/ErrorBoundary'
 import LoadingSpinner from '#/components/LoadingSpinner'
-import { useState, useEffect } from 'react'
-
-// 创建一个页面切换指示器组件
-const PageTransition = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  
-  useEffect(() => {
-    // 页面加载开始
-    setIsLoading(true);
-    
-    // 使用 requestAnimationFrame 确保在下一帧渲染前设置为 false
-    // 这样可以确保即使是快速加载的组件也能显示加载状态
-    const timer = requestAnimationFrame(() => {
-      // 使用 setTimeout 确保加载状态至少显示一小段时间
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 300);
-    });
-    
-    return () => {
-      cancelAnimationFrame(timer);
-    };
-  }, []);
-  
-  if (isLoading) {
-    return <LoadingSpinner fullScreen text="页面加载中..." />;
-  }
-  
-  return children;
-};
+import { useRouteChange } from '#/hooks/useRouteChange'
 
 // 404 页面组件
 function NotFound() {
@@ -48,6 +19,8 @@ function NotFound() {
 }
 
 export const AppRoutes = ({ routes }) => {
+  const isRouteChanging = useRouteChange();
+  
   // 递归渲染路由
   const renderRoutes = (routesList) => {
     return routesList.map((route) => {
@@ -77,9 +50,7 @@ export const AppRoutes = ({ routes }) => {
           element={
             <ErrorBoundary>
               <Suspense fallback={<LoadingSpinner fullScreen text="页面加载中..." />}>
-                <PageTransition>
-                  <route.component />
-                </PageTransition>
+                <route.component />
               </Suspense>
             </ErrorBoundary>
           }
@@ -90,6 +61,9 @@ export const AppRoutes = ({ routes }) => {
 
   return (
     <PageContainer>
+      {/* 全局路由变化加载指示器 */}
+      {isRouteChanging && <LoadingSpinner fullScreen text="页面加载中..." />}
+      
       <Routes>
         {renderRoutes(routes)}
         {/* 默认重定向到第一个路由 */}
