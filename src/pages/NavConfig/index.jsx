@@ -10,7 +10,6 @@ import {
   updateNavigationOrder
 } from '#/api/navigationApi'
 import { DEFAULT_ICONS_OPTIONS, DEFAULT_COMPONENTS_OPTIONS } from '#/config/nav-shared'
-import PageContainer from '#/components/PageContainer'
 import Modal from '#/components/Modal'
 import { FiPlus } from 'react-icons/fi'
 import DroppableNavList from './DroppableNavList'
@@ -268,66 +267,64 @@ const NavConfigPage = () => {
   };
 
   return (
-    <PageContainer>
-      <div className="nav-config-page">
-        <div className="nav-config-header">
-          <h1>导航配置</h1>
-          <button 
-            className="nav-config-add-btn"
-            onClick={() => handleAddItem()}
-          >
-            <FiPlus size={18} />
-            添加导航项
-          </button>
-        </div>
-
-        {error && (
-          <div className="nav-config-error">
-            {error}
-            <button onClick={() => setError(null)}>关闭</button>
-          </div>
-        )}
-
-        {loading ? (
-          <div className="nav-config-loading">加载中...</div>
-        ) : navItems.length === 0 ? (
-          <div className="nav-config-empty">
-            <p>暂无导航项</p>
-            <button onClick={() => handleAddItem()}>添加导航项</button>
-          </div>
-        ) : (
-          <div className="nav-config-container">
-            <DragDropContext onDragEnd={handleDragEnd}>
-              <DroppableNavList
-                items={navItems}
-                droppableId="root"
-                onAddChild={handleAddItem}
-                onEdit={handleEditItem}
-                onToggleStatus={handleToggleStatus}
-                onDelete={handleDelete}
-              />
-            </DragDropContext>
-          </div>
-        )}
-
-        {showModal && (
-          <Modal
-            isOpen={showModal}
-            onClose={() => setShowModal(false)}
-            title={formMode === 'add' ? '添加导航项' : '编辑导航项'}
-            size="md"
-          >
-            <NavItemForm 
-              item={currentItem}
-              onSubmit={handleFormSubmit}
-              onCancel={() => setShowModal(false)}
-              availableIcons={availableIcons}
-              availableComponents={availableComponents}
-            />
-          </Modal>
-        )}
+    <div className="nav-config-page">
+      <div className="nav-config-header">
+        <h1>导航配置</h1>
+        <button 
+          className="nav-config-add-btn"
+          onClick={() => handleAddItem()}
+        >
+          <FiPlus size={18} />
+          添加导航项
+        </button>
       </div>
-    </PageContainer>
+
+      {error && (
+        <div className="nav-config-error">
+          {error}
+          <button onClick={() => setError(null)}>关闭</button>
+        </div>
+      )}
+
+      {loading ? (
+        <div className="nav-config-loading">加载中...</div>
+      ) : navItems.length === 0 ? (
+        <div className="nav-config-empty">
+          <p>暂无导航项</p>
+          <button onClick={() => handleAddItem()}>添加导航项</button>
+        </div>
+      ) : (
+        <div className="nav-config-container">
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <DroppableNavList
+              items={navItems}
+              droppableId="root"
+              onAddChild={handleAddItem}
+              onEdit={handleEditItem}
+              onToggleStatus={handleToggleStatus}
+              onDelete={handleDelete}
+            />
+          </DragDropContext>
+        </div>
+      )}
+
+      {showModal && (
+        <Modal
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+          title={formMode === 'add' ? '添加导航项' : '编辑导航项'}
+          size="md"
+        >
+          <NavItemForm 
+            item={currentItem}
+            onSubmit={handleFormSubmit}
+            onCancel={() => setShowModal(false)}
+            availableIcons={availableIcons}
+            availableComponents={availableComponents}
+          />
+        </Modal>
+      )}
+    </div>
   )
 }
 
