@@ -110,17 +110,20 @@ export const Upload = {
   }
 };
 
-// 简易进度条组件
-export const Progress = ({ percent, status }) => {
+// 进度条组件
+export const Progress = ({ percent }) => {
+  // 确保百分比是有效数字
+  const validPercent = Math.min(Math.max(0, percent || 0), 100);
+  
   return (
     <div className="custom-progress">
       <div className="progress-outer">
         <div 
-          className={`progress-inner ${status}`} 
-          style={{ width: `${percent}%` }}
-        ></div>
+          className={`progress-inner ${validPercent < 100 ? 'active' : ''}`} 
+          style={{ width: `${validPercent}%` }}
+        />
       </div>
-      <span className="progress-text">{percent}%</span>
+      <span className="progress-text">{validPercent}%</span>
     </div>
   );
 };

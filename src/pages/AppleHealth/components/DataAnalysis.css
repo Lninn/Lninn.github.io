@@ -1,0 +1,55 @@
+.data-analysis {
+  padding: 20px;
+}
+
+.analysis-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.selected-activity-analysis {
+  margin-top: 20px;
+}
+
+.trend-charts {
+  margin-top: 15px;
+}
+
+.simple-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 10px 0;
+  background-color: #fafafa;
+  border-radius: 4px;
+}
+
+.chart-bar {
+  flex: 1;
+  min-height: 1px;
+  transition: height 0.3s ease;
+  border-radius: 2px 2px 0 0;
+}
+
+.chart-bar:hover {
+  background-color: #40a9ff;
+}
+
+.activity-summary-list {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.activity-summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selected-card {
+  border-color: #1890ff;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.2);
+}

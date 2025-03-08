@@ -12,14 +12,30 @@
   margin-top: 20px;
 }
 
+/* 确保进度文本样式正确 */
 .progress-container {
   margin-top: 20px;
   text-align: center;
 }
 
+/* 添加新的进度状态样式，避免与 Progress 组件的 progress-text 冲突 */
+.progress-status {
+  margin-top: 10px;
+  color: #1890ff;
+  font-size: 14px;
+  display: block;
+  clear: both;
+  padding: 5px 0;
+}
+
 .progress-text {
   margin-top: 10px;
   color: #1890ff;
+  font-size: 14px;
+  /* 添加以下样式确保文本可见 */
+  display: block;
+  clear: both;
+  padding: 5px 0;
 }
 
 /* 缓存管理样式 */

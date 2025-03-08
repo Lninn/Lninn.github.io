@@ -5,86 +5,37 @@ self.onmessage = function(e) {
   try {
     // 发送进度更新
     const updateProgress = (progress, message) => {
+      // 确保每次进度更新都能发送到主线程
       self.postMessage({
         type: 'progress',
         data: { progress, message }
       });
     };
     
-    // 解析 XML 数据
+    // 第一步：解析 XML 数据
     updateProgress(10, '正在解析 XML 数据...');
-    // 使用字符串操作解析 XML，因为 Worker 中可能不支持 DOMParser
-    const records = parseXMLString(xmlContent, updateProgress);
     
-    // 按天合并数据
-    updateProgress(60, '正在按天合并数据...');
-    const dailyData = mergeDailyData(records);
+    // 第二步：提取并分组所有健康数据
+    updateProgress(30, '正在提取并分组健康数据...');
+    const dailyHealthData = extractAndGroupHealthData(xmlContent, updateProgress);
     
-    // 处理完成，返回结果
+    // 第三步：准备可视化数据
     updateProgress(90, '正在生成可视化数据...');
-    const visualizationData = prepareVisualizationData(dailyData);
+    const visualizationData = prepareVisualizationData(dailyHealthData);
     
+    // 发送最终结果
     self.postMessage({
       type: 'result',
       data: visualizationData
     });
   } catch (error) {
+    console.error('处理健康数据时出错:', error);
     self.postMessage({
       type: 'error',
-      data: { message: error.message }
+      data: { message: error.message || '处理数据时发生未知错误' }
     });
   }
 };
-
-// 使用字符串操作解析 XML
-function parseXMLString(xmlString, updateProgress) {
-  const records = [];
-  
-  // 简单的 XML 解析，查找所有 Record 标签
-  let startIndex = 0;
-  let recordCount = 0;
-  let totalEstimatedRecords = xmlString.split('<Record ').length - 1;
-  
-  while (true) {
-    // 查找下一个 Record 标签的开始
-    const recordStart = xmlString.indexOf('<Record ', startIndex);
-    if (recordStart === -1) break;
-    
-    // 查找 Record 标签的结束
-    const recordEnd = xmlString.indexOf('/>', recordStart);
-    if (recordEnd === -1) break;
-    
-    // 提取 Record 标签的内容
-    const recordContent = xmlString.substring(recordStart, recordEnd + 2);
-    
-    // 解析属性
-    const type = extractAttribute(recordContent, 'type');
-    const startDate = extractAttribute(recordContent, 'startDate');
-    const value = extractAttribute(recordContent, 'value');
-    const unit = extractAttribute(recordContent, 'unit');
-    
-    if (startDate && value) {
-      records.push({
-        type,
-        date: new Date(startDate),
-        value: parseFloat(value),
-        unit
-      });
-    }
-    
-    // 更新起始位置
-    startIndex = recordEnd + 2;
-    
-    // 更新进度
-    recordCount++;
-    if (recordCount % 5000 === 0) {
-      const progress = Math.min(30 + Math.floor((recordCount / totalEstimatedRecords) * 30), 60);
-      updateProgress(progress, `正在处理记录 ${recordCount} / ${totalEstimatedRecords}...`);
-    }
-  }
-  
-  return records;
-}
 
 // 从 XML 字符串中提取属性值
 function extractAttribute(xmlString, attributeName) {
@@ -93,65 +44,126 @@ function extractAttribute(xmlString, attributeName) {
   return match ? match[1] : null;
 }
 
-// 按天合并数据
-function mergeDailyData(records) {
-  // 现有代码保持不变
-  const dailyData = {};
+// 直接提取并按日期分组所有健康数据
+function extractAndGroupHealthData(xmlString, updateProgress) {
+  // 估计记录总数，用于进度计算
+  const totalEstimatedRecords = (xmlString.match(/<Record /g) || []).length;
+  updateProgress(20, `发现约 ${totalEstimatedRecords} 条健康记录`);
   
-  records.forEach((record, index) => {
-    if (index % 10000 === 0) {
-      self.postMessage({
-        type: 'progress',
-        data: {
-          progress: 60 + Math.floor((index / records.length) * 20),
-          message: `正在合并数据 ${index} / ${records.length}...`
+  // 初始化每日健康数据
+  const dailyHealthData = {};
+  // 记录所有出现的数据类型
+  const activityTypes = new Set();
+  let recordCount = 0;
+  
+  try {
+    // 使用正则表达式查找所有记录
+    const recordRegex = /<Record [^>]*\/>/g;
+    let match;
+    
+    while ((match = recordRegex.exec(xmlString)) !== null) {
+      const recordContent = match[0];
+      
+      // 解析属性
+      const type = extractAttribute(recordContent, 'type');
+      const startDate = extractAttribute(recordContent, 'startDate');
+      const value = extractAttribute(recordContent, 'value');
+      const unit = extractAttribute(recordContent, 'unit');
+      
+      if (type && startDate && value) {
+        try {
+          // 添加到活动类型集合
+          activityTypes.add(type);
+          
+          // 提取日期部分
+          const date = new Date(startDate);
+          const dateStr = date.toISOString().split('T')[0];
+          const numValue = parseFloat(value) || 0; // 确保数值有效
+          
+          // 初始化该日期的数据
+          if (!dailyHealthData[dateStr]) {
+            dailyHealthData[dateStr] = {
+              date: dateStr,
+              recordCount: 0,
+              types: {},
+              details: {}
+            };
+          }
+          
+          // 初始化该类型的数据
+          if (!dailyHealthData[dateStr].types[type]) {
+            dailyHealthData[dateStr].types[type] = {
+              count: 0,
+              total: 0,
+              unit: unit || ''
+            };
+          }
+          
+          // 累加数据
+          dailyHealthData[dateStr].types[type].count += 1;
+          dailyHealthData[dateStr].types[type].total += numValue;
+          dailyHealthData[dateStr].recordCount += 1;
+          
+          // 保存详细信息到 details
+          dailyHealthData[dateStr].details[type] = dailyHealthData[dateStr].types[type].total;
+        } catch (err) {
+          console.warn(`处理记录时出错，已跳过: ${err.message}`);
+          // 继续处理下一条记录
         }
-      });
+      }
+      
+      // 更新进度
+      recordCount++;
+      if (recordCount % 5000 === 0) {
+        const progress = 30 + Math.floor((recordCount / totalEstimatedRecords) * 60);
+        updateProgress(progress, `正在处理记录 ${recordCount} / ${totalEstimatedRecords}...`);
+      }
     }
     
-    const dateStr = record.date.toISOString().split('T')[0];
+    // 最终进度更新
+    updateProgress(85, `已处理 ${recordCount} 条健康记录，共 ${Object.keys(dailyHealthData).length} 天数据，${activityTypes.size} 种数据类型`);
     
-    if (!dailyData[dateStr]) {
-      dailyData[dateStr] = {
-        date: dateStr,
-        activities: {},
-        totalActivities: 0
-      };
-    }
-    
-    if (!dailyData[dateStr].activities[record.type]) {
-      dailyData[dateStr].activities[record.type] = 0;
-    }
-    
-    dailyData[dateStr].activities[record.type]++;
-    dailyData[dateStr].totalActivities++;
-  });
-  
-  return dailyData;
+    return {
+      dailyData: dailyHealthData,
+      activityTypes: Array.from(activityTypes)
+    };
+  } catch (error) {
+    updateProgress(85, `处理数据时出错: ${error.message}`);
+    throw error;
+  }
 }
 
 // 准备可视化数据
-function prepareVisualizationData(dailyData) {
-  // 现有代码保持不变
+function prepareVisualizationData(healthData) {
+  const { dailyData, activityTypes } = healthData;
   const dates = Object.keys(dailyData).sort();
-  const activityTypes = new Set();
-  
-  // 收集所有活动类型
-  dates.forEach(date => {
-    Object.keys(dailyData[date].activities).forEach(type => {
-      activityTypes.add(type);
-    });
-  });
   
   // 转换为数组格式，适合热图显示
-  const visualizationData = dates.map(date => ({
-    date,
-    count: dailyData[date].totalActivities,
-    details: dailyData[date].activities
-  }));
+  const visualizationData = dates.map(date => {
+    const dayData = dailyData[date];
+    const result = {
+      date,
+      count: dayData.recordCount,
+      details: dayData.details || {}
+    };
+    
+    // 为每种活动类型添加特定字段
+    activityTypes.forEach(type => {
+      if (dayData.types && dayData.types[type]) {
+        // 特殊处理步数数据，保持向后兼容
+        if (type === 'HKQuantityTypeIdentifierStepCount') {
+          result.stepCount = dayData.types[type].total;
+        }
+        
+        // 可以添加其他特殊类型的处理
+      }
+    });
+    
+    return result;
+  });
   
   return {
     data: visualizationData,
-    activityTypes: Array.from(activityTypes)
+    activityTypes: activityTypes
   };
 }

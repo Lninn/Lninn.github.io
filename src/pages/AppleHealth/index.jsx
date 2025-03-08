@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import JSZip from 'jszip';
 import HealthDataCalendar from './components/HealthDataCalendar';
+import DataAnalysis from './components/DataAnalysis';
 import { Message, Upload, Progress, Card, Spin, InboxIcon } from './components/UIComponents';
 import { saveHealthData, loadHealthData, getAllCachedData, clearCacheItem, clearAllCache, formatDateTime } from './utils/cacheManager';
 import './index.css';
+import ErrorBoundary from './components/ErrorBoundary';
 
 export default function AppleHealthPage() {
   const [loading, setLoading] = useState(false);
@@ -30,16 +32,15 @@ export default function AppleHealthPage() {
     }
   };
 
+  // 处理文件上传
   const handleFileUpload = async (file) => {
     if (file.type !== 'application/zip' && !file.name.endsWith('.zip')) {
       Message.error('请上传 Apple Health 导出的 zip 文件');
       return false;
     }
 
-    // 保存当前文件引用
     currentFileRef.current = file;
     
-    // 尝试从缓存加载数据
     try {
       setLoading(true);
       setProgress(0);
@@ -48,112 +49,134 @@ export default function AppleHealthPage() {
       const cachedData = await loadHealthData(file);
       
       if (cachedData) {
-        // 使用缓存数据
-        setProgressText('从缓存加载数据...');
-        setProgress(100);
-        setHealthData(cachedData.data);
-        setLastProcessed(formatDateTime(cachedData.timestamp));
-        setLoading(false);
-        Message.success(`已从缓存加载数据 (${formatDateTime(cachedData.timestamp)})`);
+        await handleLoadFromCache(cachedData);
         return false;
       }
       
-      // 没有缓存，继续处理文件
-      setProgress(0);
-      setProgressText('正在解压文件...');
-      setHealthData(null);
-
-      // 解压 zip 文件
-      const zip = new JSZip();
-      const zipData = await zip.loadAsync(file);
-      
-      // 查找 export.xml 文件（支持英文和中文版本）
-      let exportXmlFile = null;
-      zipData.forEach((relativePath, zipEntry) => {
-        // 同时支持英文版本的 export.xml 和中文版本的 导出.xml
-        if (relativePath.endsWith('export.xml') || 
-            relativePath.endsWith('导出.xml') || 
-            relativePath === 'apple_health_export/导出.xml') {
-          exportXmlFile = zipEntry;
-        }
-      });
-
-      if (!exportXmlFile) {
-        Message.error('未找到健康数据导出文件（export.xml 或 导出.xml）');
-        setLoading(false);
-        return false;
-      }
-
-      setProgressText('正在读取 XML 数据...');
-      
-      // 使用流式处理大型 XML 文件，避免一次性加载全部内容到内存
-      var xmlContent = await exportXmlFile.async('string');
-      
-      // 释放 zip 对象内存
-      zipData.forEach((relativePath, zipEntry) => {
-        zipEntry._data = null;
-      });
-      
-      // 使用 Web Worker 处理大型 XML 数据
-      if (workerRef.current) {
-        workerRef.current.terminate();
-      }
-      
-      const worker = new Worker(new URL('./utils/xmlWorker.js', import.meta.url));
-      workerRef.current = worker;
-      
-      worker.onmessage = async (e) => {
-        const { type, data } = e.data;
-        
-        if (type === 'progress') {
-          setProgress(data.progress);
-          setProgressText(data.message);
-        } else if (type === 'result') {
-          setHealthData(data);
-          setProgress(100);
-          setProgressText('处理完成，正在保存缓存...');
-          
-          // 保存到缓存
-          try {
-            await saveHealthData(file, data);
-            // 更新缓存文件列表
-            loadCachedFilesList();
-            const now = new Date();
-            setLastProcessed(formatDateTime(now.getTime()));
-          } catch (cacheError) {
-            console.error('保存缓存失败:', cacheError);
-          }
-          
-          setProgressText('处理完成');
-          setLoading(false);
-          worker.terminate();
-          workerRef.current = null;
-        } else if (type === 'error') {
-          Message.error(`处理数据时出错: ${data.message}`);
-          setLoading(false);
-          worker.terminate();
-          workerRef.current = null;
-        }
-      };
-      
-      worker.postMessage({ xmlContent });
-      
-      // 释放 xmlContent 内存
-      setTimeout(() => {
-        // 延迟清空变量，确保 worker 已经接收到数据
-         
-        xmlContent = null;
-      }, 1000);
+      await processHealthFile(file);
     } catch (error) {
-      console.error('处理文件时出错:', error);
-      Message.error(`处理文件时出错: ${error.message}`);
+      console.error('处理健康数据文件失败:', error);
+      Message.error(`处理文件失败: ${error.message}`);
+    } finally {
       setLoading(false);
     }
     
-    return false; // 阻止默认上传行为
+    return false;
   };
 
-  // 处理清除单个缓存
+  // 处理健康数据文件
+  const processHealthFile = async (file) => {
+    setProgress(0);
+    setProgressText('正在解压文件...');
+    setHealthData(null);
+
+    const zip = new JSZip();
+    const zipData = await zip.loadAsync(file);
+    
+    const exportXmlFile = findExportXmlFile(zipData);
+    if (!exportXmlFile) {
+      throw new Error('未找到健康数据导出文件（export.xml 或 导出.xml）');
+    }
+
+    setProgressText('正在读取 XML 数据...');
+    const xmlContent = await exportXmlFile.async('string');
+    
+    // 释放 zip 对象内存
+    zipData.forEach((relativePath, zipEntry) => {
+      zipEntry._data = null;
+    });
+    
+    // 使用 Web Worker 处理数据
+    const result = await processXmlWithWorker(xmlContent);
+    
+    // 保存结果
+    await saveResult(file, result);
+    
+    return result;
+  };
+
+  // 查找导出的 XML 文件
+  const findExportXmlFile = (zipData) => {
+    let exportXmlFile = null;
+    zipData.forEach((relativePath, zipEntry) => {
+      if (relativePath.endsWith('export.xml') || 
+          relativePath.endsWith('导出.xml') || 
+          relativePath === 'apple_health_export/导出.xml' ||
+          relativePath === 'apple_health_export/export.xml') {
+        exportXmlFile = zipEntry;
+      }
+    });
+    return exportXmlFile;
+  };
+
+  // 使用 Web Worker 处理 XML 数据
+  const processXmlWithWorker = async (xmlContent) => {
+    if (workerRef.current) {
+      workerRef.current.terminate();
+    }
+    
+    workerRef.current = new Worker(new URL('./utils/xmlWorker.js', import.meta.url));
+    
+    try {
+      const result = await new Promise((resolve, reject) => {
+        workerRef.current.onmessage = (e) => {
+          const { type, data } = e.data;
+          if (type === 'result') {
+            resolve(data);
+          } else if (type === 'error') {
+            reject(new Error(data.message));
+          } else if (type === 'progress') {
+            setProgress(data.progress);
+            setProgressText(data.message);
+          }
+        };
+        
+        workerRef.current.onerror = (error) => {
+          reject(new Error(`Worker 错误: ${error.message}`));
+        };
+        
+        workerRef.current.postMessage({ xmlContent });
+      });
+      
+      return result;
+    } finally {
+      // 清理 Worker
+      if (workerRef.current) {
+        workerRef.current.terminate();
+        workerRef.current = null;
+      }
+    }
+  };
+
+  // 保存处理结果
+  const saveResult = async (file, result) => {
+    try {
+      await saveHealthData(file, result);
+      await loadCachedFilesList();
+      setHealthData(result);
+      setLastProcessed(formatDateTime(new Date().getTime()));
+      Message.success('健康数据处理完成');
+    } catch (error) {
+      console.error('保存数据失败:', error);
+      // 仍然设置数据，但提示保存失败
+      setHealthData(result);
+      Message.warning('数据已处理，但保存到缓存失败');
+    }
+  };
+
+  // 从缓存加载数据
+  const handleLoadFromCache = async (cachedItem) => {
+    try {
+      setHealthData(cachedItem.data);
+      setLastProcessed(formatDateTime(cachedItem.timestamp));
+      setShowCacheManager(false);
+      Message.success(`已从缓存加载数据 (${formatDateTime(cachedItem.timestamp)})`);
+    } catch (error) {
+      Message.error(`加载缓存数据失败: ${error.message}`);
+    }
+  };
+
+  // 缓存管理相关函数
   const handleClearCacheItem = async (fileId, fileName) => {
     try {
       await clearCacheItem(fileId);
@@ -164,22 +187,14 @@ export default function AppleHealthPage() {
     }
   };
 
-  // 处理清除所有缓存
   const handleClearAllCache = async () => {
     try {
       await clearAllCache();
       Message.success('已清除所有缓存');
-      setCachedFiles([]);
+      loadCachedFilesList();
     } catch (error) {
       Message.error(`清除所有缓存失败: ${error.message}`);
     }
-  };
-
-  // 从缓存加载特定数据
-  const handleLoadFromCache = async (cachedItem) => {
-    setHealthData(cachedItem.data);
-    setLastProcessed(formatDateTime(cachedItem.timestamp));
-    setShowCacheManager(false);
   };
 
   // 渲染缓存管理器
@@ -237,56 +252,54 @@ export default function AppleHealthPage() {
 
   return (
     <div className="apple-health-container">
-      <h1>Apple Health 数据可视化</h1>
-      
-      <div className="header-actions">
-        <button 
-          className="cache-manager-button" 
-          onClick={() => setShowCacheManager(!showCacheManager)}
-        >
-          {showCacheManager ? '隐藏缓存管理' : '缓存管理'}
-        </button>
-      </div>
-      
-      {showCacheManager && renderCacheManager()}
-      
-      <Card title="上传健康数据" className="upload-card">
-        <Upload.Dragger
-          name="file"
-          multiple={false}
-          beforeUpload={handleFileUpload}
-          showUploadList={false}
-          disabled={loading}
-        >
-          <p className="ant-upload-drag-icon">
-            <InboxIcon />
-          </p>
-          <p className="ant-upload-text">点击或拖拽 Apple Health 导出的 zip 文件到此区域</p>
-          <p className="ant-upload-hint">
-            支持从 Apple Health 应用导出的 zip 格式健康数据
-          </p>
-        </Upload.Dragger>
+      <ErrorBoundary>
+        <div className="header-actions">
+          <button 
+            className="cache-manager-button" 
+            onClick={() => setShowCacheManager(!showCacheManager)}
+          >
+            {showCacheManager ? '隐藏缓存管理' : '缓存管理'}
+          </button>
+        </div>
         
-        {loading && (
-          <div className="progress-container">
-            <Progress percent={progress} status="active" />
-            <p className="progress-text">{progressText}</p>
-            <Spin />
-          </div>
-        )}
+        {showCacheManager && renderCacheManager()}
         
-        {lastProcessed && !loading && (
-          <div className="last-processed">
-            <p>上次处理时间: {lastProcessed}</p>
-          </div>
-        )}
-      </Card>
-      
-      {healthData && (
-        <Card title="健康数据活动热图" className="calendar-card">
-          <HealthDataCalendar data={healthData} />
+        <Card title="上传 Apple Health 数据" className="upload-card">
+          <Upload.Dragger
+            beforeUpload={handleFileUpload}
+            disabled={loading}
+          >
+            <p className="upload-icon"><InboxIcon /></p>
+            <p className="upload-text">点击或拖拽文件到此区域上传</p>
+            <p className="upload-hint">请上传从 Apple Health 导出的 zip 文件</p>
+          </Upload.Dragger>
+          
+          {loading && (
+            <div className="progress-container">
+              <Progress percent={progress} />
+              <div className="progress-status">{progressText}</div>
+            </div>
+          )}
+          
+          {lastProcessed && (
+            <div className="last-processed">
+              上次处理时间: {lastProcessed}
+            </div>
+          )}
         </Card>
-      )}
+        
+        {healthData && (
+          <>
+            <Card title="健康数据日历视图" className="calendar-card">
+              <HealthDataCalendar data={healthData} />
+            </Card>
+            <Card title="数据分析" className="analysis-card">
+              <DataAnalysis data={healthData} />
+            </Card>
+          </>
+        )}
+      </ErrorBoundary>
     </div>
   );
 }
+
