@@ -36,5 +36,16 @@ export default defineConfig(({ command }) => ({
     port: 3000,
     open: true,
     cors: true
+  },
+  // Vitest 配置
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.js'],
+    include: ['**/*.{test,spec}.{js,jsx}'],
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+      exclude: ['node_modules/', 'src/test/']
+    }
   }
 }))

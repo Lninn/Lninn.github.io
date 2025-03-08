@@ -1,16 +1,7 @@
 import { create } from 'zustand'
 import { DEFAULT_ROUTES_CONFIG } from '#/utils/globalInitial'
 import { convertToRouteConfig } from '#/api/navigationApi'
-
-// 添加超时处理的 Promise
-const withTimeout = (promise, timeout = 5000) => {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('请求超时')), timeout)
-    )
-  ]);
-};
+import { withTimeout } from '#/utils/withTimeout'
 
 const useRoutesStore = create((set) => ({
   routes: DEFAULT_ROUTES_CONFIG,
