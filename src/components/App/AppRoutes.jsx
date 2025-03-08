@@ -19,15 +19,7 @@ function NotFound() {
   )
 }
 
-export const AppRoutes = () => {
-  const { routes, loading, error } = useRoutesStore();
-
-  useEffect(() => {
-    if (error) {
-      console.error('路由加载错误:', error);
-    }
-  }, [error]);
-
+export const AppRoutes = ({ routes }) => {
   // 递归渲染路由
   const renderRoutes = (routesList) => {
     return routesList.map((route) => {
@@ -60,17 +52,11 @@ export const AppRoutes = () => {
     });
   };
 
-  if (loading) {
-    return <LoadingSpinner fullScreen text="系统初始化中..." />;
-  }
-
-  const routesDom = renderRoutes(routes)
-  
   return (
     <Suspense fallback={<LoadingSpinner fullScreen text="页面加载中..." />} >
       <PageContainer>
         <Routes>
-          {routesDom}
+          {renderRoutes(routes)}
           {/* 默认重定向到第一个路由 */}
           <Route path="/" element={<Navigate to={routes[0].path} replace />} />
           {/* 404页面 */}
