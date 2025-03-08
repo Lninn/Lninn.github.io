@@ -69,30 +69,45 @@ export default function AppleHealthPage() {
     setProgress(0);
     setProgressText('正在解压文件...');
     setHealthData(null);
-
+  
+    console.log(`开始处理文件: ${file.name}, 大小: ${Math.round(file.size / 1024)} KB`);
+    
     const zip = new JSZip();
-    const zipData = await zip.loadAsync(file);
-    
-    const exportXmlFile = findExportXmlFile(zipData);
-    if (!exportXmlFile) {
-      throw new Error('未找到健康数据导出文件（export.xml 或 导出.xml）');
+    try {
+      const zipData = await zip.loadAsync(file);
+      console.log('ZIP 文件加载成功，查找 XML 文件');
+      
+      // 列出所有文件
+      const fileList = Object.keys(zipData.files);
+      console.log('ZIP 内文件列表:', fileList);
+      
+      const exportXmlFile = findExportXmlFile(zipData);
+      if (!exportXmlFile) {
+        console.error('未找到 export.xml 文件');
+        throw new Error('未找到健康数据导出文件（export.xml 或 导出.xml）');
+      }
+      
+      console.log('找到 XML 文件，开始读取内容');
+      setProgressText('正在读取 XML 数据...');
+      const xmlContent = await exportXmlFile.async('string');
+      console.log(`XML 内容读取完成，大小约 ${Math.round(xmlContent.length / 1024)} KB`);
+      
+      // 释放 zip 对象内存
+      zipData.forEach((relativePath, zipEntry) => {
+        zipEntry._data = null;
+      });
+      
+      // 使用 Web Worker 处理数据
+      const result = await processXmlWithWorker(xmlContent);
+      
+      // 保存结果
+      await saveResult(file, result);
+      
+      return result;
+    } catch (error) {
+      console.error('处理健康数据文件时发生错误:', error);
+      throw error;
     }
-
-    setProgressText('正在读取 XML 数据...');
-    const xmlContent = await exportXmlFile.async('string');
-    
-    // 释放 zip 对象内存
-    zipData.forEach((relativePath, zipEntry) => {
-      zipEntry._data = null;
-    });
-    
-    // 使用 Web Worker 处理数据
-    const result = await processXmlWithWorker(xmlContent);
-    
-    // 保存结果
-    await saveResult(file, result);
-    
-    return result;
   };
 
   // 查找导出的 XML 文件
@@ -115,26 +130,34 @@ export default function AppleHealthPage() {
       workerRef.current.terminate();
     }
     
+    console.log('创建新的 Worker 实例');
     workerRef.current = new Worker(new URL('./utils/xmlWorker.js', import.meta.url));
     
     try {
       const result = await new Promise((resolve, reject) => {
         workerRef.current.onmessage = (e) => {
           const { type, data } = e.data;
+          console.log(`收到 Worker 消息: ${type}`);
+          
           if (type === 'result') {
+            console.log('处理完成，收到结果数据');
             resolve(data);
           } else if (type === 'error') {
+            console.error('Worker 报错:', data.message);
             reject(new Error(data.message));
           } else if (type === 'progress') {
+            console.log(`进度: ${data.progress}%, ${data.message}`);
             setProgress(data.progress);
             setProgressText(data.message);
           }
         };
         
         workerRef.current.onerror = (error) => {
+          console.error('Worker 错误事件:', error);
           reject(new Error(`Worker 错误: ${error.message}`));
         };
         
+        console.log('向 Worker 发送 XML 数据');
         workerRef.current.postMessage({ xmlContent });
       });
       
@@ -142,6 +165,7 @@ export default function AppleHealthPage() {
     } finally {
       // 清理 Worker
       if (workerRef.current) {
+        console.log('终止 Worker');
         workerRef.current.terminate();
         workerRef.current = null;
       }
@@ -151,8 +175,11 @@ export default function AppleHealthPage() {
   // 保存处理结果
   const saveResult = async (file, result) => {
     try {
+      console.log('保存处理结果到缓存');
       await saveHealthData(file, result);
       await loadCachedFilesList();
+      
+      console.log('设置健康数据状态', result);
       setHealthData(result);
       setLastProcessed(formatDateTime(new Date().getTime()));
       Message.success('健康数据处理完成');

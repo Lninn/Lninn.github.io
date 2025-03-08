@@ -3,6 +3,9 @@ self.onmessage = function(e) {
   const { xmlContent } = e.data;
   
   try {
+    // 添加日志，检查收到的数据大小
+    console.log(`Worker 收到数据，大小约 ${Math.round(xmlContent.length / 1024)} KB`);
+    
     // 发送进度更新
     const updateProgress = (progress, message) => {
       // 确保每次进度更新都能发送到主线程
@@ -10,6 +13,7 @@ self.onmessage = function(e) {
         type: 'progress',
         data: { progress, message }
       });
+      console.log(`进度更新: ${progress}%, ${message}`);
     };
     
     // 第一步：解析 XML 数据
