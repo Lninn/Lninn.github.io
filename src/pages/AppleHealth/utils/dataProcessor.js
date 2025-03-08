@@ -1,5 +1,5 @@
 // 处理 XML 数据的辅助函数
-export const processXMLData = (xmlContent, updateProgress) => {
+export const processXMLData = () => {
   return new Promise((resolve, reject) => {
     try {
       // 这些函数在 Web Worker 中实现，这里只是为了在主线程中有备用

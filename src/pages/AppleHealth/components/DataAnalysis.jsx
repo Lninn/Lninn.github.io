@@ -327,7 +327,7 @@ const DataAnalysis = ({ data }) => {
                 <Col style={{ width: '33%' }}>
                   <Statistic 
                     title="平均值" 
-                    value={summary.average.toFixed(2)} 
+                    value={summary.average?.toFixed(2)} 
                   />
                 </Col>
                 <Col style={{ width: '33%' }}>

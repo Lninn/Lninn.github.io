@@ -6,6 +6,8 @@ import { Message, Upload, Progress, Card, Spin, InboxIcon } from './components/U
 import { saveHealthData, loadHealthData, getAllCachedData, clearCacheItem, clearAllCache, formatDateTime } from './utils/cacheManager';
 import './index.css';
 import ErrorBoundary from './components/ErrorBoundary';
+import Worker from './utils/xmlworker.js?worker';
+
 
 export default function AppleHealthPage() {
   const [loading, setLoading] = useState(false);
@@ -142,8 +144,8 @@ export default function AppleHealthPage() {
     
     console.log('创建新的 Worker 实例');
     addLog('创建新的 Worker 实例');
-    workerRef.current = new Worker(new URL('./utils/xmlWorker.js', import.meta.url));
-    
+    // workerRef.current = new Worker(new URL('./utils/xmlWorker.js', import.meta.url));
+    workerRef.current = new Worker();
     try {
       const result = await new Promise((resolve, reject) => {
         workerRef.current.onmessage = (e) => {

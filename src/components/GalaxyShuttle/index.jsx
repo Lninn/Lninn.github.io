@@ -2,20 +2,20 @@ import './index.css'
 
 export default function GalaxyShuttle() {
   return (
-    <div class="g-container">
-      <div class="g-group">
-          <div class="item item-right"></div>
-          <div class="item item-left"></div>   
-          <div class="item item-top"></div>
-          <div class="item item-bottom"></div> 
-          <div class="item item-middle"></div>    
+    <div className="g-container">
+      <div className="g-group">
+          <div className="item item-right"></div>
+          <div className="item item-left"></div>   
+          <div className="item item-top"></div>
+          <div className="item item-bottom"></div> 
+          <div className="item item-middle"></div>    
       </div>
-      <div class="g-group">
-          <div class="item item-right"></div>
-          <div class="item item-left"></div>   
-          <div class="item item-top"></div>
-          <div class="item item-bottom"></div>   
-          <div class="item item-middle"></div>    
+      <div className="g-group">
+          <div className="item item-right"></div>
+          <div className="item item-left"></div>   
+          <div className="item item-top"></div>
+          <div className="item item-bottom"></div>   
+          <div className="item item-middle"></div>    
       </div>
     </div>
   );
