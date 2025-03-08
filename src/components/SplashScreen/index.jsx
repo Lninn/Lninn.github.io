@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
+import GalaxyShuttle from '#/components/GalaxyShuttle'
 import './index.css';
+
+
+const ENABLE_SPLASH_SCREEN = false;
 
 const SplashScreen = ({ 
   text = "探索无限可能", 
@@ -32,6 +36,14 @@ const SplashScreen = ({
     
     return () => clearInterval(textInterval);
   }, []);
+
+  if (!ENABLE_SPLASH_SCREEN) {
+    return (
+      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex' }}>
+        <GalaxyShuttle />
+      </div>
+    )
+  }
   
   return (
     <div className="splash-screen">

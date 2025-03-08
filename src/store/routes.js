@@ -24,6 +24,10 @@ const useRoutesStore = create((set) => ({
       
       // 添加超时处理
       const apiRoutes = await withTimeout(convertToRouteConfig(), 8000);
+
+      // TODO: 测试用
+      // Add a 3-second delay fake task
+      await new Promise(resolve => setTimeout(resolve, 3000))
       
       if (apiRoutes && apiRoutes.length > 0) {
         set({ routes: apiRoutes, loading: false })
