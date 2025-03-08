@@ -18,6 +18,23 @@ export const Message = {
         document.body.removeChild(messageDiv);
       }, 300);
     }, 3000);
+  },
+  
+  success: (content) => {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'custom-message custom-message-success';
+    messageDiv.innerHTML = `
+      <span class="message-icon">✅</span>
+      <span class="message-content">${content}</span>
+    `;
+    document.body.appendChild(messageDiv);
+    
+    setTimeout(() => {
+      messageDiv.classList.add('message-fade-out');
+      setTimeout(() => {
+        document.body.removeChild(messageDiv);
+      }, 300);
+    }, 3000);
   }
 };
 

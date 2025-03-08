@@ -1,8 +1,8 @@
-import { useState, useRef } from 'react';
-// 移除 antd 导入，替换为自定义组件
+import { useState, useRef, useEffect } from 'react';
 import JSZip from 'jszip';
 import HealthDataCalendar from './components/HealthDataCalendar';
 import { Message, Upload, Progress, Card, Spin, InboxIcon } from './components/UIComponents';
+import { saveHealthData, loadHealthData, getAllCachedData, clearCacheItem, clearAllCache, formatDateTime } from './utils/cacheManager';
 import './index.css';
 
 export default function AppleHealthPage() {
@@ -10,7 +10,25 @@ export default function AppleHealthPage() {
   const [progress, setProgress] = useState(0);
   const [progressText, setProgressText] = useState('');
   const [healthData, setHealthData] = useState(null);
+  const [cachedFiles, setCachedFiles] = useState([]);
+  const [showCacheManager, setShowCacheManager] = useState(false);
+  const [lastProcessed, setLastProcessed] = useState(null);
   const workerRef = useRef(null);
+  const currentFileRef = useRef(null);
+
+  // 加载缓存文件列表
+  useEffect(() => {
+    loadCachedFilesList();
+  }, []);
+
+  const loadCachedFilesList = async () => {
+    try {
+      const cachedData = await getAllCachedData();
+      setCachedFiles(cachedData);
+    } catch (error) {
+      console.error('加载缓存列表失败:', error);
+    }
+  };
 
   const handleFileUpload = async (file) => {
     if (file.type !== 'application/zip' && !file.name.endsWith('.zip')) {
@@ -18,12 +36,33 @@ export default function AppleHealthPage() {
       return false;
     }
 
-    setLoading(true);
-    setProgress(0);
-    setProgressText('正在解压文件...');
-    setHealthData(null);
-
+    // 保存当前文件引用
+    currentFileRef.current = file;
+    
+    // 尝试从缓存加载数据
     try {
+      setLoading(true);
+      setProgress(0);
+      setProgressText('检查缓存数据...');
+      
+      const cachedData = await loadHealthData(file);
+      
+      if (cachedData) {
+        // 使用缓存数据
+        setProgressText('从缓存加载数据...');
+        setProgress(100);
+        setHealthData(cachedData.data);
+        setLastProcessed(formatDateTime(cachedData.timestamp));
+        setLoading(false);
+        Message.success(`已从缓存加载数据 (${formatDateTime(cachedData.timestamp)})`);
+        return false;
+      }
+      
+      // 没有缓存，继续处理文件
+      setProgress(0);
+      setProgressText('正在解压文件...');
+      setHealthData(null);
+
       // 解压 zip 文件
       const zip = new JSZip();
       const zipData = await zip.loadAsync(file);
@@ -48,7 +87,7 @@ export default function AppleHealthPage() {
       setProgressText('正在读取 XML 数据...');
       
       // 使用流式处理大型 XML 文件，避免一次性加载全部内容到内存
-      const xmlContent = await exportXmlFile.async('string');
+      var xmlContent = await exportXmlFile.async('string');
       
       // 释放 zip 对象内存
       zipData.forEach((relativePath, zipEntry) => {
@@ -63,7 +102,7 @@ export default function AppleHealthPage() {
       const worker = new Worker(new URL('./utils/xmlWorker.js', import.meta.url));
       workerRef.current = worker;
       
-      worker.onmessage = (e) => {
+      worker.onmessage = async (e) => {
         const { type, data } = e.data;
         
         if (type === 'progress') {
@@ -72,6 +111,19 @@ export default function AppleHealthPage() {
         } else if (type === 'result') {
           setHealthData(data);
           setProgress(100);
+          setProgressText('处理完成，正在保存缓存...');
+          
+          // 保存到缓存
+          try {
+            await saveHealthData(file, data);
+            // 更新缓存文件列表
+            loadCachedFilesList();
+            const now = new Date();
+            setLastProcessed(formatDateTime(now.getTime()));
+          } catch (cacheError) {
+            console.error('保存缓存失败:', cacheError);
+          }
+          
           setProgressText('处理完成');
           setLoading(false);
           worker.terminate();
@@ -89,7 +141,7 @@ export default function AppleHealthPage() {
       // 释放 xmlContent 内存
       setTimeout(() => {
         // 延迟清空变量，确保 worker 已经接收到数据
-        // eslint-disable-next-line no-const-assign
+         
         xmlContent = null;
       }, 1000);
     } catch (error) {
@@ -101,9 +153,102 @@ export default function AppleHealthPage() {
     return false; // 阻止默认上传行为
   };
 
+  // 处理清除单个缓存
+  const handleClearCacheItem = async (fileId, fileName) => {
+    try {
+      await clearCacheItem(fileId);
+      Message.success(`已清除缓存: ${fileName}`);
+      loadCachedFilesList();
+    } catch (error) {
+      Message.error(`清除缓存失败: ${error.message}`);
+    }
+  };
+
+  // 处理清除所有缓存
+  const handleClearAllCache = async () => {
+    try {
+      await clearAllCache();
+      Message.success('已清除所有缓存');
+      setCachedFiles([]);
+    } catch (error) {
+      Message.error(`清除所有缓存失败: ${error.message}`);
+    }
+  };
+
+  // 从缓存加载特定数据
+  const handleLoadFromCache = async (cachedItem) => {
+    setHealthData(cachedItem.data);
+    setLastProcessed(formatDateTime(cachedItem.timestamp));
+    setShowCacheManager(false);
+  };
+
+  // 渲染缓存管理器
+  const renderCacheManager = () => {
+    return (
+      <Card title="缓存管理" className="cache-manager-card">
+        <div className="cache-controls">
+          <button 
+            className="clear-all-button" 
+            onClick={handleClearAllCache}
+            disabled={cachedFiles.length === 0}
+          >
+            清除所有缓存
+          </button>
+          <button 
+            className="close-button" 
+            onClick={() => setShowCacheManager(false)}
+          >
+            关闭
+          </button>
+        </div>
+        
+        {cachedFiles.length === 0 ? (
+          <p className="no-cache">没有缓存数据</p>
+        ) : (
+          <div className="cache-list">
+            {cachedFiles.map(item => (
+              <div key={item.id} className="cache-item">
+                <div className="cache-info">
+                  <div className="cache-name">{item.fileName}</div>
+                  <div className="cache-date">处理时间: {formatDateTime(item.timestamp)}</div>
+                  <div className="cache-size">文件大小: {(item.fileSize / (1024 * 1024)).toFixed(2)} MB</div>
+                </div>
+                <div className="cache-actions">
+                  <button 
+                    className="load-button" 
+                    onClick={() => handleLoadFromCache(item)}
+                  >
+                    加载
+                  </button>
+                  <button 
+                    className="delete-button" 
+                    onClick={() => handleClearCacheItem(item.id, item.fileName)}
+                  >
+                    删除
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+    );
+  };
+
   return (
     <div className="apple-health-container">
       <h1>Apple Health 数据可视化</h1>
+      
+      <div className="header-actions">
+        <button 
+          className="cache-manager-button" 
+          onClick={() => setShowCacheManager(!showCacheManager)}
+        >
+          {showCacheManager ? '隐藏缓存管理' : '缓存管理'}
+        </button>
+      </div>
+      
+      {showCacheManager && renderCacheManager()}
       
       <Card title="上传健康数据" className="upload-card">
         <Upload.Dragger
@@ -127,6 +272,12 @@ export default function AppleHealthPage() {
             <Progress percent={progress} status="active" />
             <p className="progress-text">{progressText}</p>
             <Spin />
+          </div>
+        )}
+        
+        {lastProcessed && !loading && (
+          <div className="last-processed">
+            <p>上次处理时间: {lastProcessed}</p>
           </div>
         )}
       </Card>
