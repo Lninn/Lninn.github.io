@@ -1,67 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import './UIComponents.css';
 
 
-
-// 自定义选择器组件 - 保留，因为这是特定于 AppleHealth 的实现
-export const Select = ({ value, onChange, style, options }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const selectRef = useRef(null);
-  
-  // 点击外部关闭下拉菜单
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (selectRef.current && !selectRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-    
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-  
-  const handleSelect = (optionValue) => {
-    onChange(optionValue);
-    setIsOpen(false);
-  };
-  
-  const selectedLabel = options.find(option => option.value === value)?.label || '';
-  
-  // 合并默认样式和传入的样式
-  const mergedStyle = {
-    minWidth: '120px',  // 设置最小宽度
-    width: 'auto',      // 允许自动扩展
-    display: 'inline-block', // 确保宽度自适应内容
-    ...style
-  };
-  
-  return (
-    <div className="custom-select" style={mergedStyle} ref={selectRef}>
-      <div 
-        className="select-selected"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {selectedLabel}
-        <span className="select-arrow">{isOpen ? '▲' : '▼'}</span>
-      </div>
-      {isOpen && (
-        <div className="select-options">
-          {options.map((option, i) => (
-            <div 
-              key={option.value + '' + i} 
-              className={`select-option ${option.value === value ? 'selected' : ''}`}
-              onClick={() => handleSelect(option.value)}
-            >
-              {option.label}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
 
 // 自定义统计数据组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Statistic = ({ title, value, prefix, suffix }) => {
