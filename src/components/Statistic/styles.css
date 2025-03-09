@@ -1,0 +1,59 @@
+.statistic {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: var(--text-primary, #000000d9);
+  font-size: 14px;
+  line-height: 1.5715;
+  list-style: none;
+}
+
+.statistic-title {
+  margin-bottom: 4px;
+  color: var(--text-secondary, #00000073);
+  font-size: 14px;
+}
+
+.statistic-content {
+  display: flex;
+  align-items: center;
+  color: var(--text-primary, #000000d9);
+  font-size: 16px;
+}
+
+.statistic-value {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.statistic-prefix {
+  margin-right: 4px;
+}
+
+.statistic-suffix {
+  margin-left: 4px;
+}
+
+/* 暗色模式适配 */
+.dark-mode .statistic {
+  color: var(--text-primary-dark, #ffffffd9);
+}
+
+.dark-mode .statistic-title {
+  color: var(--text-secondary-dark, #ffffff73);
+}
+
+.dark-mode .statistic-content {
+  color: var(--text-primary-dark, #ffffffd9);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .statistic-value {
+    font-size: 20px;
+  }
+  
+  .statistic-title {
+    font-size: 12px;
+  }
+}
