@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 
 import Tooltip from '#/components/Tooltip';
 import Select from '#/components/Select';
@@ -15,6 +15,17 @@ import './HealthDataCalendar.css';
 
 const HealthDataCalendar = ({ data }) => {
   const [selectedType, setSelectedType] = useState('HKQuantityTypeIdentifierStepCount');
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  
+  // 添加响应式检测
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   const { calendarData, years, activityTypes, stats } = useMemo(() => {
     if (!data || !data.data) return { calendarData: [], years: [], activityTypes: [], stats: {} };
@@ -114,13 +125,17 @@ const HealthDataCalendar = ({ data }) => {
     return maxCounts;
   }, [calendarData, years, selectedType]);
   
-  // 渲染月份标签
+  // 渲染月份标签 - 修改为更好的对齐方式
   const renderMonthLabels = () => {
     const months = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+    // 移动端显示简化月份
+    const mobileMonths = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+    const displayMonths = isMobile ? mobileMonths : months;
+    
     return (
       <div className="month-labels">
-        {months.map((month, index) => (
-          <div key={month} className="month-label" style={{ left: `${(index * 8.3) + 2}%` }}>
+        {displayMonths.map((month) => (
+          <div key={month} className="month-label">
             {month}
           </div>
         ))}
@@ -178,6 +193,7 @@ const HealthDataCalendar = ({ data }) => {
                       <Tooltip 
                         key={`${year}-w${weekIndex}-d${dayIndex}`}
                         title={tooltipText}
+                        placement={isMobile ? "top" : "right"}
                       >
                         <div 
                           className={`calendar-day intensity-${intensity}`}
@@ -231,14 +247,12 @@ const HealthDataCalendar = ({ data }) => {
           <button 
             className="export-button" 
             onClick={handleExportJson}
-            style={{ marginLeft: '10px' }}
           >
             导出 JSON
           </button>
           <button 
             className="export-button" 
             onClick={handleExportCsv}
-            style={{ marginLeft: '10px' }}
           >
             导出 CSV
           </button>
@@ -246,7 +260,7 @@ const HealthDataCalendar = ({ data }) => {
       </div>
       
       <Row gutter={16} className="stats-cards">
-        <Col span={6}>
+        <Col span={isMobile ? 12 : 6} xs={24} sm={12} md={6}>
           <Card>
             <Statistic 
               title="记录天数" 
@@ -256,7 +270,7 @@ const HealthDataCalendar = ({ data }) => {
             />
           </Card>
         </Col>
-        <Col span={6}>
+        <Col span={isMobile ? 12 : 6} xs={24} sm={12} md={6}>
           <Card>
             <Statistic 
               title="总活动数" 
@@ -265,7 +279,7 @@ const HealthDataCalendar = ({ data }) => {
             />
           </Card>
         </Col>
-        <Col span={6}>
+        <Col span={isMobile ? 12 : 6} xs={24} sm={12} md={6}>
           <Card>
             <Statistic 
               title="单日最高活动" 
@@ -274,7 +288,7 @@ const HealthDataCalendar = ({ data }) => {
             />
           </Card>
         </Col>
-        <Col span={6}>
+        <Col span={isMobile ? 12 : 6} xs={24} sm={12} md={6}>
           <Card>
             <Statistic 
               title="日均活动" 

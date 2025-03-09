@@ -1,5 +1,7 @@
 .health-data-calendar {
   margin-top: 20px;
+  width: 100%;
+  overflow-x: auto;
 }
 
 .calendar-header {
@@ -7,6 +9,33 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.calendar-title h3 {
+  margin: 0;
+}
+
+.calendar-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.export-button {
+  padding: 6px 12px;
+  background-color: var(--primary-color, #1890ff);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.export-button:hover {
+  background-color: var(--primary-color-hover, #40a9ff);
 }
 
 .stats-cards {
@@ -17,17 +46,19 @@
   display: flex;
   align-items: center;
   margin: 20px 0;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .legend-items {
   display: flex;
-  margin-left: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  margin-right: 15px;
 }
 
 .legend-color {
@@ -39,29 +70,36 @@
 
 .year-calendar {
   margin-bottom: 40px;
+  width: 100%;
 }
 
 .calendar-grid {
   position: relative;
-  padding-top: 20px;
+  padding-top: 30px;
+  width: 100%;
+  overflow-x: auto;
 }
 
 .month-labels {
   position: absolute;
   top: 0;
-  left: 0;
+  left: 30px; /* 与 weekday-labels 宽度对齐 */
   right: 0;
   height: 20px;
+  display: flex;
 }
 
 .month-label {
-  position: absolute;
+  position: relative;
   font-size: 12px;
   color: var(--text-color-secondary, #666);
+  flex: 1;
+  text-align: center;
 }
 
 .calendar-body {
   display: flex;
+  width: 100%;
 }
 
 .weekday-labels {
@@ -83,12 +121,15 @@
 .calendar-cells {
   flex: 1;
   display: flex;
+  flex-wrap: nowrap;
+  width: calc(100% - 35px);
 }
 
 .calendar-week {
   display: flex;
   flex-direction: column;
   margin-right: 2px;
+  flex: 1;
 }
 
 .calendar-day {
@@ -119,4 +160,55 @@
 
 .intensity-4 {
   background-color: var(--calendar-level-4, #196127);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .calendar-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .calendar-actions {
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .stats-cards .col {
+    margin-bottom: 10px;
+  }
+  
+  .calendar-grid {
+    padding-top: 25px;
+  }
+  
+  .month-label {
+    font-size: 10px;
+  }
+  
+  .weekday-label {
+    font-size: 10px;
+  }
+  
+  .calendar-day {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* 小屏幕适配 */
+@media (max-width: 576px) {
+  .stats-cards [class*="col-"] {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  
+  .calendar-day {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .legend-items {
+    margin-top: 5px;
+  }
 }
