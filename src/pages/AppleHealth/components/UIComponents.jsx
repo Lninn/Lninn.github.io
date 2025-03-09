@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './UIComponents.css';
 
-// 简易消息提示组件
+// 简易消息提示组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Message = {
   error: (content) => {
     const messageDiv = document.createElement('div');
@@ -38,7 +38,7 @@ export const Message = {
   }
 };
 
-// 简易上传组件
+// 简易上传组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Upload = {
   Dragger: ({ children, beforeUpload, disabled }) => {
     const fileInputRef = useRef(null);
@@ -110,7 +110,7 @@ export const Upload = {
   }
 };
 
-// 进度条组件
+// 进度条组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Progress = ({ percent }) => {
   // 确保百分比是有效数字
   const validPercent = Math.min(Math.max(0, percent || 0), 100);
@@ -128,7 +128,7 @@ export const Progress = ({ percent }) => {
   );
 };
 
-// 简易卡片组件
+// 简易卡片组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Card = ({ title, children, className }) => {
   return (
     <div className={`custom-card ${className || ''}`}>
@@ -138,7 +138,7 @@ export const Card = ({ title, children, className }) => {
   );
 };
 
-// 简易加载中组件
+// 简易加载中组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Spin = () => {
   return (
     <div className="custom-spin">
@@ -147,7 +147,7 @@ export const Spin = () => {
   );
 };
 
-// 简易收件箱图标组件
+// 简易收件箱图标组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const InboxIcon = () => {
   return (
     <svg 
@@ -162,8 +162,7 @@ export const InboxIcon = () => {
   );
 };
 
-// 从 CustomComponents 添加的组件
-// 自定义提示组件
+// 自定义提示组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Tooltip = ({ children, title }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipRef = useRef(null);
@@ -184,7 +183,7 @@ export const Tooltip = ({ children, title }) => {
   );
 };
 
-// 自定义选择器组件
+// 自定义选择器组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Select = ({ value, onChange, style, options }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef(null);
@@ -244,7 +243,7 @@ export const Select = ({ value, onChange, style, options }) => {
   );
 };
 
-// 自定义统计数据组件
+// 自定义统计数据组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Statistic = ({ title, value, prefix, suffix }) => {
   return (
     <div className="custom-statistic">
@@ -258,7 +257,7 @@ export const Statistic = ({ title, value, prefix, suffix }) => {
   );
 };
 
-// 自定义行组件
+// 自定义行组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Row = ({ children, gutter, className }) => {
   const style = {
     marginLeft: gutter ? -gutter / 2 : 0,
@@ -282,7 +281,7 @@ export const Row = ({ children, gutter, className }) => {
   );
 };
 
-// 自定义列组件
+// 自定义列组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Col = ({ children, span, style }) => {
   const colStyle = {
     ...style,
@@ -297,7 +296,7 @@ export const Col = ({ children, span, style }) => {
   );
 };
 
-// 自定义日历图标
+// 自定义日历图标 - 保留，因为这是特定于 AppleHealth 的实现
 export const CalendarIcon = () => {
   return (
     <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor">
@@ -306,7 +305,7 @@ export const CalendarIcon = () => {
   );
 };
 
-// 自定义火焰图标
+// 自定义火焰图标 - 保留，因为这是特定于 AppleHealth 的实现
 export const FireIcon = () => {
   return (
     <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor">

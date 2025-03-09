@@ -18,6 +18,11 @@
   border: 1px solid #ffccc7;
 }
 
+.custom-message-success {
+  background-color: #f6ffed;
+  border: 1px solid #b7eb8f;
+}
+
 .message-icon {
   margin-right: 8px;
 }
@@ -40,42 +45,62 @@
 .custom-upload-dragger {
   border: 2px dashed #d9d9d9;
   border-radius: 4px;
-  cursor: pointer;
-  padding: 20px;
+  background-color: #fafafa;
   text-align: center;
-  background: #fafafa;
-  transition: border-color 0.3s, background 0.3s;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  position: relative;
 }
 
-.custom-upload-dragger:hover, .custom-upload-dragger.dragging {
+.custom-upload-dragger:hover {
   border-color: #1890ff;
-  background: #f0f7ff;
+}
+
+.custom-upload-dragger.dragging {
+  border-color: #1890ff;
+  background-color: #f0f7ff;
 }
 
 .custom-upload-dragger.disabled {
   cursor: not-allowed;
-  background: #f5f5f5;
+  background-color: #f5f5f5;
   border-color: #d9d9d9;
-  color: rgba(0, 0, 0, 0.25);
+}
+
+.upload-icon {
+  margin-bottom: 8px;
+  font-size: 48px;
+  color: #1890ff;
+}
+
+.upload-text {
+  margin: 0;
+  color: #000000d9;
+  font-size: 16px;
+}
+
+.upload-hint {
+  margin-top: 8px;
+  color: #00000073;
+  font-size: 14px;
 }
 
 /* 进度条样式 */
 .custom-progress {
   display: flex;
   align-items: center;
-  margin: 10px 0;
+  margin: 16px 0;
 }
 
 .progress-outer {
   flex: 1;
   background-color: #f5f5f5;
   border-radius: 100px;
-  height: 8px;
   overflow: hidden;
 }
 
 .progress-inner {
-  height: 100%;
+  height: 8px;
   background-color: #1890ff;
   border-radius: 100px;
   transition: width 0.3s ease;
@@ -100,6 +125,7 @@
   margin-left: 8px;
   width: 40px;
   text-align: right;
+  color: #00000073;
 }
 
 @keyframes progress-bar-stripes {
@@ -107,26 +133,26 @@
   to { background-position: 16px 0; }
 }
 
-/* 卡片样式 */
+/* 卡片组件样式 */
 .custom-card {
-  background: #fff;
+  background-color: #fff;
   border-radius: 4px;
-  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
   margin-bottom: 16px;
 }
 
 .card-header {
+  padding: 16px;
   border-bottom: 1px solid #f0f0f0;
-  padding: 16px 24px;
   font-weight: 500;
   font-size: 16px;
 }
 
 .card-body {
-  padding: 24px;
+  padding: 16px;
 }
 
-/* 加载中样式 */
+/* 加载中组件样式 */
 .custom-spin {
   display: inline-block;
   position: relative;
@@ -140,17 +166,16 @@
   height: 100%;
   border-radius: 50%;
   border: 3px solid #1890ff;
-  border-top-color: transparent;
-  animation: spin 1s linear infinite;
+  border-color: #1890ff transparent #1890ff transparent;
+  animation: spin-rotate 1.2s linear infinite;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+@keyframes spin-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-/* 从 CustomComponents.
-
-/* 提示框样式 */
+/* 提示组件样式 */
 .custom-tooltip-container {
   position: relative;
   display: inline-block;
@@ -161,14 +186,14 @@
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  color: #fff;
   background-color: rgba(0, 0, 0, 0.75);
-  color: white;
-  padding: 5px 10px;
   border-radius: 4px;
   font-size: 12px;
   white-space: nowrap;
   z-index: 1000;
-  margin-bottom: 5px;
 }
 
 .custom-tooltip::after {
@@ -182,27 +207,26 @@
   border-color: rgba(0, 0, 0, 0.75) transparent transparent transparent;
 }
 
-/* 选择器样式 */
+/* 选择器组件样式 */
 .custom-select {
   position: relative;
-  display: inline-block;
-  font-size: 14px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  background-color: #fff;
+  transition: all 0.3s;
 }
 
 .select-selected {
+  padding: 8px 12px;
+  cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  background-color: white;
-  cursor: pointer;
 }
 
 .select-arrow {
   margin-left: 8px;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .select-options {
@@ -212,10 +236,10 @@
   right: 0;
   z-index: 1000;
   margin-top: 4px;
-  background-color: white;
-  border: 1px solid #d9d9d9;
+  padding: 4px 0;
+  background-color: #fff;
   border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08);
   max-height: 200px;
   overflow-y: auto;
 }
@@ -223,6 +247,7 @@
 .select-option {
   padding: 8px 12px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .select-option:hover {
@@ -234,40 +259,30 @@
   color: #1890ff;
 }
 
-/* 统计数据样式 */
+/* 统计数据组件样式 */
 .custom-statistic {
-  text-align: center;
+  margin-bottom: 16px;
 }
 
 .statistic-title {
+  color: #00000073;
   font-size: 14px;
-  color: rgba(0, 0, 0, 0.45);
   margin-bottom: 4px;
 }
 
 .statistic-content {
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
-}
-
-.statistic-prefix {
-  margin-right: 4px;
-  color: #1890ff;
-}
-
-.statistic-value {
+  color: #000000d9;
   font-size: 24px;
   font-weight: 600;
 }
 
+.statistic-prefix,
 .statistic-suffix {
-  margin-left: 4px;
   font-size: 16px;
-  color: rgba(0, 0, 0, 0.45);
+  margin: 0 4px;
 }
 
-/* 行和列样式 */
+/* 行列布局样式 */
 .custom-row {
   display: flex;
   flex-wrap: wrap;
@@ -278,25 +293,70 @@
   box-sizing: border-box;
 }
 
-.custom-message-success {
-  background-color: #f6ffed;
-  border: 1px solid #b7eb8f;
+/* 处理日志样式 */
+.logs-container {
+  margin-top: 20px;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #fafafa;
 }
 
-/* 添加或修改以下样式 */
-.custom-select {
-  position: relative;
-  box-sizing: border-box;
+.log-item {
+  margin-bottom: 5px;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
-.select-options {
-  min-width: 100%;  /* 确保下拉菜单至少与选择框同宽 */
-  width: max-content; /* 允许根据内容扩展 */
-  max-width: 300px;  /* 设置最大宽度，避免过长 */
+.log-time {
+  color: #888;
+  margin-right: 8px;
 }
 
-.select-option {
-  white-space: nowrap; /* 防止文本换行 */
-  overflow: hidden;
-  text-overflow: ellipsis;
+.log-message {
+  color: #333;
+}
+
+/* 页面导航样式 */
+.page-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.nav-button {
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.nav-button:hover {
+  background-color: #40a9ff;
+}
+
+/* 缓存管理器按钮样式 */
+.cache-manager-button {
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cache-manager-button:hover {
+  background-color: #40a9ff;
+}
+
+/* 日历卡片和分析卡片样式 */
+.calendar-card,
+.analysis-card {
+  margin-top: 20px;
 }
