@@ -2,16 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import './UIComponents.css';
 
 
-// 简易卡片组件 - 保留，因为这是特定于 AppleHealth 的实现
-export const Card = ({ title, children, className }) => {
-  return (
-    <div className={`custom-card ${className || ''}`}>
-      {title && <div className="card-header">{title}</div>}
-      <div className="card-body">{children}</div>
-    </div>
-  );
-};
-
 // 简易加载中组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Spin = () => {
   return (

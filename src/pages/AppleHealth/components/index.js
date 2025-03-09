@@ -1,6 +1,5 @@
 // 从 UIComponents.jsx 导出所有组件
 export {
-  Card,
   Spin,
   InboxIcon,
   Tooltip,
@@ -15,4 +14,5 @@ export {
 export { default as Message } from '#/components/Message';
 export { default as Upload } from '#/components/Upload';
 export { default as Progress } from '#/components/Progress';
+export { default as Card } from '#/components/Card';
 export { default as ErrorBoundary } from '#/components/ErrorBoundary';
