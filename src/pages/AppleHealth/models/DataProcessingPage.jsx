@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import JSZip from 'jszip';
 import { Message, Upload, Progress, Card, Spin, InboxIcon } from '../components/UIComponents';
 import { saveHealthData, loadHealthData, getAllCachedData, clearCacheItem, clearAllCache } from '../utils/cacheManager';
-import CacheManager from '../components/CacheManager';
-import ErrorBoundary from '../components/ErrorBoundary';
+import CacheManager from './CacheManager';
+import ErrorBoundary from './ErrorBoundary';
 import '../index.css';
 
 export default function DataProcessingPage() {

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import HealthDataCalendar from '../components/HealthDataCalendar';
-import DataAnalysis from '../components/DataAnalysis';
+import HealthDataCalendar from './HealthDataCalendar';
+import DataAnalysis from './DataAnalysis';
 import { Card, Spin } from '../components/UIComponents';
-import ErrorBoundary from '../components/ErrorBoundary';
+import ErrorBoundary from './ErrorBoundary';
 import '../index.css';
 
 export default function DataVisualizationPage() {
