@@ -3,7 +3,7 @@ import GalaxyShuttle from '#/components/GalaxyShuttle'
 import './index.css';
 
 
-const ENABLE_SPLASH_SCREEN = false;
+const ENABLE_SPLASH_SCREEN = true;
 
 const SplashScreen = ({ 
   text = "探索无限可能", 
