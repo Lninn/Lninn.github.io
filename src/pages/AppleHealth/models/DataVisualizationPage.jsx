@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HealthDataCalendar from './HealthDataCalendar';
 import DataAnalysis from './DataAnalysis';
-import { Card, Spin, ErrorBoundary } from '../components';
+import { Card, LoadingSpinner, ErrorBoundary } from '../components';
 
 
 export default function DataVisualizationPage() {
@@ -32,7 +32,7 @@ export default function DataVisualizationPage() {
   if (loading) {
     return (
       <div className="apple-health-container" style={{ textAlign: 'center', padding: '50px' }}>
-        <Spin />
+        <LoadingSpinner />
         <p>加载数据中...</p>
       </div>
     );

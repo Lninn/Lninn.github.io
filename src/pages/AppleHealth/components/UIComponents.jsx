@@ -2,15 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import './UIComponents.css';
 
 
-// 简易加载中组件 - 保留，因为这是特定于 AppleHealth 的实现
-export const Spin = () => {
-  return (
-    <div className="custom-spin">
-      <div className="spin-dot"></div>
-    </div>
-  );
-};
-
 // 简易收件箱图标组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const InboxIcon = () => {
   return (
