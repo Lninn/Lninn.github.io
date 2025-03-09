@@ -8,8 +8,8 @@ import { Row, Col } from '#/components/Grid'
 import Message from '#/components/Message'
 import { FireIcon, CalendarIcon } from '#/components/Icons'
 
-import { getColorIntensity } from '../utils/dataProcessor';
-import { exportAsJson, exportAsCsv } from '../utils/exportData';
+import { getColorIntensity } from './utils/dataProcessor';
+import { exportAsJson, exportAsCsv } from './utils/exportData';
 import './HealthDataCalendar.css';
 
 

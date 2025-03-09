@@ -1,0 +1,10 @@
+/* 数据展示相关样式 */
+.apple-health-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.calendar-card {
+  margin-top: 20px;
+}

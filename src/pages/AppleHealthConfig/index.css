@@ -1,15 +1,6 @@
-.apple-health-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
+/* 数据处理相关样式 */
 .upload-card {
   margin-bottom: 20px;
-}
-
-.calendar-card {
-  margin-top: 20px;
 }
 
 /* 确保进度文本样式正确 */
