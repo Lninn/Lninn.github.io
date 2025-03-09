@@ -1,6 +1,5 @@
 // 从 UIComponents.jsx 导出所有组件
 export {
-  Upload,
   Progress,
   Card,
   Spin,
@@ -15,4 +14,5 @@ export {
 } from './UIComponents';
 
 export { default as Message } from '#/components/Message';
+export { default as Upload } from '#/components/Upload';
 export { default as ErrorBoundary } from '#/components/ErrorBoundary';
