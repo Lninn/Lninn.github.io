@@ -1,0 +1,1 @@
+import{s as e}from"./index-Bno4Llji.js";import{c as t}from"./utils-DVSSZgyS.js";const m=t(r=>({list:[],fetchBookmarks:async()=>{const{data:a,error:o}=await e.from("bookmark").select("*").order("create_at",{ascending:!1});if(o){console.error("Failed to fetch bookmark data:",o);return}r({list:a})}}));export{m as u};
