@@ -1,15 +1,13 @@
 import React, { useMemo, useState } from 'react';
-import { 
-  Tooltip, 
-  Select, 
-  Card, 
-  Statistic, 
-  Row, 
-  Col, 
-  CalendarIcon, 
-  FireIcon,
-  Message // 添加 Message 导入
-} from '../components';
+
+import Tooltip from '#/components/Tooltip';
+import Select from '#/components/Select';
+import Card from '#/components/Card';
+import Statistic from '#/components/Statistic';
+import { Row, Col } from '#/components/Grid'
+import Message from '#/components/Message'
+import { FireIcon, CalendarIcon } from '#/components/Icons'
+
 import { getColorIntensity } from '../utils/dataProcessor';
 import { exportAsJson, exportAsCsv } from '../utils/exportData';
 import './HealthDataCalendar.css';
