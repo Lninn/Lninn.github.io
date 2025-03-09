@@ -17,45 +17,6 @@ export const Statistic = ({ title, value, prefix, suffix }) => {
   );
 };
 
-// 自定义行组件 - 保留，因为这是特定于 AppleHealth 的实现
-export const Row = ({ children, gutter, className }) => {
-  const style = {
-    marginLeft: gutter ? -gutter / 2 : 0,
-    marginRight: gutter ? -gutter / 2 : 0,
-  };
-  
-  return (
-    <div className={`custom-row ${className || ''}`} style={style}>
-      {React.Children.map(children, child => {
-        if (!child) return null;
-        
-        return React.cloneElement(child, {
-          style: {
-            ...child.props.style,
-            paddingLeft: gutter ? gutter / 2 : 0,
-            paddingRight: gutter ? gutter / 2 : 0,
-          }
-        });
-      })}
-    </div>
-  );
-};
-
-// 自定义列组件 - 保留，因为这是特定于 AppleHealth 的实现
-export const Col = ({ children, span, style }) => {
-  const colStyle = {
-    ...style,
-    flex: `0 0 ${(span / 24) * 100}%`,
-    maxWidth: `${(span / 24) * 100}%`,
-  };
-  
-  return (
-    <div className="custom-col" style={colStyle}>
-      {children}
-    </div>
-  );
-};
-
 // 自定义日历图标 - 保留，因为这是特定于 AppleHealth 的实现
 export const CalendarIcon = () => {
   return (
