@@ -147,7 +147,7 @@ export default function DataProcessingPage() {
     console.log('创建新的 Worker 实例');
     addLog('创建新的 Worker 实例');
     
-    workerRef.current = new Worker(new URL('../utils/xmlWorker.js', import.meta.url), {
+    workerRef.current = new Worker(new URL('./utils/xmlWorker.js', import.meta.url), {
       type: 'module'
     });
 
