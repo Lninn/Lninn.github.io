@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import JSZip from 'jszip';
-import { Message, Upload, Progress, Card, Spin, InboxIcon } from '../components/UIComponents';
+import { Message, Upload, Progress, Card, InboxIcon, ErrorBoundary } from '../components';
 import { saveHealthData, loadHealthData, getAllCachedData, clearCacheItem, clearAllCache } from '../utils/cacheManager';
 import CacheManager from './CacheManager';
-import ErrorBoundary from './ErrorBoundary';
 import '../index.css';
+
 
 export default function DataProcessingPage() {
   const navigate = useNavigate();

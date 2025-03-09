@@ -1,6 +1,7 @@
-import React from 'react';
-import { Card } from '../components/UIComponents';
 import '../index.css';
+import React from 'react';
+import { Card } from '../components';
+
 
 const CacheManager = ({ cachedFiles, onLoadCache, onDeleteCache, onClearAll, onClose }) => {
   return (

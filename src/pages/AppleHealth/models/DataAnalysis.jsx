@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useCallback } from 'react';
-import { Card, Row, Col, Statistic, Select } from '../components/UIComponents';
+import { Card, Row, Col, Statistic, Select } from '../components';
 import './DataAnalysis.css';
 
 const DataAnalysis = ({ data }) => {
