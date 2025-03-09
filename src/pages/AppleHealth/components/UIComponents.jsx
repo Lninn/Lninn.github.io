@@ -221,9 +221,9 @@ export const Select = ({ value, onChange, style, options }) => {
       </div>
       {isOpen && (
         <div className="select-options">
-          {options.map(option => (
+          {options.map((option, i) => (
             <div 
-              key={option.value} 
+              key={option.value + '' + i} 
               className={`select-option ${option.value === value ? 'selected' : ''}`}
               onClick={() => handleSelect(option.value)}
             >
