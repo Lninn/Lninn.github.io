@@ -2,21 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import './UIComponents.css';
 
 
-// 简易收件箱图标组件 - 保留，因为这是特定于 AppleHealth 的实现
-export const InboxIcon = () => {
-  return (
-    <svg 
-      viewBox="0 0 24 24" 
-      width="48" 
-      height="48" 
-      fill="currentColor" 
-      style={{ color: '#1890ff' }}
-    >
-      <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-7-2h2v-2h-2v2zm-4 0h2v-2H8v2zm8 0h2v-2h-2v2zm-8-4h8v-6H8v6z" />
-    </svg>
-  );
-};
-
 // 自定义提示组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Tooltip = ({ children, title }) => {
   const [showTooltip, setShowTooltip] = useState(false);
