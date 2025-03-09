@@ -1,6 +1,9 @@
 import InboxIcon from './InboxIcon';
+import CalendarIcon from './CalendarIcon';
+import FireIcon from './FireIcon';
 
-// 将来可以在这里添加更多图标
 export {
-  InboxIcon
+  InboxIcon,
+  CalendarIcon,
+  FireIcon
 };

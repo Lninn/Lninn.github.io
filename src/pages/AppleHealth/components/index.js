@@ -1,8 +1,6 @@
 // 从 UIComponents.jsx 导出所有组件
 export {
   Statistic,
-  CalendarIcon,
-  FireIcon
 } from './UIComponents';
 
 export { default as Message } from '#/components/Message';
@@ -14,4 +12,5 @@ export { InboxIcon } from '#/components/icons';
 export { default as Tooltip } from '#/components/Tooltip';
 export { default as Select } from '#/components/Select';
 export { Row, Col } from '#/components/Grid';
+export { CalendarIcon, FireIcon } from '#/components/icons';
 export { default as ErrorBoundary } from '#/components/ErrorBoundary';
