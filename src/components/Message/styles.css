@@ -1,0 +1,68 @@
+.message {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 8px;
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 2000;
+  animation: message-slide-in 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.message.success {
+  border-left: 4px solid var(--success);
+}
+
+.message.error {
+  border-left: 4px solid var(--error);
+}
+
+.message-icon {
+  font-size: 16px;
+}
+
+.message-content {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.message.fade-out {
+  animation: message-fade-out 0.3s ease forwards;
+}
+
+@keyframes message-slide-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes message-fade-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .message {
+    width: calc(100% - 32px);
+    margin: 0 16px;
+  }
+}

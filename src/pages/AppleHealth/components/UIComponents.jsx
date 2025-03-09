@@ -1,43 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './UIComponents.css';
 
-// 简易消息提示组件 - 保留，因为这是特定于 AppleHealth 的实现
-export const Message = {
-  error: (content) => {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'custom-message custom-message-error';
-    messageDiv.innerHTML = `
-      <span class="message-icon">❌</span>
-      <span class="message-content">${content}</span>
-    `;
-    document.body.appendChild(messageDiv);
-    
-    setTimeout(() => {
-      messageDiv.classList.add('message-fade-out');
-      setTimeout(() => {
-        document.body.removeChild(messageDiv);
-      }, 300);
-    }, 3000);
-  },
-  
-  success: (content) => {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'custom-message custom-message-success';
-    messageDiv.innerHTML = `
-      <span class="message-icon">✅</span>
-      <span class="message-content">${content}</span>
-    `;
-    document.body.appendChild(messageDiv);
-    
-    setTimeout(() => {
-      messageDiv.classList.add('message-fade-out');
-      setTimeout(() => {
-        document.body.removeChild(messageDiv);
-      }, 300);
-    }, 3000);
-  }
-};
-
 // 简易上传组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Upload = {
   Dragger: ({ children, beforeUpload, disabled }) => {

@@ -1,6 +1,5 @@
 // 从 UIComponents.jsx 导出所有组件
 export {
-  Message,
   Upload,
   Progress,
   Card,
@@ -15,5 +14,5 @@ export {
   FireIcon
 } from './UIComponents';
 
-// 导出 ErrorBoundary 组件
-export { default as ErrorBoundary } from './ErrorBoundary';
+export { default as Message } from '#/components/Message';
+export { default as ErrorBoundary } from '#/components/ErrorBoundary';
