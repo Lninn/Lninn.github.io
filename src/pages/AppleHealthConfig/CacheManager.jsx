@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from '#/components/Card';
-
+import './CacheManager.css'; // 添加样式文件引用
 
 const CacheManager = ({ cachedFiles, onLoadCache, onDeleteCache, onClearAll, onClose }) => {
   return (
@@ -19,27 +19,25 @@ const CacheManager = ({ cachedFiles, onLoadCache, onDeleteCache, onClearAll, onC
       {cachedFiles.length === 0 ? (
         <div className="no-cache-message">没有缓存数据</div>
       ) : (
-        <div className="cached-files-list">
-          {cachedFiles.map((file) => (
-            <div key={file.id} className="cached-file-item">
-              <div className="cache-info">
-                <div className="cache-name">{file.fileName}</div>
-                <div className="cache-date">
-                  {new Date(file.timestamp).toLocaleString()}
-                </div>
-                <div className="cache-size">
-                  {(file.fileSize / (1024 * 1024)).toFixed(2)} MB
+        <div className="cache-files-list">
+          {cachedFiles.map(file => (
+            <div key={file.id} className="cache-file-item">
+              <div className="file-info">
+                <div className="file-name">{file.name}</div>
+                <div className="file-meta">
+                  <span className="file-size">{Math.round(file.size / 1024)} KB</span>
+                  <span className="file-date">{new Date(file.timestamp).toLocaleString()}</span>
                 </div>
               </div>
-              <div className="cache-actions">
+              <div className="file-actions">
                 <button 
-                  className="load-button" 
+                  className="load-button"
                   onClick={() => onLoadCache(file.id)}
                 >
                   加载
                 </button>
                 <button 
-                  className="delete-button" 
+                  className="delete-button"
                   onClick={() => onDeleteCache(file.id)}
                 >
                   删除

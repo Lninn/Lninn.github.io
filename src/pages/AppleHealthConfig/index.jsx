@@ -11,6 +11,7 @@ import ErrorBoundary from '#/components/ErrorBoundary';
 
 import { saveHealthData, loadHealthData, getAllCachedData, clearCacheItem, clearAllCache } from './cacheManager-handler';
 import CacheManager from './CacheManager';
+import './index.css'; // 确保引入样式文件
 
 
 export default function DataProcessingPage() {
