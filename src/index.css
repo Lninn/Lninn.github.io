@@ -28,6 +28,8 @@
   --text-secondary: #666666;
   --text-tertiary: #999999;
   --text-on-primary: #ffffff;
+  --text-color: var(--text-primary);
+  --text-color-secondary: var(--text-secondary);
   
   /* 边框和阴影 */
   --border-color: #eaeaea;
@@ -78,6 +80,8 @@
   --text-secondary: #aaaaaa;
   --text-tertiary: #777777;
   --text-on-primary: #ffffff;
+  --text-color: var(--text-primary);
+  --text-color-secondary: var(--text-secondary);
   
   /* 边框和阴影 */
   --border-color: #333333;
