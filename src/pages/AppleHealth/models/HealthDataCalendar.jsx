@@ -16,7 +16,7 @@ import './HealthDataCalendar.css';
 
 
 const HealthDataCalendar = ({ data }) => {
-  const [selectedType, setSelectedType] = useState('all');
+  const [selectedType, setSelectedType] = useState('HKQuantityTypeIdentifierStepCount');
   
   const { calendarData, years, activityTypes, stats } = useMemo(() => {
     if (!data || !data.data) return { calendarData: [], years: [], activityTypes: [], stats: {} };
@@ -96,10 +96,12 @@ const HealthDataCalendar = ({ data }) => {
     return cell.details[selectedType] || 0;
   };
   
-  // 计算最大值，用于颜色强度
-  const maxCount = useMemo(() => {
-    let max = 0;
+  // 计算每年的最大值，用于颜色强度
+  const yearlyMaxCounts = useMemo(() => {
+    const maxCounts = {};
+    
     years.forEach(year => {
+      let max = 0;
       calendarData[year].forEach(week => {
         week.forEach(day => {
           if (day) {
@@ -108,8 +110,10 @@ const HealthDataCalendar = ({ data }) => {
           }
         });
       });
+      maxCounts[year] = max;
     });
-    return max;
+    
+    return maxCounts;
   }, [calendarData, years, selectedType]);
   
   // 渲染月份标签
@@ -142,6 +146,9 @@ const HealthDataCalendar = ({ data }) => {
   
   // 渲染单个年份的日历
   const renderYearCalendar = (year) => {
+    // 使用当前年份的最大值
+    const currentYearMaxCount = yearlyMaxCounts[year];
+    
     return (
       <div key={year} className="year-calendar">
         <h3>{year}年</h3>
@@ -154,7 +161,7 @@ const HealthDataCalendar = ({ data }) => {
                 <div key={`${year}-w${weekIndex}`} className="calendar-week">
                   {week.map((day, dayIndex) => {
                     const count = getFilteredCount(day);
-                    const intensity = getColorIntensity(count, maxCount);
+                    const intensity = getColorIntensity(count, currentYearMaxCount);
                     
                     // 获取步数信息
                     const stepCount = day && selectedType === 'StepCount' 

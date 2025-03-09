@@ -16,13 +16,18 @@ export const getColorIntensity = (count, maxCount) => {
   if (count === 0) return 0;
   if (maxCount === 0) return 0; // 防止除以零错误
   
-  // 使用对数比例更好地显示数据差异
-  const logBase = 4;
-  const logMax = Math.log(maxCount + 1) / Math.log(logBase);
-  const logCount = Math.log(count + 1) / Math.log(logBase);
+  // 使用分位数方法计算强度，更好地反映数据分布
+  // 0: 0
+  // 1: 1-25% 的数据
+  // 2: 26-50% 的数据
+  // 3: 51-75% 的数据
+  // 4: 76-100% 的数据
+  const ratio = count / maxCount;
   
-  const intensity = Math.min(Math.ceil((logCount / logMax) * 4), 4);
-  return intensity;
+  if (ratio <= 0.25) return 1;
+  if (ratio <= 0.5) return 2;
+  if (ratio <= 0.75) return 3;
+  return 4;
 };
 
 // 格式化日期

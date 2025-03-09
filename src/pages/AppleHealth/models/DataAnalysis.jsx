@@ -179,7 +179,7 @@ const DataAnalysis = ({ data }) => {
   }, []);
   
   // 渲染简易图表
-  const renderSimpleChart = (values, dates, height = 50) => {
+  const renderSimpleChart = (values, dates, height = 275) => {
     if (!values || values.length < 2) return null;
     
     const max = Math.max(...values);
