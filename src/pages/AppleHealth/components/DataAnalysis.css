@@ -36,20 +36,3 @@
 .chart-bar:hover {
   background-color: #40a9ff;
 }
-
-.activity-summary-list {
-  max-height: 500px;
-  overflow-y: auto;
-  padding-right: 10px;
-}
-
-.activity-summary-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.selected-card {
-  border-color: #1890ff;
-  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.2);
-}

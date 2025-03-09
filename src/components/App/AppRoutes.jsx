@@ -28,7 +28,7 @@ export const AppRoutes = ({ routes }) => {
       if (route.children && route.children.length > 0) {
         return (
           <Route key={route.path} path={route.path} element={
-            <Suspense fallback={<LoadingSpinner fullScreen text="页面加载中..." />}>
+            <Suspense fallback={<LoadingSpinner text="页面加载中..." />}>
               <route.component />
             </Suspense>
           }>
@@ -49,7 +49,7 @@ export const AppRoutes = ({ routes }) => {
           path={route.path}
           element={
             <ErrorBoundary>
-              <Suspense fallback={<LoadingSpinner fullScreen text="页面加载中..." />}>
+              <Suspense fallback={<LoadingSpinner text="页面加载中..." />}>
                 <route.component />
               </Suspense>
             </ErrorBoundary>
@@ -62,7 +62,7 @@ export const AppRoutes = ({ routes }) => {
   return (
     <PageContainer>
       {/* 全局路由变化加载指示器 */}
-      {isRouteChanging && <LoadingSpinner fullScreen text="页面加载中..." />}
+      {isRouteChanging && <LoadingSpinner text="页面获取中..." />}
       
       <Routes>
         {renderRoutes(routes)}

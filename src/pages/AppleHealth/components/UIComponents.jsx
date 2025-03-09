@@ -210,8 +210,16 @@ export const Select = ({ value, onChange, style, options }) => {
   
   const selectedLabel = options.find(option => option.value === value)?.label || '';
   
+  // 合并默认样式和传入的样式
+  const mergedStyle = {
+    minWidth: '120px',  // 设置最小宽度
+    width: 'auto',      // 允许自动扩展
+    display: 'inline-block', // 确保宽度自适应内容
+    ...style
+  };
+  
   return (
-    <div className="custom-select" style={style} ref={selectRef}>
+    <div className="custom-select" style={mergedStyle} ref={selectRef}>
       <div 
         className="select-selected"
         onClick={() => setIsOpen(!isOpen)}

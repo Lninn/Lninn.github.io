@@ -302,45 +302,7 @@ const DataAnalysis = ({ data }) => {
         </div>
       )}
       
-      <h4 style={{ marginTop: '20px' }}>所有活动摘要</h4>
-      <div className="activity-summary-list">
-        {Object.entries(analysisResults.activitySummary)
-          .sort(([, a], [, b]) => b.total - a.total) // 按总量排序
-          .map(([type, summary]) => (
-            <Card 
-              key={type} 
-              style={{ marginBottom: '10px', cursor: 'pointer' }}
-              onClick={() => setSelectedType(type)}
-              className={selectedType === type ? 'selected-card' : ''}
-            >
-              <div className="activity-summary-header">
-                <h5>{type}</h5>
-                {analysisResults.trends[type] && renderTrendIndicator(analysisResults.trends[type])}
-              </div>
-              <Row>
-                <Col style={{ width: '33%' }}>
-                  <Statistic 
-                    title="总计" 
-                    value={summary.total.toFixed(2)} 
-                  />
-                </Col>
-                <Col style={{ width: '33%' }}>
-                  <Statistic 
-                    title="平均值" 
-                    value={summary.average?.toFixed(2)} 
-                  />
-                </Col>
-                <Col style={{ width: '33%' }}>
-                  <Statistic 
-                    title="记录天数" 
-                    value={summary.days} 
-                    suffix="天"
-                  />
-                </Col>
-              </Row>
-            </Card>
-          ))}
-      </div>
+      {/* 移除了"所有活动摘要"部分 */}
     </div>
   );
 };
