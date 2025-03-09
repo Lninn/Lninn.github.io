@@ -8,8 +8,7 @@ export function parseHealthRecords(xmlContent) {
   const records = [];
   
   // 使用正则表达式匹配所有 Record 标签
-  // 修改正则表达式以更准确地匹配 Record 标签，包括自闭合标签和带有子元素的标签
-  const recordRegex = /<Record [^>]*\/>/g;
+  const recordRegex = /<Record\b[^>]*?(?:\/>|>[\s\S]*?<\/Record>)/g;
   let match;
   
   while ((match = recordRegex.exec(xmlContent)) !== null) {
