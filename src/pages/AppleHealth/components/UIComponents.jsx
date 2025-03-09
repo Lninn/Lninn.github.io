@@ -2,26 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import './UIComponents.css';
 
 
-// 自定义提示组件 - 保留，因为这是特定于 AppleHealth 的实现
-export const Tooltip = ({ children, title }) => {
-  const [showTooltip, setShowTooltip] = useState(false);
-  const tooltipRef = useRef(null);
-  
-  return (
-    <div 
-      className="custom-tooltip-container"
-      onMouseEnter={() => setShowTooltip(true)}
-      onMouseLeave={() => setShowTooltip(false)}
-    >
-      {children}
-      {showTooltip && (
-        <div className="custom-tooltip" ref={tooltipRef}>
-          {title}
-        </div>
-      )}
-    </div>
-  );
-};
 
 // 自定义选择器组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Select = ({ value, onChange, style, options }) => {
