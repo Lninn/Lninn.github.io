@@ -2,24 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import './UIComponents.css';
 
 
-// 进度条组件 - 保留，因为这是特定于 AppleHealth 的实现
-export const Progress = ({ percent }) => {
-  // 确保百分比是有效数字
-  const validPercent = Math.min(Math.max(0, percent || 0), 100);
-  
-  return (
-    <div className="custom-progress">
-      <div className="progress-outer">
-        <div 
-          className={`progress-inner ${validPercent < 100 ? 'active' : ''}`} 
-          style={{ width: `${validPercent}%` }}
-        />
-      </div>
-      <span className="progress-text">{validPercent}%</span>
-    </div>
-  );
-};
-
 // 简易卡片组件 - 保留，因为这是特定于 AppleHealth 的实现
 export const Card = ({ title, children, className }) => {
   return (
