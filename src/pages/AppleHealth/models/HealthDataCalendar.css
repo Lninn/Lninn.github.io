@@ -57,7 +57,7 @@
 .month-label {
   position: absolute;
   font-size: 12px;
-  color: #666;
+  color: var(--text-color-secondary, #666);
 }
 
 .calendar-body {
@@ -74,7 +74,7 @@
 .weekday-label {
   height: 15px;
   font-size: 12px;
-  color: #666;
+  color: var(--text-color-secondary, #666);
   margin-bottom: 2px;
   display: flex;
   align-items: center;
@@ -96,27 +96,27 @@
   height: 15px;
   margin-bottom: 2px;
   border-radius: 2px;
-  background-color: #ebedf0;
+  background-color: var(--calendar-empty, #ebedf0);
   cursor: pointer;
 }
 
 /* 颜色强度 */
 .intensity-0 {
-  background-color: #ebedf0;
+  background-color: var(--calendar-empty, #ebedf0);
 }
 
 .intensity-1 {
-  background-color: #c6e48b;
+  background-color: var(--calendar-level-1, #c6e48b);
 }
 
 .intensity-2 {
-  background-color: #7bc96f;
+  background-color: var(--calendar-level-2, #7bc96f);
 }
 
 .intensity-3 {
-  background-color: #239a3b;
+  background-color: var(--calendar-level-3, #239a3b);
 }
 
 .intensity-4 {
-  background-color: #196127;
+  background-color: var(--calendar-level-4, #196127);
 }

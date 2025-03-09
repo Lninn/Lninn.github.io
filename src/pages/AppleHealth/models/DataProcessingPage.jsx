@@ -4,7 +4,6 @@ import JSZip from 'jszip';
 import { Message, Upload, Progress, Card, InboxIcon, ErrorBoundary } from '../components';
 import { saveHealthData, loadHealthData, getAllCachedData, clearCacheItem, clearAllCache } from '../utils/cacheManager';
 import CacheManager from './CacheManager';
-import '../index.css';
 
 
 export default function DataProcessingPage() {

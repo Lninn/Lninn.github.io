@@ -22,7 +22,7 @@
   align-items: flex-end;
   gap: 2px;
   padding: 10px 0;
-  background-color: #fafafa;
+  background-color: var(--background-color-light, #fafafa);
   border-radius: 4px;
 }
 
@@ -34,5 +34,5 @@
 }
 
 .chart-bar:hover {
-  background-color: #40a9ff;
+  background-color: var(--primary-hover-color, #40a9ff);
 }

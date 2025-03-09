@@ -40,6 +40,20 @@
   --hover-bg: rgba(0, 0, 0, 0.05);
   --active-bg: rgba(0, 124, 240, 0.1);
   --accent-color: #007cf0;
+
+  /* AppleHealth 组件需要的额外变量 */
+  --error-bg: #fff2f0;
+  --error-border: #ffccc7;
+  --success-bg: #f6ffed;
+  --success-border: #b7eb8f;
+  --primary-color: var(--primary, #1890ff);
+  --primary-bg-light: #e6f7ff;
+  --primary-hover-color: #40a9ff;
+  --background-color-light: #fafafa;
+  --disabled-bg: #f5f5f5;
+  --card-bg: #fff;
+  --item-hover-bg: #f5f5f5;
+  --tooltip-bg: rgba(0, 0, 0, 0.75);
 }
 
 /* 暗色主题变量 */
@@ -76,6 +90,20 @@
   --hover-bg: rgba(255, 255, 255, 0.05);
   --active-bg: rgba(58, 155, 255, 0.2);
   --accent-color: #3a9bff;
+
+  /* AppleHealth 组件需要的额外暗色主题变量 */
+  --error-bg: #2a1215;
+  --error-border: #5c2223;
+  --success-bg: #162312;
+  --success-border: #274916;
+  --primary-color: var(--primary, #177ddc);
+  --primary-bg-light: #111b26;
+  --primary-hover-color: #40a9ff;
+  --background-color-light: #1f1f1f;
+  --disabled-bg: #262626;
+  --card-bg: #1f1f1f;
+  --item-hover-bg: #262626;
+  --tooltip-bg: rgba(0, 0, 0, 0.85);
 }
 
 /* ===== 重置样式 ===== */

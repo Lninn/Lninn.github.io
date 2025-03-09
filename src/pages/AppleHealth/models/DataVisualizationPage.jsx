@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import HealthDataCalendar from './HealthDataCalendar';
 import DataAnalysis from './DataAnalysis';
 import { Card, Spin, ErrorBoundary } from '../components';
-import '../index.css';
+
 
 export default function DataVisualizationPage() {
   const location = useLocation();
