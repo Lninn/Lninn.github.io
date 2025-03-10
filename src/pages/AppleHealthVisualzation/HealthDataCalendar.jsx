@@ -6,7 +6,7 @@ import Card from '#/components/Card';
 import Statistic from '#/components/Statistic';
 import { Row, Col } from '#/components/Grid'
 import Message from '#/components/Message'
-import { FireIcon, CalendarIcon } from '#/components/Icons'
+import { FireIcon, CalendarIcon } from '#/components/icons'
 
 import { getColorIntensity } from './utils/dataProcessor';
 import { exportAsJson, exportAsCsv } from './utils/exportData';
