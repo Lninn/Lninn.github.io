@@ -319,6 +319,36 @@
 
 /* 在文件末尾添加以下样式 */
 
+/* 音效选择和测试按钮样式 */
+.sound-option-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.sound-option-container select {
+  flex: 1;
+}
+
+.test-sound-button {
+  background-color: var(--primary);
+  color: var(--text-on-primary);
+  border: none;
+  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.test-sound-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
 /* 记录按钮样式 */
 .header-buttons {
   display: flex;

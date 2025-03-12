@@ -4,7 +4,10 @@ export default function useTimer(initialSettings, onSessionComplete) {
   const [isRunning, setIsRunning] = useState(false);
   const [mode, setMode] = useState('focus'); // 'focus' 或 'break' 或 'longBreak'
   const [timeLeft, setTimeLeft] = useState(initialSettings.focusTime * 60);
-  const [settings, setSettings] = useState(initialSettings);
+  const [settings, setSettings] = useState({
+    ...initialSettings,
+    soundOption: initialSettings.soundOption || 'bell' // 确保有默认值
+  });
   const [cycles, setCycles] = useState(0);
   const [sessionStartTime, setSessionStartTime] = useState(null);
   const [totalFocusTime, setTotalFocusTime] = useState(0);
@@ -152,8 +155,6 @@ export default function useTimer(initialSettings, onSessionComplete) {
       setTimeLeft(newSettings.longBreakTime * 60);
     }
   };
-  
-   // ... 前面的代码保持不变 ...
   
    return {
     isRunning,
