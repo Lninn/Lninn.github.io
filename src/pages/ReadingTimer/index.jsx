@@ -86,36 +86,44 @@ export default function ReadingTimer() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [timer, showSettings, showRecords]);
   
+  // 在 return 语句中修改布局结构
+  
   return (
     <div className="reading-timer-container">
-      <div className="timer-card">
-        <TimerHeader 
-          onSettingsClick={toggleSettings} 
-          onRecordsClick={toggleRecords} 
-        />
+      <div className="timer-layout">
+        <div className="timer-main">
+          <div className="timer-card">
+            <TimerHeader 
+              onSettingsClick={toggleSettings} 
+              onRecordsClick={toggleRecords} 
+            />
+            
+            <ModeIndicator mode={timer.mode} cycles={timer.cycles} />
+            
+            <TimerDisplay 
+              timeText={timer.formatTime(timer.timeLeft)} 
+              progress={timer.calculateProgress()} 
+            />
+            
+            <TimerControls 
+              isRunning={timer.isRunning} 
+              onToggle={timer.toggleTimer} 
+              onReset={timer.resetTimer} 
+            />
+          </div>
+        </div>
         
-        <ModeIndicator mode={timer.mode} cycles={timer.cycles} />
-        
-        <TimerDisplay 
-          timeText={timer.formatTime(timer.timeLeft)} 
-          progress={timer.calculateProgress()} 
-        />
-        
-        <TimerControls 
-          isRunning={timer.isRunning} 
-          onToggle={timer.toggleTimer} 
-          onReset={timer.resetTimer} 
-        />
-        
-        <GoalProgress 
-          current={stats.todayFocusTime || 0} 
-          goal={timer.settings.dailyGoal} 
-        />
-        
-        <TimerTips />
+        <div className="timer-sidebar">
+          <GoalProgress 
+            current={stats.todayFocusTime || 0} 
+            goal={timer.settings.dailyGoal} 
+          />
+          
+          <TimerTips />
+        </div>
       </div>
       
-      {/* 使用 Modal 组件替代直接渲染 */}
+      {/* Modal 组件保持不变 */}
       <Modal 
         isOpen={showSettings}
         onClose={() => setShowSettings(false)}
