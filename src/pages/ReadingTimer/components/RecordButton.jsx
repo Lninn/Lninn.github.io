@@ -1,3 +1,5 @@
+import './RecordButton.css'
+
 export default function RecordButton({ onClick }) {
   return (
     <button 

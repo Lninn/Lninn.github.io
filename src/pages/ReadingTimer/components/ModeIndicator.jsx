@@ -1,3 +1,5 @@
+import './ModeIndicator.css'
+
 export default function ModeIndicator({ mode, cycles }) {
   const getModeText = (mode) => {
     switch (mode) {

@@ -1,3 +1,5 @@
+import './TimerDisplay.css'
+
 export default function TimerDisplay({ timeText, progress }) {
   return (
     <div className="timer-display">

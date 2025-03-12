@@ -1,0 +1,29 @@
+.timer-tips {
+  margin-top: 30px;
+  padding: 16px;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  border-left: 4px solid var(--primary);
+}
+
+.timer-tips h4 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.timer-tips ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.timer-tips li {
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.timer-tips li:last-child {
+  margin-bottom: 0;
+}

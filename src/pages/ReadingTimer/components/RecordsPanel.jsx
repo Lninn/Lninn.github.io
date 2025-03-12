@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './RecordsPanel.css'
 
 export default function RecordsPanel({ records, stats, onClear, onClose }) {
   const [view, setView] = useState('records'); // 'records' 或 'stats'

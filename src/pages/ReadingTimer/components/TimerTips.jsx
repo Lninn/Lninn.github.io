@@ -1,3 +1,5 @@
+import './TimerTips.css'
+
 export default function TimerTips() {
   return (
     <div className="timer-tips">

@@ -1,0 +1,41 @@
+.timer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.timer-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* 修改按钮样式确保图标可见 */
+.settings-button {
+  background: none;
+  border: none;
+  color: var(--text-secondary, #666);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.settings-button:hover {
+  background-color: var(--bg-hover, #f0f0f0);
+  color: var(--text-primary, #333);
+}
+
+/* 记录按钮样式 */
+.header-buttons {
+  display: flex;
+  gap: 10px;
+}

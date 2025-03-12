@@ -1,3 +1,5 @@
+import './TimerControls.css'
+
 export default function TimerControls({ isRunning, onToggle, onReset }) {
   return (
     <div className="timer-controls">

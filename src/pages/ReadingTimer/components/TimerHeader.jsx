@@ -1,5 +1,6 @@
 import SettingsIcon from './SettingsIcon';
 import RecordButton from './RecordButton';
+import './TimerHeader.css'
 
 export default function TimerHeader({ onSettingsClick, onRecordsClick }) {
   return (

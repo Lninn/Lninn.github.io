@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import './SettingsPanel.css'
 
 export default function SettingsPanel({ settings, onCancel, onApply }) {
   const [localSettings, setLocalSettings] = useState(settings);
