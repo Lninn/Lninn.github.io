@@ -1,3 +1,5 @@
+// 在 useTimer 钩子中添加通知功能
+
 import { useState, useEffect, useRef } from 'react';
 
 export default function useTimer(initialSettings, onSessionComplete) {
@@ -52,11 +54,38 @@ export default function useTimer(initialSettings, onSessionComplete) {
         if (mode === 'focus') {
           setTotalFocusTime(prev => prev + 1/60); // 转换为分钟
         }
+        
+        // 当剩余时间为30秒时发出提示音
+        if (timeLeft === 30) {
+          // 播放轻微提示音
+          const reminderSound = new Audio('/sounds/reminder.mp3');
+          reminderSound.volume = settings.volume || 0.5;
+          reminderSound.play();
+        }
       }, 1000);
     } else if (isRunning && timeLeft === 0) {
       // 时间到，播放提示音
       if (alarmSound.current) {
+        alarmSound.current.volume = settings.volume || 1.0;
         alarmSound.current.play();
+      }
+      
+      // 发送通知
+      if (notificationsEnabled) {
+        const title = mode === 'focus' 
+          ? '专注时间结束！' 
+          : mode === 'break' 
+            ? '休息时间结束！' 
+            : '长休息时间结束！';
+            
+        const body = mode === 'focus' 
+          ? '休息一下吧！' 
+          : '准备开始新的专注时间';
+          
+        new Notification(title, { 
+          body,
+          icon: '/favicon.ico'
+        });
       }
       
       // 切换模式
@@ -155,8 +184,167 @@ export default function useTimer(initialSettings, onSessionComplete) {
       setTimeLeft(newSettings.longBreakTime * 60);
     }
   };
+
+  // 添加通知权限请求
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   
-   return {
+  // 请求通知权限
+  useEffect(() => {
+    if ('Notification' in window) {
+      if (Notification.permission === 'granted') {
+        setNotificationsEnabled(true);
+      } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission().then(permission => {
+          setNotificationsEnabled(permission === 'granted');
+        });
+      }
+    }
+  }, []);
+  
+  // 修改计时器逻辑，添加通知
+  useEffect(() => {
+    let interval = null;
+    
+    if (isRunning && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft(timeLeft - 1);
+        
+        // 如果是专注模式，增加专注时间计数
+        if (mode === 'focus') {
+          setTotalFocusTime(prev => prev + 1/60); // 转换为分钟
+        }
+        
+        // 当剩余时间为30秒时发出提示音
+        if (timeLeft === 30) {
+          // 播放轻微提示音
+          const reminderSound = new Audio('/sounds/reminder.mp3');
+          reminderSound.volume = settings.volume || 0.5;
+          reminderSound.play();
+        }
+      }, 1000);
+    } else if (isRunning && timeLeft === 0) {
+      // 时间到，播放提示音
+      if (alarmSound.current) {
+        alarmSound.current.volume = settings.volume || 1.0;
+        alarmSound.current.play();
+      }
+      
+      // 发送通知
+      if (notificationsEnabled) {
+        const title = mode === 'focus' 
+          ? '专注时间结束！' 
+          : mode === 'break' 
+            ? '休息时间结束！' 
+            : '长休息时间结束！';
+            
+        const body = mode === 'focus' 
+          ? '休息一下吧！' 
+          : '准备开始新的专注时间';
+          
+        new Notification(title, { 
+          body,
+          icon: '/favicon.ico'
+        });
+      }
+      
+      // 切换模式
+      if (mode === 'focus') {
+        const newCycles = cycles + 1;
+        setCycles(newCycles);
+        
+        // 判断是否需要长休息
+        if (newCycles % settings.longBreakInterval === 0) {
+          setMode('longBreak');
+          setTimeLeft(settings.longBreakTime * 60);
+        } else {
+          setMode('break');
+          setTimeLeft(settings.breakTime * 60);
+        }
+      } else {
+        // 如果从休息模式切换到专注模式，记录一个完整的周期
+        if (onSessionComplete && sessionStartTime) {
+          const sessionRecord = {
+            focusTime: Math.round(totalFocusTime),
+            cycles: cycles,
+            mode: mode,
+            duration: Math.round((new Date() - sessionStartTime) / 1000 / 60) // 转换为分钟
+          };
+          onSessionComplete(sessionRecord);
+          setSessionStartTime(null);
+          setTotalFocusTime(0);
+        }
+        
+        setMode('focus');
+        setTimeLeft(settings.focusTime * 60);
+      }
+    }
+    
+    return () => clearInterval(interval);
+  }, [isRunning, timeLeft, mode, cycles, settings, notificationsEnabled]);
+  
+  // 添加请求通知权限的方法
+  const requestNotificationPermission = () => {
+    if ('Notification' in window && Notification.permission !== 'denied') {
+      Notification.requestPermission().then(permission => {
+        setNotificationsEnabled(permission === 'granted');
+      });
+    }
+  };
+
+  // 添加自动保存功能
+  useEffect(() => {
+    // 保存当前状态到本地存储
+    const saveState = () => {
+      const state = {
+        mode,
+        timeLeft,
+        cycles,
+        totalFocusTime,
+        isRunning: false, // 页面刷新时总是暂停
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem('reading-timer-state', JSON.stringify(state));
+    };
+    
+    // 每5秒保存一次状态
+    const saveInterval = setInterval(saveState, 5000);
+    
+    // 页面关闭或刷新时保存
+    window.addEventListener('beforeunload', saveState);
+    
+    return () => {
+      clearInterval(saveInterval);
+      window.removeEventListener('beforeunload', saveState);
+    };
+  }, [mode, timeLeft, cycles, totalFocusTime]);
+  
+  // 初始化时尝试恢复状态
+  useEffect(() => {
+    const savedState = localStorage.getItem('reading-timer-state');
+    if (savedState) {
+      try {
+        const state = JSON.parse(savedState);
+        const timestamp = new Date(state.timestamp);
+        const now = new Date();
+        
+        // 如果保存时间在30分钟内，恢复状态
+        if (now - timestamp < 30 * 60 * 1000) {
+          setMode(state.mode);
+          setTimeLeft(state.timeLeft);
+          setCycles(state.cycles);
+          setTotalFocusTime(state.totalFocusTime);
+        } else {
+          // 超过30分钟，清除保存的状态
+          localStorage.removeItem('reading-timer-state');
+        }
+      } catch (e) {
+        console.error('恢复计时器状态失败', e);
+        localStorage.removeItem('reading-timer-state');
+      }
+    }
+  }, []);
+  
+  return {
     isRunning,
     mode,
     timeLeft,
@@ -167,6 +355,8 @@ export default function useTimer(initialSettings, onSessionComplete) {
     calculateProgress,
     toggleTimer,
     resetTimer,
-    updateSettings
+    updateSettings,
+    notificationsEnabled,
+    requestNotificationPermission
   };
 }

@@ -89,11 +89,53 @@
   margin-bottom: 8px;
 }
 
+/* 添加删除按钮样式 */
 .record-details {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 8px;
   font-size: 0.9rem;
+  position: relative;
+}
+
+.delete-record-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s, background-color 0.2s;
+}
+
+.record-item:hover .delete-record-button {
+  opacity: 1;
+}
+
+.delete-record-button:hover {
+  color: var(--danger-color);
+  background-color: var(--bg-hover);
+}
+
+/* 统计视图样式 - 改为3列布局 */
+.stats-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+}
+
+/* 响应式调整 */
+@media (max-width: 480px) {
+  .stats-view {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .clear-records-button {

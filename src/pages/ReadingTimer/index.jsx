@@ -1,4 +1,6 @@
-import { useState } from 'react';
+// 在 ReadingTimer 组件中整合新功能
+
+import { useState, useEffect } from 'react';
 import './index.css';
 
 // 导入自定义 Hook
@@ -13,13 +15,14 @@ import TimerControls from './components/TimerControls';
 import SettingsPanel from './components/SettingsPanel';
 import TimerTips from './components/TimerTips';
 import RecordsPanel from './components/RecordsPanel';
+import GoalProgress from './components/GoalProgress';
 
 export default function ReadingTimer() {
   const [showSettings, setShowSettings] = useState(false);
   const [showRecords, setShowRecords] = useState(false);
   
   // 初始化记录管理
-  const { records, addRecord, clearRecords, getStats } = useRecords();
+  const { records, addRecord, clearRecords, deleteRecord, getStats } = useRecords();
   
   // 初始化计时器，并传入会话完成的回调
   const timer = useTimer({
@@ -28,7 +31,12 @@ export default function ReadingTimer() {
     longBreakTime: 15, // 长休息时间（分钟）
     longBreakInterval: 4, // 几个周期后长休息
     soundOption: 'bell', // 默认使用bell.mp3
+    volume: 1.0, // 默认音量
+    dailyGoal: 120 // 默认每日目标
   }, addRecord);
+  
+  // 获取今日专注时间
+  const stats = getStats();
   
   // 切换设置面板
   const toggleSettings = () => {
@@ -51,6 +59,31 @@ export default function ReadingTimer() {
     setShowSettings(false);
   };
   
+  // 添加键盘快捷键
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // 空格键：开始/暂停
+      if (e.code === 'Space' && !showSettings && !showRecords) {
+        e.preventDefault(); // 防止页面滚动
+        timer.toggleTimer();
+      }
+      
+      // R键：重置
+      if (e.code === 'KeyR' && !showSettings && !showRecords) {
+        timer.resetTimer();
+      }
+      
+      // Esc键：关闭面板
+      if (e.code === 'Escape') {
+        if (showSettings) setShowSettings(false);
+        if (showRecords) setShowRecords(false);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [timer, showSettings, showRecords]);
+  
   return (
     <div className="reading-timer-container">
       <div className="timer-card">
@@ -72,24 +105,35 @@ export default function ReadingTimer() {
           onReset={timer.resetTimer} 
         />
         
-        {showSettings && (
-          <SettingsPanel 
-            settings={timer.settings} 
-            onCancel={() => setShowSettings(false)} 
-            onApply={applySettings} 
-          />
-        )}
-        
-        {showRecords && (
-          <RecordsPanel 
-            records={records}
-            stats={getStats()}
-            onClear={clearRecords}
-            onClose={() => setShowRecords(false)}
-          />
-        )}
+        <GoalProgress 
+          current={stats.todayFocusTime || 0} 
+          goal={timer.settings.dailyGoal} 
+        />
         
         <TimerTips />
+      </div>
+      
+      {showSettings && (
+        <SettingsPanel 
+          settings={timer.settings} 
+          onCancel={() => setShowSettings(false)} 
+          onApply={applySettings} 
+        />
+      )}
+      
+      {showRecords && (
+        <RecordsPanel 
+          records={records}
+          stats={stats}
+          onClear={clearRecords}
+          onDelete={deleteRecord}
+          onClose={() => setShowRecords(false)}
+        />
+      )}
+      
+      {/* 添加键盘快捷键提示 */}
+      <div className="keyboard-shortcuts">
+        <p>快捷键: 空格键 = 开始/暂停, R = 重置, ESC = 关闭面板</p>
       </div>
     </div>
   );

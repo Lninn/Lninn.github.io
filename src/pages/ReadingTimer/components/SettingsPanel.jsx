@@ -1,8 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import './SettingsPanel.css'
 
+// 在 SettingsPanel 组件中添加专注目标设置
 export default function SettingsPanel({ settings, onCancel, onApply }) {
-  const [localSettings, setLocalSettings] = useState(settings);
+  const [localSettings, setLocalSettings] = useState({
+    ...settings,
+    dailyGoal: settings.dailyGoal || 120, // 默认每日目标120分钟
+    volume: settings.volume || 1.0
+  });
   const testAudioRef = useRef(null);
   
   // 初始化测试音频
@@ -38,6 +43,7 @@ export default function SettingsPanel({ settings, onCancel, onApply }) {
   // 测试音频
   const testSound = () => {
     if (testAudioRef.current) {
+      testAudioRef.current.volume = localSettings.volume;
       testAudioRef.current.currentTime = 0;
       testAudioRef.current.play();
     }
@@ -100,6 +106,19 @@ export default function SettingsPanel({ settings, onCancel, onApply }) {
         </div>
         
         <div className="setting-group">
+          <label htmlFor="dailyGoal">每日专注目标 (分钟)</label>
+          <input 
+            type="number" 
+            id="dailyGoal"
+            name="dailyGoal"
+            min="10"
+            max="480"
+            value={localSettings.dailyGoal}
+            onChange={handleSettingChange}
+          />
+        </div>
+        
+        <div className="setting-group">
           <label htmlFor="soundOption">提示音效</label>
           <div className="sound-option-container">
             <select
@@ -118,8 +137,28 @@ export default function SettingsPanel({ settings, onCancel, onApply }) {
               onClick={testSound}
               aria-label="测试音效"
             >
-              测试音效
+              测试
             </button>
+          </div>
+        </div>
+        
+        <div className="setting-group">
+          <label htmlFor="volume">音量</label>
+          <div className="volume-control">
+            <input
+              type="range"
+              id="volume"
+              name="volume"
+              min="0"
+              max="1"
+              step="0.1"
+              value={localSettings.volume}
+              onChange={(e) => setLocalSettings({
+                ...localSettings,
+                volume: parseFloat(e.target.value)
+              })}
+            />
+            <span className="volume-value">{Math.round(localSettings.volume * 100)}%</span>
           </div>
         </div>
         
