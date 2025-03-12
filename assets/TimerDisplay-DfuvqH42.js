@@ -1,0 +1,1 @@
+import{j as s}from"./index-BoBzeu2f.js";import"./vendor-D6FSTBK7.js";import"./utils-B-ph8sPT.js";function l({timeText:i,progress:e}){return s.jsxs("div",{className:"timer-display",children:[s.jsx("div",{className:"time-text",children:i}),s.jsx("div",{className:"progress-bar",children:s.jsx("div",{className:"progress-fill",style:{width:`${e}%`}})})]})}export{l as default};
