@@ -19,7 +19,7 @@ export default function ModeIndicator({ mode, cycles }) {
       <span className={`mode-badge ${mode}`}>
         {getModeText(mode)}
       </span>
-      <span className="cycles-count">第 {cycles + 1} 个周期</span>
+      <span className="cycles-count">第 {cycles} 个周期</span>
     </div>
   );
 }
