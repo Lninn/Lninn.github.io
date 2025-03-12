@@ -1,4 +1,7 @@
+/* 使用全局变量，并添加组件特定的变量 */
 .reading-timer-container {
+  --timer-bg: var(--bg-primary);
+  --timer-text: var(--text-primary);
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;

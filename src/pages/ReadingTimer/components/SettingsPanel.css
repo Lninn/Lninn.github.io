@@ -12,6 +12,7 @@
   margin-bottom: 16px;
   font-size: 1.2rem;
   color: var(--text-primary);
+  font-weight: 600;
 }
 
 .settings-form {
@@ -28,15 +29,25 @@
 .setting-group label {
   font-size: 0.9rem;
   color: var(--text-secondary);
+  font-weight: 500;
 }
 
-.setting-group input, .setting-group select {
+.setting-group input, 
+.setting-group select {
   padding: 10px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
   font-size: 1rem;
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.setting-group input:focus, 
+.setting-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb, 33, 150, 243), 0.2);
 }
 
 .settings-actions {
@@ -46,12 +57,14 @@
   margin-top: 16px;
 }
 
-.cancel-button, .apply-button {
+.cancel-button, 
+.apply-button {
   padding: 8px 16px;
   border-radius: 6px;
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s;
+  font-weight: 500;
 }
 
 .cancel-button {
@@ -66,7 +79,8 @@
   color: var(--text-on-primary);
 }
 
-.cancel-button:hover, .apply-button:hover {
+.cancel-button:hover, 
+.apply-button:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }
@@ -94,6 +108,7 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s;
+  flex-shrink: 0;
 }
 
 .test-sound-button:hover {
@@ -101,9 +116,27 @@
   box-shadow: var(--shadow-sm);
 }
 
+.test-sound-button:active {
+  transform: translateY(0);
+}
+
 /* 响应式设计 */
 @media (max-width: 480px) {
   .settings-form {
     grid-template-columns: 1fr;
+  }
+  
+  .settings-panel {
+    padding: 16px;
+  }
+  
+  .settings-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+  
+  .cancel-button, 
+  .apply-button {
+    width: 100%;
   }
 }
