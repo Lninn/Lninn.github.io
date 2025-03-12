@@ -1,41 +1,76 @@
 .timer-display {
   text-align: center;
-  margin: 30px 0;
+  margin: 36px 0;
 }
 
 .time-text {
-  font-size: 4rem;
+  font-size: 5rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 2px;
+  letter-spacing: 4px;
+  line-height: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  transition: font-size 0.3s ease;
 }
 
 .progress-bar {
   height: 8px;
   background-color: var(--bg-secondary);
-  border-radius: 4px;
+  border-radius: 8px;
   overflow: hidden;
   margin: 0 auto;
+  position: relative;
 }
 
 .progress-fill {
   height: 100%;
-  background: var(--primary);
-  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--timer-primary) 0%,
+    var(--timer-success) 100%
+  );
+  border-radius: 8px;
   transition: width 1s linear;
+  position: relative;
+  overflow: hidden;
 }
 
-/* 响应式设计 */
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 响应式设计优化 */
 @media (max-width: 768px) {
   .time-text {
-    font-size: 3rem;
+    font-size: 4rem;
   }
 }
 
 @media (max-width: 480px) {
   .time-text {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
   }
 }
