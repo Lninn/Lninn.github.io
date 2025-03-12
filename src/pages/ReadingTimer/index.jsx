@@ -16,6 +16,8 @@ import SettingsPanel from './components/SettingsPanel';
 import TimerTips from './components/TimerTips';
 import RecordsPanel from './components/RecordsPanel';
 import GoalProgress from './components/GoalProgress';
+// 导入 Modal 组件
+import Modal from '../../components/Modal';
 
 export default function ReadingTimer() {
   const [showSettings, setShowSettings] = useState(false);
@@ -41,8 +43,8 @@ export default function ReadingTimer() {
   // 切换设置面板
   const toggleSettings = () => {
     setShowSettings(!showSettings);
-    if (timer.isRunning) {
-      timer.toggleTimer(); // 暂停计时器
+    if (timer.isRunning && !showSettings) {
+      timer.toggleTimer(); // 打开设置时暂停计时器
     }
     setShowRecords(false); // 关闭记录面板
   };
@@ -113,15 +115,26 @@ export default function ReadingTimer() {
         <TimerTips />
       </div>
       
-      {showSettings && (
+      {/* 使用 Modal 组件替代直接渲染 */}
+      <Modal 
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        title="计时器设置"
+        size="md"
+      >
         <SettingsPanel 
           settings={timer.settings} 
           onCancel={() => setShowSettings(false)} 
           onApply={applySettings} 
         />
-      )}
+      </Modal>
       
-      {showRecords && (
+      <Modal 
+        isOpen={showRecords}
+        onClose={() => setShowRecords(false)}
+        title="阅读记录"
+        size="lg"
+      >
         <RecordsPanel 
           records={records}
           stats={stats}
@@ -129,7 +142,7 @@ export default function ReadingTimer() {
           onDelete={deleteRecord}
           onClose={() => setShowRecords(false)}
         />
-      )}
+      </Modal>
       
       {/* 添加键盘快捷键提示 */}
       <div className="keyboard-shortcuts">
