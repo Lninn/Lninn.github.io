@@ -3,14 +3,30 @@ import ExampleComponent from './Modal/ExampleComponent'
 import ConfirmDialog from './Modal/ConfirmDialog'
 import { kml } from '@tmcw/togeojson'
 import MapComponent from '#/utils/MapContainer'
+import { useState } from 'react'
 
 export default function ComponentDemo() {
+
+  const [polylinePath, setPolylinePath] = useState(null)
   
   async function test(file) {
     const xmlText = await getTextFromFile(file)
     
     const result = getGeometryInfo(xmlText)
-    console.log('test ', result)
+
+    const features = result.features
+    const featureWithPoints = features[2]
+    const geometry = featureWithPoints.geometry
+    const coordinates = geometry.coordinates
+
+    const newPath = coordinates.map(point => {
+      return (
+        [
+          point[0], point[1]
+        ]
+      )
+    })
+    setPolylinePath(newPath)
   }
 
   function getGeometryInfo(text) {
@@ -35,7 +51,6 @@ export default function ComponentDemo() {
     <div className="component-demo">
       
       <p>
-        <h3>解析文件</h3>
         <input type="file" onChange={e => {
           const files = e.target.files
           if (files.length <= 0) return
@@ -44,7 +59,7 @@ export default function ComponentDemo() {
         }} />
       </p>
 
-      <MapComponent />
+      <MapComponent polylinePath={polylinePath} />
 
       <h1>组件演示</h1>
       <p>这里是组件演示页面，你可以在这里预览和测试各个组件。</p>
