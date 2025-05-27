@@ -2,6 +2,7 @@ import './index.css'
 import ExampleComponent from './Modal/ExampleComponent'
 import ConfirmDialog from './Modal/ConfirmDialog'
 import { kml } from '@tmcw/togeojson'
+import MapComponent from '#/utils/MapContainer'
 
 export default function ComponentDemo() {
   
@@ -32,15 +33,6 @@ export default function ComponentDemo() {
 
   return (
     <div className="component-demo">
-
-      <h1>组件演示</h1>
-      <p>这里是组件演示页面，你可以在这里预览和测试各个组件。</p>
-
-      <h3>使用示例</h3>
-      <ExampleComponent />
-
-      <h3>确认对话框</h3>
-      <ConfirmDialog />
       
       <p>
         <h3>解析文件</h3>
@@ -51,6 +43,17 @@ export default function ComponentDemo() {
           test(files[0])
         }} />
       </p>
+
+      <MapComponent />
+
+      <h1>组件演示</h1>
+      <p>这里是组件演示页面，你可以在这里预览和测试各个组件。</p>
+
+      <h3>使用示例</h3>
+      <ExampleComponent />
+
+      <h3>确认对话框</h3>
+      <ConfirmDialog />
     </div>
   )
 }
