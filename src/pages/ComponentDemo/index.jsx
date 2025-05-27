@@ -1,8 +1,35 @@
 import './index.css'
 import ExampleComponent from './Modal/ExampleComponent'
 import ConfirmDialog from './Modal/ConfirmDialog'
+import { kml } from '@tmcw/togeojson'
 
 export default function ComponentDemo() {
+  
+  async function test(file) {
+    const xmlText = await getTextFromFile(file)
+    
+    const result = getGeometryInfo(xmlText)
+    console.log('test ', result)
+  }
+
+  function getGeometryInfo(text) {
+    return kml(new DOMParser().parseFromString(text, "text/xml"))
+  }
+
+  function getTextFromFile(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsText(file)
+      reader.onerror = () => {
+        reject(reader.error)
+      }
+      reader.onload = () => {
+        const text = reader.result
+        resolve(text)
+      }
+    })
+  }
+
   return (
     <div className="component-demo">
 
@@ -14,6 +41,16 @@ export default function ComponentDemo() {
 
       <h3>确认对话框</h3>
       <ConfirmDialog />
+      
+      <p>
+        <h3>解析文件</h3>
+        <input type="file" onChange={e => {
+          const files = e.target.files
+          if (files.length <= 0) return
+
+          test(files[0])
+        }} />
+      </p>
     </div>
   )
 }
