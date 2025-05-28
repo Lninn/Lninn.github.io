@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { kml } from '@tmcw/togeojson'
 import { supabase } from '#/supabaseClient'
 import Notification from '#/components/Notification'
+import Select from '#/components/Select'
 import Progress from '#/components/Progress'
 import { useNotification } from '#/hooks/useNotification'
 import MapComponent from './MapContainer'
@@ -12,6 +13,7 @@ import './index.css'
 export default function AroundPath() {
   const [importOpen, setImportOpen] = useState(false)
   const [userPathModalOpen, setUserPathModalOpen] = useState(false)
+  const [travelingPathOpen, setTravelingPathOpen] = useState(false)
   
   const selectedFileRef = useRef(null)
   const { notification, notify, clearNotification } = useNotification()
@@ -25,6 +27,10 @@ export default function AroundPath() {
 
   function openUserPathDialog() {
     setUserPathModalOpen(true)
+  }
+
+  function openTravelingPathDialog() {
+    setTravelingPathOpen(true)
   }
 
   function onSuccessAddUserPath() {
@@ -158,7 +164,22 @@ export default function AroundPath() {
         路径管理
       </button>
 
+      <button className='btn btn-primary' onClick={openTravelingPathDialog}>
+        行程管理
+      </button>
+
       <MapComponent userPathList={userPathList} />
+      
+      <TravelingPathModal
+        open={travelingPathOpen}
+        onClose={() => {
+          setTravelingPathOpen(false)
+        }}
+        onAdd={() => {
+          console.log('添加行程成功')
+        }}
+        userPathList={userPathList}
+      />
 
       <UserPathModal
         open={userPathModalOpen}
@@ -278,5 +299,108 @@ function UserPathModal({ open, onClose, userPathList, onDelete }) {
       })}
     </Modal>
 
+  )
+}
+
+function TravelingPathModal({ open, onClose, onAdd, userPathList }) {
+  const [title, setTitle] = useState('')
+
+  const [travelingPaths, setTravelingPaths] = useState([])
+
+  const [activeUserPath, setActiveUserPath] = useState(null)
+
+  const userPathOptions = userPathList.map(up => {
+    return {
+      label: up.name,
+      value: up.id,
+    }
+  })
+
+  async function fetchData() {
+
+    let { data: traveling_paths } = await supabase
+      .from('traveling_paths')
+      .select('*')
+  
+    return traveling_paths
+  }
+
+  async function getData() {
+    const list = await fetchData()
+    setTravelingPaths(list)
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+
+  async function AddTravelingPath() {
+
+    if (!title) {
+      alert("请输入标题")
+      return
+    }
+
+    const { error } = await supabase
+      .from('traveling_paths')
+      .insert([
+        { title, legs: [] },
+      ])
+      .select()
+
+    if (!error) {
+      await getData()
+
+      setTitle('')
+      onAdd()
+    }
+  }
+
+  async function addLegToTravelingPath(tPath) {
+    console.log(tPath)
+  }
+
+  return (
+     <Modal
+      isOpen={open}
+      onClose={onClose} 
+      title="行程管理"
+      size="md"
+      position="center"
+    >
+      <div style={{ height: 600 }}>
+        <div className='create-traveling-form'>
+          <div className='form-item'>
+            <label>行程名称</label>
+            <input style={{ width: 200 }} type="text" value={title} onChange={e => setTitle(e.target.value)} />
+          </div>
+
+          <div className='form-item'>
+            <button className='btn btn-primary' onClick={AddTravelingPath}>添加行程</button>
+          </div>
+        </div>
+
+        <ul>
+          {travelingPaths.map(tPath => {
+            return (
+              <li key={tPath.title} className='traveling-path-item'>
+                <div>{tPath.title}</div>
+
+                <div onClick={() => addLegToTravelingPath(tPath)}>增加</div>
+
+                <Select
+                  value={activeUserPath}
+                  onChange={setActiveUserPath}
+                  options={userPathOptions}
+                  placeholder="选择对应的里程"
+                  style={{ width: '200px' }}
+                />
+
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+    </Modal>
   )
 }
