@@ -1,4 +1,4 @@
 ## 2025-05-28
 - **Author**: Lninn
-- **Message**: 更新GitHub配置文件
+- **Message**: 添加基本的行程管理功能
 
