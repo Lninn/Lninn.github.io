@@ -11,3 +11,21 @@
   align-items: center;
   gap: 16px;
 }
+
+.user-path-panel {
+  display: flex;
+  gap: 8px;
+  margin: 8px;
+}
+
+.user-path-item {
+  padding: 4px 6px;
+  background-color: #333;
+  color: #ddd;
+  cursor: pointer;
+}
+
+.user-path-item.active {
+  background-color: #ccc;
+  color: #333;
+}

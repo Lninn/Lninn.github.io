@@ -3,8 +3,19 @@ import AMapLoader from '@amap/amap-jsapi-loader';
 import { useEffect, useState } from "react";
 
 
-export default function MapContainer({ userPathList }) {
+const ORIGINAL_POLYLINE_OPTIONS = {
+  strokeColor: "blue",
+  strokeWeight: 3,
+}
+const ACTIVE_POLYLINE_OPTIONS = {
+  strokeColor: "red",
+  strokeWeight: 5,
+}
+
+export default function MapContainer({ userPathList, activeUserPath }) {
   const [map, setMap] = useState(null)
+
+  const [polylineList, setPolylineList] = useState([])
 
   useEffect(() => {
     window._AMapSecurityConfig = {
@@ -39,34 +50,62 @@ export default function MapContainer({ userPathList }) {
 
     if (userPathList.length === 0) return
 
-    const polylineList = []
+    const nextPolylineList = []
 
-    const locations = userPathList.map(userPath => {
-      return userPath.gps_path.split('|').map(coordString => {
+    const transformData = userPathList.map(userPath => {
+      const locations =  userPath.gps_path.split('|').map(coordString => {
         return new window.AMap.LngLat(...coordString.split(','))
       })
+
+      return {
+        locations,
+        id: userPath.id,
+      }
     })
 
-    locations.forEach(l => {
+    transformData.forEach(entry => {
       const polyline = new window.AMap.Polyline({
-        path: l,
-        strokeColor: "blue",
-        strokeWeight: 5,
+        path: entry.locations,
+        ...ORIGINAL_POLYLINE_OPTIONS,
+        extData: { userPathId: entry.id, }
       })
 
-      polylineList.push(polyline)
+      nextPolylineList.push(polyline)
       map.add(polyline)
     })
 
-    map.setFitView(polylineList)
-
+    map.setFitView(nextPolylineList)
+    setPolylineList(nextPolylineList)
     return () => {
-      polylineList.forEach(p => {
+      if (!map) return
+
+      nextPolylineList.forEach(p => {
         map.remove(p)
       })
+      setPolylineList([])
     }
     
   }, [map, userPathList])
+
+  useEffect(() => {
+    if (!activeUserPath) return
+
+    const targetPolyline = polylineList.find(polyline => {
+      const extData = polyline.getExtData()
+      return extData.userPathId === activeUserPath?.id
+    })
+
+    if (targetPolyline) {
+      targetPolyline.setOptions(ACTIVE_POLYLINE_OPTIONS)
+      const bounds = targetPolyline.getBounds()
+      const [,center] = map.getFitZoomAndCenterByBounds(bounds)
+      map.setCenter(center)
+    }
+
+    return () => {
+      targetPolyline.setOptions(ORIGINAL_POLYLINE_OPTIONS)
+    }
+  }, [map, activeUserPath, polylineList])
 
   return (
     <>

@@ -14,6 +14,8 @@ export default function AroundPath() {
   const [importOpen, setImportOpen] = useState(false)
   const [userPathModalOpen, setUserPathModalOpen] = useState(false)
   const [travelingPathOpen, setTravelingPathOpen] = useState(false)
+
+  const [activeUserPath, setActiveUserPath] = useState(null)
   
   const selectedFileRef = useRef(null)
   const { notification, notify, clearNotification } = useNotification()
@@ -168,7 +170,21 @@ export default function AroundPath() {
         行程管理
       </button>
 
-      <MapComponent userPathList={userPathList} />
+      <div className='user-path-panel'>
+        {userPathList.map(uP => {
+          const isActive = activeUserPath?.name === uP.name
+          let cls = 'user-path-item'
+          if (isActive) {
+            cls += ' active'
+          }
+
+          return (
+            <div className={cls} key={uP.name} onClick={() => setActiveUserPath(uP)}>{uP.name}</div>
+          )
+        })}
+      </div>
+
+      <MapComponent activeUserPath={activeUserPath} userPathList={userPathList} />
       
       <TravelingPathModal
         open={travelingPathOpen}
