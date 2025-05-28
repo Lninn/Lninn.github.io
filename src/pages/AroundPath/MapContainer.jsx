@@ -8,10 +8,10 @@ export default function MapContainer({ userPathList }) {
 
   useEffect(() => {
     window._AMapSecurityConfig = {
-      securityJsCode: "8750ad1552105ca34626f4a00b92c478",
+      securityJsCode: "cbda977efbb9bf5d0b4809ae711ccba7",
     };
     AMapLoader.load({
-      key: "fa974d63c94fdbe25c7ab1f203fa983d", // 申请好的Web端开发者Key，首次调用 load 时必填
+      key: "16e9f3a53e15d22721e46259c3a8a8d2", // 申请好的Web端开发者Key，首次调用 load 时必填
       version: "2.0", // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
     })
       .then((AMap) => {
@@ -39,6 +39,8 @@ export default function MapContainer({ userPathList }) {
 
     if (userPathList.length === 0) return
 
+    const polylineList = []
+
     const locations = userPathList.map(userPath => {
       return userPath.gps_path.split('|').map(coordString => {
         return new window.AMap.LngLat(...coordString.split(','))
@@ -46,17 +48,22 @@ export default function MapContainer({ userPathList }) {
     })
 
     locations.forEach(l => {
-      AddPolyline(l)
-    })
-
-    function AddPolyline(path) {
       const polyline = new window.AMap.Polyline({
-        path,
+        path: l,
         strokeColor: "blue",
         strokeWeight: 5,
       })
+
+      polylineList.push(polyline)
       map.add(polyline)
-      map.setFitView([polyline])
+    })
+
+    map.setFitView(polylineList)
+
+    return () => {
+      polylineList.forEach(p => {
+        map.remove(p)
+      })
     }
     
   }, [map, userPathList])

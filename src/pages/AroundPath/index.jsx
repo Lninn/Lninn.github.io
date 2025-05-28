@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { kml } from '@tmcw/togeojson'
 import { supabase } from '#/supabaseClient'
 import Notification from '#/components/Notification'
+import Progress from '#/components/Progress'
 import { useNotification } from '#/hooks/useNotification'
 import MapComponent from './MapContainer'
 import './index.css'
@@ -10,14 +11,35 @@ import './index.css'
 
 export default function AroundPath() {
   const [importOpen, setImportOpen] = useState(false)
+  const [userPathModalOpen, setUserPathModalOpen] = useState(false)
   
   const selectedFileRef = useRef(null)
   const { notification, notify, clearNotification } = useNotification()
 
-  const { userPathList } = useUserPath()
+  const { userPathList, refresh } = useUserPath()
+  const [percent, setPercent] = useState(0)
 
   function openImportDialog() {
     setImportOpen(true)
+  }
+
+  function openUserPathDialog() {
+    setUserPathModalOpen(true)
+  }
+
+  function onSuccessAddUserPath() {
+    notify('success', '添加成功')
+    
+    selectedFileRef.current = null;
+    setPercent(0);
+    setImportOpen(false);
+
+    refresh();
+  }
+
+  function onSuccessDeleteUserPath(userPath) {
+    notify('success', '删除 ' + userPath.name +' 成功')
+    refresh();
   }
 
   async function handleFile(file) {
@@ -35,10 +57,46 @@ export default function AroundPath() {
     const payload = { name, originalPath: originalPathString, gpsPath: pathString }
     try {
       await addUserPath(payload)
-      notify('success', '添加成功')
+
+      onSuccessAddUserPath()
+
     } catch {
       notify('error', '添加路径接口失败')
     }
+  }
+
+  // 并发量上限(3次/秒)
+  // limit 手动发现可以设置为 480
+  async function batchConvert(coords, coordsys = 'gps', limit = 400) {
+    let flag = 0
+
+    const results = [];
+    for (let i = 0; i < coords.length; i += limit) {
+        const batch = coords.slice(i, i + limit);
+        const locations = batch.map(coord => coord.join(',')).join('|');
+        
+        await new Promise((resolve) => {
+          window.AMap.convertFrom(locations, coordsys, (status, result) => {
+            if (status === 'complete') {
+              results.push(...result.locations);
+              resolve();
+
+              const number = Math.min(i + limit, coords.length) / coords.length
+              const percent = (number * 100).toFixed(2)
+              setPercent(percent)
+            }
+          });
+        });
+
+        if (flag % 2 === 0) {
+          await sleep(1)
+          flag = 0
+        } else {
+          flag++
+        }
+    }
+
+    return results
   }
 
   function getCoordinates(result) {
@@ -96,7 +154,20 @@ export default function AroundPath() {
         导入轨迹
       </button>
 
+      <button className='btn btn-primary' onClick={openUserPathDialog}>
+        路径管理
+      </button>
+
       <MapComponent userPathList={userPathList} />
+
+      <UserPathModal
+        open={userPathModalOpen}
+        onClose={() => setUserPathModalOpen(false)}
+        userPathList={userPathList}
+        onDelete={(userPath) => {
+          onSuccessDeleteUserPath(userPath)
+        }}
+      />
 
       <Modal
         isOpen={importOpen}
@@ -106,6 +177,11 @@ export default function AroundPath() {
         position="center"
       >
         <form>
+          <div className='form-item'>
+            <label>坐标解析进度</label>
+            <Progress percent={percent} />
+          </div>
+
           <div className='form-item'>
             <input type="file" onChange={onFileChange} />
           </div>
@@ -130,38 +206,6 @@ export default function AroundPath() {
   )
 }
 
-// 并发量上限(3次/秒)
-// limit 手动发现可以设置为 480
-async function batchConvert(coords, coordsys = 'gps', limit = 400) {
-  let flag = 0
-
-  const results = [];
-  for (let i = 0; i < coords.length; i += limit) {
-      const batch = coords.slice(i, i + limit);
-      const locations = batch.map(coord => coord.join(',')).join('|');
-      
-      await new Promise((resolve) => {
-          window.AMap.convertFrom(locations, coordsys, (status, result) => {
-            console.log('convertFrom', { status, result })
-              if (status === 'complete') {
-                  results.push(...result.locations);
-                  resolve();
-              }
-          });
-      });
-
-      if (flag % 2 === 0) {
-        await sleep(1)
-        flag = 0
-      } else {
-        flag++
-      }
-
-  }
-
-  return results
-}
-
 function sleep(seconds) {
   return new Promise(resolve => setTimeout(resolve, seconds * 1000));
 };
@@ -182,13 +226,17 @@ async function addUserPath({ name, originalPath, gpsPath }) {
 function useUserPath() {
   const [userPathList, setUserPathList] = useState([])
 
-   useEffect(() => {
-    async function run() {
-      let { data: user_paths } = await supabase
-        .from('user_paths')
-        .select('*')
+  async function fetchList() {
+    let { data: user_paths } = await supabase
+      .from('user_paths')
+      .select('*')
 
-        setUserPathList(user_paths)
+      setUserPathList(user_paths)
+  }
+
+  useEffect(() => {
+    async function run() {
+      await fetchList()
     }
 
     run()
@@ -196,5 +244,39 @@ function useUserPath() {
 
   return {
     userPathList,
+    refresh: fetchList,
   }
+}
+
+function UserPathModal({ open, onClose, userPathList, onDelete }) {
+  async function handleDelete(userPath) {
+
+    const { error } = await supabase
+      .from('user_paths')
+      .delete()
+      .eq('name', userPath.name)
+
+    if (!error) {
+      onDelete(userPath)
+    }
+  }
+
+  return (
+    <Modal
+      isOpen={open}
+      onClose={onClose} 
+      title="导入轨迹"
+      size="md"
+      position="center"
+    >
+      {userPathList.map(userPath => {
+        return (
+          <div key={userPath.name}>
+            <div>{userPath.name} <button onClick={() => handleDelete(userPath)}>删除</button></div>
+          </div>
+        )
+      })}
+    </Modal>
+
+  )
 }
