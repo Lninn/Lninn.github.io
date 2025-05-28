@@ -42,7 +42,10 @@ export default function UrlList({ list, searchTerm, category }) {
                 className="bookmark-icon"
                 loading="lazy"
                 onError={(e) => {
+                  e.target.style.display = 'none'
                   e.target.src = '/fallback-icon.svg'
+                  e.stopPropagation()
+                  e.preventDefault()
                 }}
               />
             </div>

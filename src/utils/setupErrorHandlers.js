@@ -1,4 +1,4 @@
-import { logError, reportErrorToServer } from './errorHandler'
+import { reportErrorToServer } from './errorHandler'
 
 // 错误类型定义
 const ERROR_TYPES = {
@@ -12,7 +12,6 @@ const RESOURCE_TYPES = ['IMG', 'SCRIPT', 'LINK']
 
 // 统一的错误报告处理
 function reportError(error, context) {
-  logError(error, context)
   reportErrorToServer(error, context)
 }
 
@@ -22,7 +21,7 @@ function handleResourceError(event) {
   if (!target || !RESOURCE_TYPES.includes(target.tagName)) {
     return false
   }
-  
+
   event.preventDefault()
   
   // 识别错误类型并提取关键信息

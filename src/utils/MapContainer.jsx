@@ -1,10 +1,9 @@
 import "./MapContainer.css";
 import AMapLoader from '@amap/amap-jsapi-loader';
 import { useEffect, useState } from "react";
-import Progress from '#/components/Progress'
 
 
-export default function MapContainer({ polylinePath }) {
+export default function MapContainer({ filename, polylinePath }) {
   const [map, setMap] = useState(null)
 
   useEffect(() => {
@@ -21,8 +20,8 @@ export default function MapContainer({ polylinePath }) {
           viewMode: "2D", // 是否为3D地图模式
           zoom: 5, // 初始化地图级别
           center: [116.397428, 39.90923],
-          // features: ['bg', 'point'],
-          mapStyle: "amap://styles/whitesmoke", 
+          features: ['bg', 'point'],
+          // mapStyle: "amap://styles/whitesmoke", 
         });
         setMap(newMap)
       })
@@ -40,40 +39,36 @@ export default function MapContainer({ polylinePath }) {
 
     if (!polylinePath) return
 
-    // let nextPath = polylinePath.map(point => {
-    //   return new window.AMap.LngLat(point[0], point[1])
-    // })
-    // nextPath = nextPath.slice(0, 480)
-
-    //  var nextPath = [
-    //     new window.AMap.LngLat(116.368904,39.913423),
-    //     new window.AMap.LngLat(116.398258,39.904600)
-    // ];
-
-    // window.AMap.convertFrom(nextPath, 'gps', (status, result) => {
-    //   console.log('[window.AMap.convertFrom] ', { status, result })
-    //   if (result.info === 'ok') {
-    //     const polyline = new window.AMap.Polyline({
-    //       path: result.locations,
-    //       strokeColor: "#FF33FF",
-    //       strokeWeight: 5,
-    //     })
-    //     map.add(polyline)
-    //     map.setFitView([polyline])
-    //   }
-    // })
-
     async function run() {
-      const finalPath = await batchConvert(polylinePath)
-      console.log('finalPath', { finalPath })
+      const locations = await getPolylinePath()
+      AddPolyline(locations)
+    }
 
-      const polyline = new window.AMap.Polyline({
-          path: finalPath,
-          strokeColor: "#FF33FF",
-          strokeWeight: 5,
+    async function getPolylinePath() {
+       const cachefile = localStorage.getItem(filename)
+      if (cachefile) {
+        const locations = cachefile.split('|').map(lnglatString => {
+          return new window.AMap.LngLat(...lnglatString.split(','))
         })
-        map.add(polyline)
-        map.setFitView([polyline])
+        return locations
+      } else {
+        const locations = await batchConvert(polylinePath)
+  
+        const pathString = locations.map(l => l.toArray()).join('|');
+        localStorage.setItem(filename, pathString)
+  
+        return locations
+      }
+    }
+
+    function AddPolyline(path) {
+      const polyline = new window.AMap.Polyline({
+        path,
+        strokeColor: "#FF33FF",
+        strokeWeight: 5,
+      })
+      map.add(polyline)
+      map.setFitView([polyline])
     }
 
     run()
@@ -82,7 +77,6 @@ export default function MapContainer({ polylinePath }) {
 
   return (
     <>
-      <Progress percent={50} />
       <div
         id="container"
         className='container'
@@ -97,30 +91,31 @@ export default function MapContainer({ polylinePath }) {
 async function batchConvert(coords, coordsys = 'gps', limit = 400) {
   let flag = 0
 
-    const results = [];
-    for (let i = 0; i < coords.length; i += limit) {
-        const batch = coords.slice(i, i + limit);
-        const locations = batch.map(coord => coord.join(',')).join('|');
-        
-        await new Promise((resolve) => {
-            window.AMap.convertFrom(locations, coordsys, (status, result) => {
-              console.log('convertFrom', { status, result })
-                if (status === 'complete') {
-                    results.push(...result.locations);
-                    resolve();
-                }
-            });
-        });
+  const results = [];
+  for (let i = 0; i < coords.length; i += limit) {
+      const batch = coords.slice(i, i + limit);
+      const locations = batch.map(coord => coord.join(',')).join('|');
+      
+      await new Promise((resolve) => {
+          window.AMap.convertFrom(locations, coordsys, (status, result) => {
+            console.log('convertFrom', { status, result })
+              if (status === 'complete') {
+                  results.push(...result.locations);
+                  resolve();
+              }
+          });
+      });
 
-        if (flag % 2 === 0) {
-          await sleep(1)
-          flag = 0
-        } else {
-          flag++
-        }
+      if (flag % 2 === 0) {
+        await sleep(1)
+        flag = 0
+      } else {
+        flag++
+      }
 
-    }
-    return results;
+  }
+
+  return results
 }
 
 function sleep(seconds) {

@@ -8,11 +8,13 @@ import { useState } from 'react'
 export default function ComponentDemo() {
 
   const [polylinePath, setPolylinePath] = useState(null)
+  const [filename, setFilename] = useState()
   
   async function test(file) {
     const xmlText = await getTextFromFile(file)
     
     const result = getGeometryInfo(xmlText)
+    const name = file.name
 
     const features = result.features
     const featureWithPoints = features[2]
@@ -27,6 +29,7 @@ export default function ComponentDemo() {
       )
     })
     setPolylinePath(newPath)
+    setFilename(name)
   }
 
   function getGeometryInfo(text) {
@@ -59,7 +62,7 @@ export default function ComponentDemo() {
         }} />
       </p>
 
-      <MapComponent polylinePath={polylinePath} />
+      <MapComponent filename={filename} polylinePath={polylinePath} />
 
       <h1>组件演示</h1>
       <p>这里是组件演示页面，你可以在这里预览和测试各个组件。</p>
