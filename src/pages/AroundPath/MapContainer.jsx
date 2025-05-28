@@ -3,7 +3,7 @@ import AMapLoader from '@amap/amap-jsapi-loader';
 import { useEffect, useState } from "react";
 
 
-export default function MapContainer({ filename, polylinePath }) {
+export default function MapContainer({ userPathList }) {
   const [map, setMap] = useState(null)
 
   useEffect(() => {
@@ -37,43 +37,29 @@ export default function MapContainer({ filename, polylinePath }) {
   useEffect(() => {
     if (!map) return
 
-    if (!polylinePath) return
+    if (userPathList.length === 0) return
 
-    async function run() {
-      const locations = await getPolylinePath()
-      AddPolyline(locations)
-    }
+    const locations = userPathList.map(userPath => {
+      return userPath.gps_path.split('|').map(coordString => {
+        return new window.AMap.LngLat(...coordString.split(','))
+      })
+    })
 
-    async function getPolylinePath() {
-       const cachefile = localStorage.getItem(filename)
-      if (cachefile) {
-        const locations = cachefile.split('|').map(lnglatString => {
-          return new window.AMap.LngLat(...lnglatString.split(','))
-        })
-        return locations
-      } else {
-        const locations = await batchConvert(polylinePath)
-  
-        const pathString = locations.map(l => l.toArray()).join('|');
-        localStorage.setItem(filename, pathString)
-  
-        return locations
-      }
-    }
+    locations.forEach(l => {
+      AddPolyline(l)
+    })
 
     function AddPolyline(path) {
       const polyline = new window.AMap.Polyline({
         path,
-        strokeColor: "#FF33FF",
+        strokeColor: "blue",
         strokeWeight: 5,
       })
       map.add(polyline)
       map.setFitView([polyline])
     }
-
-    run()
     
-  }, [map, polylinePath])
+  }, [map, userPathList])
 
   return (
     <>
@@ -85,39 +71,3 @@ export default function MapContainer({ filename, polylinePath }) {
     </>
   );
 }
-
-// 并发量上限(3次/秒)
-// limit 手动发现可以设置为 480
-async function batchConvert(coords, coordsys = 'gps', limit = 400) {
-  let flag = 0
-
-  const results = [];
-  for (let i = 0; i < coords.length; i += limit) {
-      const batch = coords.slice(i, i + limit);
-      const locations = batch.map(coord => coord.join(',')).join('|');
-      
-      await new Promise((resolve) => {
-          window.AMap.convertFrom(locations, coordsys, (status, result) => {
-            console.log('convertFrom', { status, result })
-              if (status === 'complete') {
-                  results.push(...result.locations);
-                  resolve();
-              }
-          });
-      });
-
-      if (flag % 2 === 0) {
-        await sleep(1)
-        flag = 0
-      } else {
-        flag++
-      }
-
-  }
-
-  return results
-}
-
-function sleep(seconds) {
-  return new Promise(resolve => setTimeout(resolve, seconds * 1000));
-};
