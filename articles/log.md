@@ -1,4 +1,4 @@
-## 2025-03-12
+## 2025-05-28
 - **Author**: Lninn
-- **Message**: 修复渲染问题
+- **Message**: 更新GitHub配置文件
 
