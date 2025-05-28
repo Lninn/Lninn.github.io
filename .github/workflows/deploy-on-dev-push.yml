@@ -32,7 +32,7 @@ jobs:
 
       # 4. 安装依赖
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       # 5. 打包项目
       - name: Build project
