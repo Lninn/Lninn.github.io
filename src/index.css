@@ -209,6 +209,10 @@ button:focus-visible {
   cursor: pointer;
 }
 
+.btn + .btn {
+  margin-left: 16px;
+}
+
 .btn-primary {
   background-color: var(--primary);
   color: var(--text-on-primary);

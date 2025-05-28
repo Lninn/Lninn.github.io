@@ -14,8 +14,10 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@amap/amap-jsapi-loader": "^1.0.1",
     "@hello-pangea/dnd": "^18.0.1",
     "@supabase/supabase-js": "^2.49.1",
+    "@tmcw/togeojson": "^7.1.1",
     "chart.js": "^4.4.8",
     "date-fns": "^4.1.0",
     "jszip": "^3.10.1",
