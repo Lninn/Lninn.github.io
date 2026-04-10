@@ -1,36 +1,384 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .container {
-            text-align: center;
-            color: white;
-        }
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        p {
-            font-size: 1.5rem;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>林林的个人博客</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      line-height: 1.7;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    header {
+      padding: 60px 0 40px;
+      text-align: center;
+      color: white;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    /* Navigation */
+    nav {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.3s;
+    }
+
+    nav a:hover {
+      opacity: 0.8;
+    }
+
+    /* Main Content */
+    main {
+      padding: 40px 0;
+    }
+
+    /* Blog Post Cards */
+    .blog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .blog-card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .blog-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    .blog-card-meta {
+      display: flex;
+      gap: 15px;
+      font-size: 0.85rem;
+      color: #999;
+      margin-bottom: 12px;
+    }
+
+    .blog-card-tag {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+    }
+
+    .blog-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      color: #2c3e50;
+    }
+
+    .blog-card h2 a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .blog-card h2 a:hover {
+      color: #667eea;
+    }
+
+    .blog-card p {
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .blog-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .read-more {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .read-more:hover {
+      text-decoration: underline;
+    }
+
+    /* About Section */
+    .about-section {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+
+    .about-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    .about-section p {
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    /* Tags */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .tag {
+      background: #f5f5f5;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: white;
+      opacity: 0.8;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Stats */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 30px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+
+      nav ul {
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      .blog-card {
+        padding: 20px;
+      }
+
+      .stats {
+        gap: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <header>
     <div class="container">
-        <h1>Hello World</h1>
-        <p>欢迎来到我的新网站</p>
+      <h1>林林的个人博客</h1>
+      <p>记录生活 · 分享技术 · 沉淀思考</p>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-number">5</div>
+          <div class="stat-label">文章</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">3</div>
+          <div class="stat-label">分类</div>
+        </div>
+      </div>
     </div>
+  </header>
+
+  <nav>
+    <div class="container">
+      <ul>
+        <li><a href="#home">首页</a></li>
+        <li><a href="#posts">文章</a></li>
+        <li><a href="#about">关于</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container" id="posts">
+    <div class="blog-list">
+      <!-- Post 1 -->
+      <article class="blog-card">
+        <div class="blog-card-meta">
+          <span class="blog-card-tag">技术</span>
+          <span>2024年12月15日</span>
+          <span>阅读 2,847 次</span>
+        </div>
+        <h2><a href="#">从零构建现代化前端工作流</a></h2>
+        <p>最近在重构项目时，总结了一套基于 Vite + Vue3 + TypeScript 的开发工作流。包括自动化部署、CI/CD 流水线、单元测试覆盖等内容。实际项目中使用后，开发效率提升了近 40%。</p>
+        <div class="blog-card-footer">
+          <span style="color: #999; font-size: 0.85rem;">预计阅读 8 分钟</span>
+          <a href="#" class="read-more">阅读全文 →</a>
+        </div>
+      </article>
+
+      <!-- Post 2 -->
+      <article class="blog-card">
+        <div class="blog-card-meta">
+          <span class="blog-card-tag">生活</span>
+          <span>2024年11月28日</span>
+          <span>阅读 1,923 次</span>
+        </div>
+        <h2><a href="#">我的年度阅读清单</a></h2>
+        <p>今年读完了 28 本书，涵盖技术、人文、商业几个领域。最推荐的是《原子习惯》和《置身事内》。前者改变了我对习惯养成的认知，后者让我理解了政府与经济的关系。</p>
+        <div class="blog-card-footer">
+          <span style="color: #999; font-size: 0.85rem;">预计阅读 5 分钟</span>
+          <a href="#" class="read-more">阅读全文 →</a>
+        </div>
+      </article>
+
+      <!-- Post 3 -->
+      <article class="blog-card">
+        <div class="blog-card-meta">
+          <span class="blog-card-tag">技术</span>
+          <span>2024年10月10日</span>
+          <span>阅读 3,421 次</span>
+        </div>
+        <h2><a href="#">Docker 容器化最佳实践</a></h2>
+        <p>部署了十几个生产环境服务后，总结出一些 Docker 使用经验：多阶段构建减少镜像体积、健康检查配置、资源限制设置、日志管理策略。这些细节能大大提升服务稳定性。</p>
+        <div class="blog-card-footer">
+          <span style="color: #999; font-size: 0.85rem;">预计阅读 12 分钟</span>
+          <a href="#" class="read-more">阅读全文 →</a>
+        </div>
+      </article>
+
+      <!-- Post 4 -->
+      <article class="blog-card">
+        <div class="blog-card-meta">
+          <span class="blog-card-tag">随想</span>
+          <span>2024年9月5日</span>
+          <span>阅读 1,056 次</span>
+        </div>
+        <h2><a href="#">远程工作两年后的思考</a></h2>
+        <p>在家办公两年多了，从最初的自由兴奋到后来的焦虑迷茫，再到现在找到平衡。关键是要建立清晰的工作边界、固定的作息规律、主动的社交安排。</p>
+        <div class="blog-card-footer">
+          <span style="color: #999; font-size: 0.85rem;">预计阅读 6 分钟</span>
+          <a href="#" class="read-more">阅读全文 →</a>
+        </div>
+      </article>
+
+      <!-- Post 5 -->
+      <article class="blog-card">
+        <div class="blog-card-meta">
+          <span class="blog-card-tag">技术</span>
+          <span>2024年7月20日</span>
+          <span>阅读 4,128 次</span>
+        </div>
+        <h2><a href="#">使用 Go 语言构建高性能 API 服务</a></h2>
+        <p>用 Go 重写了之前 Python 写的 API 服务，QPS 从 800 提升到 15000。记录下性能优化的关键点：连接池配置、并发模型选择、内存分配优化、GC 调参。</p>
+        <div class="blog-card-footer">
+          <span style="color: #999; font-size: 0.85rem;">预计阅读 15 分钟</span>
+          <a href="#" class="read-more">阅读全文 →</a>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <section class="container" id="about">
+    <div class="about-section">
+      <h2>关于我</h2>
+      <p>你好，我是林林，一名全栈工程师。目前专注于 Web 开发和云原生技术。</p>
+      <p>这个博客用来记录我在技术学习、项目实践和生活思考中的收获。如果你觉得内容有帮助，欢迎分享给需要的朋友。</p>
+      <p>平时会在 GitHub 上活跃，偶尔在技术社区回答问题。欢迎交流！</p>
+      <div class="tags">
+        <span class="tag">Vue.js</span>
+        <span class="tag">Node.js</span>
+        <span class="tag">Go</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Kubernetes</span>
+        <span class="tag">TypeScript</span>
+        <span class="tag">PostgreSQL</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 林林的个人博客 · 基于 GitHub Pages 构建</p>
+      <p style="margin-top: 10px;">
+        <a href="https://github.com/Lninn">GitHub</a> ·
+        <a href="#">RSS</a> ·
+        <a href="#">联系我</a>
+      </p>
+    </div>
+  </footer>
 </body>
 </html>
